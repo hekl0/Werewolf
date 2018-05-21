@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.bm.werewolf.Adapter.ViewPagerAdapter;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Utils.AccountManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        Log.d(TAG, "onCreate: " + AccountManager.avaLink);
 
         bottomNavigation.getMenu().getItem(0).getIcon().setAlpha(100);
         bottomNavigation.getMenu().getItem(1).getIcon().setAlpha(255);

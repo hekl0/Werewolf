@@ -3,5 +3,8 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/allerta_stencil</item>
         <item>@font/allura</item>
+        <item>@font/autour_one</item>
+        <item>@font/bungee_shade</item>
+        <item>@font/butcherman</item>
     </array>
 </resources>

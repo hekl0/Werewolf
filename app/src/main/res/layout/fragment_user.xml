@@ -1,13 +1,210 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.bm.werewolf.Fragment.UserFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="User" />
+    <ImageView
+        android:id="@+id/iv_ava"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_above="@id/tv_nickname"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"/>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tv_user_name"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/butcherman"
+        android:text="Vô danh"
+        android:textColor="@color/white"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tv_win"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/autour_one"
+        android:text="hekl0"
+        android:textColor="#d1ffffff"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_win"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_lose"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/text_border"
+        android:fontFamily="@font/allerta_stencil"
+        android:padding="8dp"
+        android:text="Thắng: 0"
+        android:textColor="#d1ffffff"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_lose"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tv_total_game"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/text_border"
+        android:fontFamily="@font/allerta_stencil"
+        android:padding="8dp"
+        android:text="Thua: 0"
+        android:textColor="#d1ffffff"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_total_game"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ll_favorite_role"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/text_border"
+        android:fontFamily="@font/allerta_stencil"
+        android:padding="8dp"
+        android:text="Số game đã chơi: 0"
+        android:textColor="#d1ffffff"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_favorite_role"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:layout_above="@+id/ll"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/text_border">
+
+        <ImageView
+            android:id="@+id/iv_favorite_role"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="#000"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_favorite_role"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="None"
+            android:textAllCaps="false"
+            android:textColor="#d1ffffff"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/iv_heart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:src="@drawable/ic_heart" />
+
+        <TextView
+            android:id="@+id/tv_heart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="#d1ffffff"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/iv_leader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_flag" />
+
+        <TextView
+            android:id="@+id/tv_leader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="0"
+            android:textColor="#d1ffffff"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/iv_gg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/allerta_stencil"
+            android:text="GG"
+            android:textColor="#ff00d5"
+            android:textSize="22dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_gg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="0"
+            android:textColor="#d1ffffff"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_small_window"
+        android:layout_width="350dp"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:background="@drawable/small_window_border"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Favorite role"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:fontFamily="@font/autour_one"
+            android:layout_centerHorizontal="true"
+            android:padding="8dp"/>
+
+        <ImageView
+            android:id="@+id/iv_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_x_button"
+            android:padding="8dp"
+            android:layout_alignParentEnd="true"/>
+
+        <GridView
+            android:id="@+id/gv_list_role"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/text"
+            android:background="@drawable/small_content_border"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:numColumns="2"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
