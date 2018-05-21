@@ -3,22 +3,18 @@
 
     <item
         android:id="@+id/item_friends"
-        android:title=""
         android:icon="@drawable/ic_friends" />
 
     <item
         android:id="@+id/item_play"
-        android:title=""
         android:icon="@drawable/ic_play"/>
 
     <item
         android:id="@+id/item_achievement"
-        android:title=""
         android:icon="@drawable/ic_achievement"/>
 
     <item
         android:id="@+id/item_user"
-        android:title=""
         android:icon="@drawable/ic_user"/>
 
 </menu>

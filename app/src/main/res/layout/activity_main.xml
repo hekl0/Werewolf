@@ -4,19 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.bm.werewolf.MainActivity">
+    tools:context="com.example.bm.werewolf.Activity.MainActivity"
+    android:background="@drawable/background">
 
     <RelativeLayout
         android:id="@+id/rl_temp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#80344152">
 
         <TextView
             android:id="@+id/tv_screen_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Screen Name"
-            android:textSize="24sp"
+            android:text="Lobby"
+            android:textSize="18sp"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:padding="12dp"/>
 
@@ -26,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/iv_inbox"
             android:src="@drawable/ic_add_friend"
-            android:padding="16dp"/>
+            android:padding="12dp"/>
 
         <ImageView
             android:id="@+id/iv_inbox"
@@ -34,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_inbox"
-            android:padding="16dp"/>
+            android:padding="12dp"/>
 
     </RelativeLayout>
 
@@ -50,6 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:menu="@menu/navigation_items"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:background="@color/navigationBarColor"/>
 
 </RelativeLayout>
