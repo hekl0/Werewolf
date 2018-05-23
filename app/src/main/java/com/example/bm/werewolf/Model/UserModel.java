@@ -9,7 +9,6 @@ import java.util.List;
 public class UserModel {
     public int win;
     public int lose;
-    public String nickName;
     public boolean isOnline;
     public int favoriteRole;
     public String name;
@@ -21,13 +20,12 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(int win, int lose, String nickName, boolean isOnline, int favoriteRole, String name,
+    public UserModel(int win, int lose, boolean isOnline, int favoriteRole, String name,
                      List<Achievement> achievementList,
                      List<DataRole> dataRoleList,
                      List<String> friendList) {
         this.win = win;
         this.lose = lose;
-        this.nickName = nickName;
         this.isOnline = isOnline;
         this.favoriteRole = favoriteRole;
         this.name = name;
@@ -41,7 +39,6 @@ public class UserModel {
         return "UserModel{" +
                 "win=" + win +
                 ", lose=" + lose +
-                ", nickName='" + nickName + '\'' +
                 ", isOnline=" + isOnline +
                 ", favoriteRole=" + favoriteRole +
                 ", name='" + name + '\'' +

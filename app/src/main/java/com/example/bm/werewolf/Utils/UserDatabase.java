@@ -1,7 +1,11 @@
 package com.example.bm.werewolf.Utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
+import com.example.bm.werewolf.Activity.MainActivity;
 import com.example.bm.werewolf.Model.UserModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,11 +39,11 @@ public class UserDatabase {
     }
 
     public void updateUser() {
-        databaseReference.child(facebookID).child(facebookID).setValue(userModel);
+        databaseReference.child(facebookID).setValue(userModel);
     }
 
-    public void accessUser(final String name) {
-        databaseReference.child(facebookID).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void accessUser(final String name, final Context context) {
+        databaseReference.orderByKey().equalTo(facebookID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onDataChange: " + dataSnapshot.getValue());
@@ -51,7 +55,6 @@ public class UserDatabase {
                     userModel = new UserModel(
                             0,
                             0,
-                            "Nobody",
                             true,
                             0,
                             name,
@@ -63,6 +66,10 @@ public class UserDatabase {
                 userModel.isOnline = true;
 
                 updateUser();
+
+                Intent intent = new Intent(context, MainActivity.class);
+                context.startActivity(intent);
+                ((Activity)context).finish();
             }
 
             @Override

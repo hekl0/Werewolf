@@ -18,10 +18,6 @@ import android.widget.TextView;
 import com.example.bm.werewolf.Adapter.GridViewAdapter;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Utils.UserDatabase;
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -31,10 +27,9 @@ import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarDataSet;
 import com.github.mikephil.charting.data.RadarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +47,8 @@ public class UserFragment extends Fragment {
     private static final String TAG = "UserFragment";
 
     String[] roleName;
-    float[] winRate;
+    float[] winGame;
+    float[] totalGame;
 
     @BindView(R.id.text)
     TextView text;
@@ -105,6 +101,18 @@ public class UserFragment extends Fragment {
 
         tvName.setText(UserDatabase.getInstance().userModel.name);
 
+        initRadarChart();
+
+        radarChart.animate();
+        radarChart.getDescription().setEnabled(false);
+        radarChart.setWebLineWidth(1f);
+        radarChart.setWebColor(Color.WHITE);
+        radarChart.setWebLineWidthInner(1f);
+        radarChart.setWebColorInner(Color.WHITE);
+        radarChart.setWebAlpha(100);
+        radarChart.animateXY(1400, 1400, Easing.EasingOption.EaseOutSine, Easing.EasingOption.EaseOutSine);
+        radarChart.getLegend().setTextColor(Color.WHITE);
+
         return view;
     }
 
@@ -124,27 +132,37 @@ public class UserFragment extends Fragment {
     }
 
     public void initRadarChart() {
-        List<RadarEntry> entries = new ArrayList<>();
-        for (float x : winRate)
-            entries.add(new RadarEntry(x));
+        roleName = new String[]{"aaa", "bbb", "ccc", "ddd", "eee"};
+        winGame = new float[]{5, 6, 7, 8, 9};
+        totalGame = new float[]{10, 9, 12, 15, 11};
+        
+        List<RadarEntry> winEntries = new ArrayList<>();
+        for (float x : winGame)
+            winEntries.add(new RadarEntry(x));
 
-        radarChart.animate();
-        radarChart.setWebLineWidth(1f);
-        radarChart.setWebColor(Color.LTGRAY);
-        radarChart.setWebLineWidthInner(1f);
-        radarChart.setWebColorInner(Color.LTGRAY);
-        radarChart.setWebAlpha(100);
-        radarChart.animateXY(1400, 1400, Easing.EasingOption.EaseOutSine, Easing.EasingOption.EaseOutSine);
+        List<RadarEntry> totalEntries = new ArrayList<>();
+        for (float x : totalGame)
+            totalEntries.add(new RadarEntry(x));
 
-        RadarDataSet dataSet = new RadarDataSet(entries, "axx");
-        dataSet.setColor(Color.CYAN);
-        dataSet.setDrawFilled(true);
-        dataSet.setDrawValues(false);
+        RadarDataSet winDataSet = new RadarDataSet(winEntries, "số game thắng");
+        winDataSet.setColor(Color.CYAN);
+        winDataSet.setFillColor(Color.CYAN);
+        winDataSet.setDrawFilled(true);
+        winDataSet.setDrawValues(false);
 
-        RadarData radarData = new RadarData(dataSet);
+        RadarDataSet totalDataSet = new RadarDataSet(totalEntries, "số game đã chơi");
+        totalDataSet.setColor(Color.parseColor("#B252FF"));
+        totalDataSet.setFillColor(Color.parseColor("#B252FF"));
+        totalDataSet.setDrawFilled(true);
+        totalDataSet.setDrawValues(false);
+
+        List<IRadarDataSet> radarDataSetList = new ArrayList<>();
+        radarDataSetList.add(totalDataSet);
+        radarDataSetList.add(winDataSet);
+
+        RadarData radarData = new RadarData(radarDataSetList);
 
         radarChart.setData(radarData);
-
         radarChart.invalidate();
 
         XAxis xAxis = radarChart.getXAxis();
@@ -154,16 +172,14 @@ public class UserFragment extends Fragment {
                 return roleName[(int) value];
             }
         });
+        xAxis.setTextColor(Color.WHITE);
 
         YAxis yAxis = radarChart.getYAxis();
-        yAxis.setAxisMinimum(0f);
-        yAxis.setAxisMaximum(100f);
-        yAxis.setLabelCount(entries.size(), false);
-        yAxis.setDrawLabels(false);
-
-        radarChart.getDescription().setText("Tỉ lệ thắng");
-        radarChart.getLegend().setEnabled(false);
+        yAxis.setLabelCount(winEntries.size(), false);
+        yAxis.setDrawLabels(true);
+        yAxis.setTextColor(R.color.white);
     }
+
 
     @Override
     public void onDestroyView() {

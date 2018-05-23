@@ -27,14 +27,10 @@ public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
     LoginButton loginButton;
 
-    Intent intent;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        intent = new Intent(this, MainActivity.class);
 
         if (AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired())
             process(AccessToken.getCurrentAccessToken());
@@ -84,10 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         UserDatabase.facebookID = id;
-                        UserDatabase.getInstance().accessUser(name);
-
-                        startActivity(intent);
-                        finish();
+                        UserDatabase.getInstance().accessUser(name, LoginActivity.this);
                     }
                 }
         );
