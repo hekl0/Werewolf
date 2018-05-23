@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/tablayout"
+            android:id="@+id/tl_achievement"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabTextColor="#64ffffff"
@@ -20,21 +20,23 @@
             android:background="#80344152">
 
             <android.support.design.widget.TabItem
+                android:id="@+id/item_inprogress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="IN PROGRESS"/>
 
             <android.support.design.widget.TabItem
+                android:id="@+id/item_achieved"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ACHIEVED"/>
         </android.support.design.widget.TabLayout>
 
         <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
+            android:id="@+id/vp_achievement"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/tablayout">
+            android:layout_below="@id/tl_achievement">
 
         </android.support.v4.view.ViewPager>
     </RelativeLayout>

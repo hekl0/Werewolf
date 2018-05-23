@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/iv_achievement"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/ma_soi"
+        android:padding="6dp"/>
+
+    <TextView
+        android:id="@+id/tv_achievement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vua Sói"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_gravity="center_vertical"
+        android:padding="6dp"
+        android:textStyle="bold"
+        android:fontFamily="@font/autour_one"
+        android:layout_toRightOf="@+id/iv_achievement"/>
+
+    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+        android:id="@+id/pb_achievement"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:cpb_progressbar_color="@color/white"
+        app:cpb_progressbar_width="4dp"
+        app:cpb_progress="10"/>
+
+</RelativeLayout>
