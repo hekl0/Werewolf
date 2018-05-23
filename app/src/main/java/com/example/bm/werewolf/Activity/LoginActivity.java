@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.bm.werewolf.R;
-import com.example.bm.werewolf.Utils.AccountManager;
+import com.example.bm.werewolf.Utils.UserDatabase;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -15,7 +15,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,14 +75,19 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         String id = null;
+                        String name = null;
                         try {
                             id = object.getString("id");
-                            AccountManager.avaLink = "https://graph.facebook.com/" + id + "/picture?type=large";
+                            name = object.getString("name");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
+                        UserDatabase.facebookID = id;
+                        UserDatabase.getInstance().accessUser(name);
+
                         startActivity(intent);
+                        finish();
                     }
                 }
         );

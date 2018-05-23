@@ -1,90 +1,148 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.bm.werewolf.Fragment.UserFragment">
 
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.10" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.40" />
+
+    <ImageView
+        android:id="@+id/iv_wall"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@color/cardview_light_background"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_30"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
     <ImageView
         android:id="@+id/iv_ava"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_above="@id/tv_nickname"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"/>
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:src="@color/cardview_light_background"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_40"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_20" />
 
     <TextView
-        android:id="@+id/tv_nickname"
+        android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/tv_user_name"
-        android:layout_centerHorizontal="true"
-        android:fontFamily="@font/butcherman"
-        android:text="Vô danh"
-        android:textColor="@color/white"
-        android:textSize="24sp" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_ava" />
 
     <TextView
-        android:id="@+id/tv_user_name"
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="36dp"
+        android:fontFamily="serif"
+        android:text="Thua:"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_30" />
+
+    <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/tv_win"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="@font/autour_one"
-        android:text="hekl0"
-        android:textColor="#d1ffffff"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/tv_win"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_lose"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/text_border"
-        android:fontFamily="@font/allerta_stencil"
-        android:padding="8dp"
-        android:text="Thắng: 0"
-        android:textColor="#d1ffffff"
-        android:textSize="14sp" />
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="36dp"
+        android:fontFamily="serif"
+        android:text="Thắng:"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_30" />
 
     <TextView
         android:id="@+id/tv_lose"
-        android:layout_width="250dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_above="@id/tv_total_game"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/text_border"
+        android:layout_marginStart="32dp"
         android:fontFamily="@font/allerta_stencil"
-        android:padding="8dp"
-        android:text="Thua: 0"
-        android:textColor="#d1ffffff"
-        android:textSize="14sp" />
+        android:gravity="center"
+        android:text="0"
+        android:textColor="#fff"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
-        android:id="@+id/tv_total_game"
-        android:layout_width="250dp"
+        android:id="@+id/tv_win"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_above="@id/ll_favorite_role"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/text_border"
+        android:layout_marginEnd="32dp"
         android:fontFamily="@font/allerta_stencil"
-        android:padding="8dp"
-        android:text="Số game đã chơi: 0"
-        android:textColor="#d1ffffff"
-        android:textSize="14sp" />
+        android:gravity="center"
+        android:text="0"
+        android:textColor="#fff"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <com.github.mikephil.charting.charts.RadarChart
+        android:id="@+id/radar_chart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@id/ll_favorite_role"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <LinearLayout
         android:id="@+id/ll_favorite_role"
         android:layout_width="150dp"
         android:layout_height="45dp"
-        android:layout_above="@+id/ll"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/text_border">
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/text_border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/iv_favorite_role"
@@ -106,105 +164,53 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/iv_heart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:src="@drawable/ic_heart" />
-
-        <TextView
-            android:id="@+id/tv_heart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textColor="#d1ffffff"
-            android:textSize="20sp" />
-
-        <ImageView
-            android:id="@+id/iv_leader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:padding="8dp"
-            android:src="@drawable/ic_flag" />
-
-        <TextView
-            android:id="@+id/tv_leader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="0"
-            android:textColor="#d1ffffff"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/iv_gg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/allerta_stencil"
-            android:text="GG"
-            android:textColor="#ff00d5"
-            android:textSize="22dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tv_gg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="0"
-            android:textColor="#d1ffffff"
-            android:textSize="20sp" />
-    </LinearLayout>
-
     <RelativeLayout
         android:id="@+id/rl_small_window"
         android:layout_width="350dp"
         android:layout_height="250dp"
         android:layout_centerInParent="true"
-        android:orientation="vertical"
+        android:layout_marginBottom="148dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:background="@drawable/small_window_border"
-        android:visibility="visible">
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/ll_favorite_role"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.981">
 
         <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/autour_one"
+            android:padding="8dp"
             android:text="Favorite role"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:fontFamily="@font/autour_one"
-            android:layout_centerHorizontal="true"
-            android:padding="8dp"/>
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/iv_exit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_x_button"
+            android:layout_alignParentEnd="true"
             android:padding="8dp"
-            android:layout_alignParentEnd="true"/>
+            android:src="@drawable/ic_x_button" />
 
         <GridView
             android:id="@+id/gv_list_role"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/text"
-            android:background="@drawable/small_content_border"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:numColumns="2"/>
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/small_content_border"
+            android:numColumns="2" />
 
     </RelativeLayout>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
