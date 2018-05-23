@@ -17,17 +17,21 @@ import android.widget.TextView;
 
 import com.example.bm.werewolf.Adapter.GridViewAdapter;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarDataSet;
 import com.github.mikephil.charting.data.RadarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -45,10 +49,6 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
  */
 public class UserFragment extends Fragment {
     private static final String TAG = "UserFragment";
-
-    String[] roleName;
-    float[] winGame;
-    float[] totalGame;
 
     @BindView(R.id.text)
     TextView text;
@@ -100,6 +100,10 @@ public class UserFragment extends Fragment {
                 .into(ivAva);
 
         tvName.setText(UserDatabase.getInstance().userModel.name);
+        if (UserDatabase.getInstance().userModel.favoriteRole == 0) ivFavoriteRole.setVisibility(View.GONE);
+        else ivFavoriteRole.setVisibility(View.VISIBLE);
+        ivFavoriteRole.setImageResource(Constant.imageRole[UserDatabase.getInstance().userModel.favoriteRole]);
+        tvFavoriteRole.setText(Constant.nameRole[UserDatabase.getInstance().userModel.favoriteRole]);
 
         initRadarChart();
 
@@ -112,6 +116,7 @@ public class UserFragment extends Fragment {
         radarChart.setWebAlpha(100);
         radarChart.animateXY(1400, 1400, Easing.EasingOption.EaseOutSine, Easing.EasingOption.EaseOutSine);
         radarChart.getLegend().setTextColor(Color.WHITE);
+        radarChart.setExtraOffsets(-100, -100, -100, -100);
 
         return view;
     }
@@ -125,42 +130,49 @@ public class UserFragment extends Fragment {
                 rlSmallWindow.setVisibility(View.GONE);
                 if (position == 0) ivFavoriteRole.setVisibility(View.GONE);
                 else ivFavoriteRole.setVisibility(View.VISIBLE);
-                ivFavoriteRole.setImageResource(gridViewAdapter.image[position]);
-                tvFavoriteRole.setText(gridViewAdapter.name[position]);
+                ivFavoriteRole.setImageResource(Constant.imageRole[position]);
+                tvFavoriteRole.setText(Constant.nameRole[position]);
+
+                UserDatabase.getInstance().userModel.favoriteRole = position;
+                UserDatabase.getInstance().updateUser();
             }
         });
     }
 
     public void initRadarChart() {
-        roleName = new String[]{"aaa", "bbb", "ccc", "ddd", "eee"};
-        winGame = new float[]{5, 6, 7, 8, 9};
-        totalGame = new float[]{10, 9, 12, 15, 11};
-        
         List<RadarEntry> winEntries = new ArrayList<>();
-        for (float x : winGame)
+        for (float x : UserDatabase.getInstance().userModel.dataWinRole)
             winEntries.add(new RadarEntry(x));
 
         List<RadarEntry> totalEntries = new ArrayList<>();
-        for (float x : totalGame)
+        for (float x : UserDatabase.getInstance().userModel.dataTotalRole)
             totalEntries.add(new RadarEntry(x));
 
         RadarDataSet winDataSet = new RadarDataSet(winEntries, "số game thắng");
         winDataSet.setColor(Color.CYAN);
         winDataSet.setFillColor(Color.CYAN);
         winDataSet.setDrawFilled(true);
-        winDataSet.setDrawValues(false);
+        winDataSet.setDrawValues(true);
+        winDataSet.setValueTextColor(Color.LTGRAY);
 
         RadarDataSet totalDataSet = new RadarDataSet(totalEntries, "số game đã chơi");
         totalDataSet.setColor(Color.parseColor("#B252FF"));
         totalDataSet.setFillColor(Color.parseColor("#B252FF"));
         totalDataSet.setDrawFilled(true);
-        totalDataSet.setDrawValues(false);
+        totalDataSet.setDrawValues(true);
+        totalDataSet.setValueTextColor(Color.LTGRAY);
 
         List<IRadarDataSet> radarDataSetList = new ArrayList<>();
         radarDataSetList.add(totalDataSet);
         radarDataSetList.add(winDataSet);
 
         RadarData radarData = new RadarData(radarDataSetList);
+        radarData.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return String.valueOf(Math.round(value));
+            }
+        });
 
         radarChart.setData(radarData);
         radarChart.invalidate();
@@ -169,15 +181,15 @@ public class UserFragment extends Fragment {
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return roleName[(int) value];
+                return Constant.nameRole[(int) value + 1];
             }
         });
         xAxis.setTextColor(Color.WHITE);
 
         YAxis yAxis = radarChart.getYAxis();
         yAxis.setLabelCount(winEntries.size(), false);
-        yAxis.setDrawLabels(true);
-        yAxis.setTextColor(R.color.white);
+        yAxis.setDrawLabels(false);
+        yAxis.setAxisMinimum(0);
     }
 
 
