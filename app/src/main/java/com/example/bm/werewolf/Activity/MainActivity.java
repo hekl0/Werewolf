@@ -5,20 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.bm.werewolf.Adapter.ViewPagerAdapter;
 import com.example.bm.werewolf.Fragment.AchievementFragment;
 import com.example.bm.werewolf.Fragment.FriendsFragment;
 import com.example.bm.werewolf.Fragment.PlayFragment;
 import com.example.bm.werewolf.Fragment.UserFragment;
 import com.example.bm.werewolf.R;
-import com.example.bm.werewolf.Utils.AccountManager;
+import com.example.bm.werewolf.Utils.UserDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,5 +72,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_container, fragment);
         transaction.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        UserDatabase.getInstance().offlineStatus();
+        super.onDestroy();
     }
 }

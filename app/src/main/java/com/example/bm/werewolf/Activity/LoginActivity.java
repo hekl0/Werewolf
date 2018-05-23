@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.bm.werewolf.R;
-import com.example.bm.werewolf.Utils.AccountManager;
+import com.example.bm.werewolf.Utils.UserDatabase;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -15,7 +15,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,14 +27,10 @@ public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
     LoginButton loginButton;
 
-    Intent intent;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        intent = new Intent(this, MainActivity.class);
 
         if (AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired())
             process(AccessToken.getCurrentAccessToken());
@@ -76,14 +71,16 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         String id = null;
+                        String name = null;
                         try {
                             id = object.getString("id");
-                            AccountManager.avaLink = "https://graph.facebook.com/" + id + "/picture?type=large";
+                            name = object.getString("name");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
-                        startActivity(intent);
+                        UserDatabase.facebookID = id;
+                        UserDatabase.getInstance().accessUser(name, LoginActivity.this);
                     }
                 }
         );
