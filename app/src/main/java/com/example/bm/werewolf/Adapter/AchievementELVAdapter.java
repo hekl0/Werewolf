@@ -79,7 +79,8 @@ public class AchievementELVAdapter extends BaseExpandableListAdapter {
         TextView tvName = convertView.findViewById(R.id.tv_achievement);
         ImageView ivImage = convertView.findViewById(R.id.iv_achievement);
         CircularProgressBar pbAchievement = convertView.findViewById(R.id.pb_achievement);
-        pbAchievement.setProgress((float)achievementModel.progress*100/achievementModel.total);
+        pbAchievement.setProgress(0);
+        pbAchievement.setProgressWithAnimation((float)achievementModel.progress*100/achievementModel.total,2000);
         Transformation transformation = new CropCircleTransformation();
         if (achievementModel.id == 0) Picasso.get().load(R.mipmap.achieve_vua_soi).transform(transformation).into(ivImage);
         else Picasso.get().load(R.mipmap.achieve_gia_lang).transform(transformation).into(ivImage);
