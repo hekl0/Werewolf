@@ -81,9 +81,9 @@ public class LoginActivity extends AppCompatActivity {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                float translationX = (float) animation.getAnimatedValue() * backgroundOne.getWidth();
+                float translationX = - (float) animation.getAnimatedValue() * backgroundOne.getWidth();
                 backgroundOne.setTranslationX(translationX);
-                backgroundTwo.setTranslationX(translationX - backgroundOne.getWidth());
+                backgroundTwo.setTranslationX(translationX + backgroundOne.getWidth());
             }
         });
         animator.start();
