@@ -1,7 +1,6 @@
 package com.example.bm.werewolf.Fragment;
 
 
-import android.accounts.AccountManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,8 +18,6 @@ import com.example.bm.werewolf.Adapter.GridViewAdapter;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
-import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -119,6 +116,7 @@ public class UserFragment extends Fragment {
         radarChart.animateXY(1400, 1400, Easing.EasingOption.EaseOutSine, Easing.EasingOption.EaseOutSine);
         radarChart.getLegend().setTextColor(Color.WHITE);
         radarChart.setExtraOffsets(-100, -100, -100, -100);
+        radarChart.setHighlightPerTapEnabled(false);
 
         return view;
     }
