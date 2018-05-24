@@ -14,25 +14,9 @@ public class UserModel {
     public String name;
 
     public List<Achievement> achievementList;
-    public List<DataRole> dataRoleList;
+    public List<Integer> dataWinRole;
+    public List<Integer> dataTotalRole;
     public List<String> friendList;
-
-    public UserModel() {
-    }
-
-    public UserModel(int win, int lose, boolean isOnline, int favoriteRole, String name,
-                     List<Achievement> achievementList,
-                     List<DataRole> dataRoleList,
-                     List<String> friendList) {
-        this.win = win;
-        this.lose = lose;
-        this.isOnline = isOnline;
-        this.favoriteRole = favoriteRole;
-        this.name = name;
-        this.achievementList = achievementList;
-        this.dataRoleList = dataRoleList;
-        this.friendList = friendList;
-    }
 
     @Override
     public String toString() {
@@ -43,20 +27,19 @@ public class UserModel {
                 ", favoriteRole=" + favoriteRole +
                 ", name='" + name + '\'' +
                 ", achievementList=" + achievementList +
-                ", dataRoleList=" + dataRoleList +
+                ", dataWinRole=" + dataWinRole +
+                ", dataTotalRole=" + dataTotalRole +
                 ", friendList=" + friendList +
                 '}';
     }
+
+    public UserModel() {
+    }
+
 
     public class Achievement {
         public String name;
         public int currentPoint;
         public int totalPoint;
-    }
-
-    public class DataRole {
-        public String role;
-        public int win;
-        public int totalGame;
     }
 }

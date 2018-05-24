@@ -51,16 +51,22 @@ public class UserDatabase {
                     userModel = userSnapShot.getValue(UserModel.class);
                     Log.d(TAG, "onDataChange1: " + userSnapShot.getValue(UserModel.class));
                 }
-                if (userModel == null)
-                    userModel = new UserModel(
-                            0,
-                            0,
-                            true,
-                            0,
-                            name,
-                            new ArrayList<UserModel.Achievement>(),
-                            new ArrayList<UserModel.DataRole>(),
-                            new ArrayList<String>());
+                if (userModel == null) {
+                    userModel = new UserModel();
+                    userModel.win = 0;
+                    userModel.lose = 0;
+                    userModel.isOnline = true;
+                    userModel.favoriteRole = 0;
+                    userModel.name = name;
+                    userModel.achievementList = new ArrayList<>();
+                    userModel.dataWinRole = new ArrayList<>();
+                    userModel.dataTotalRole = new ArrayList<>();
+                    for (int i = 0; i < Constant.nameRole.length - 1; i++) {
+                        userModel.dataWinRole.add(0);
+                        userModel.dataTotalRole.add(0);
+                    }
+                    userModel.friendList = new ArrayList<>();
+                }
 
                 userModel.name = name;
                 userModel.isOnline = true;
