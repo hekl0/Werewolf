@@ -1,10 +1,10 @@
 package com.example.bm.werewolf.Fragment;
 
 
+import android.accounts.AccountManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +19,8 @@ import com.example.bm.werewolf.Adapter.GridViewAdapter;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.components.AxisBase;
