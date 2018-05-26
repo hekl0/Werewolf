@@ -1,48 +1,60 @@
 package com.example.bm.werewolf.Activity;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 import com.example.bm.werewolf.R;
-import com.example.bm.werewolf.Utils.AccountManager;
+import com.example.bm.werewolf.Utils.UserDatabase;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
     CallbackManager callbackManager;
+    @BindView(R.id.login_button)
     LoginButton loginButton;
-
-    Intent intent;
+    @BindView(R.id.background_one)
+    ImageView backgroundOne;
+    @BindView(R.id.background_two)
+    ImageView backgroundTwo;
+    @BindView(R.id.avi)
+    AVLoadingIndicatorView avi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
-        intent = new Intent(this, MainActivity.class);
+        LoginManager.getInstance().logOut();
 
         if (AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired())
             process(AccessToken.getCurrentAccessToken());
 
         callbackManager = CallbackManager.Factory.create();
 
-        loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList("public_profile"));
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -61,6 +73,20 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "onError: error");
             }
         });
+
+        ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setDuration(20000);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float translationX = - (float) animation.getAnimatedValue() * backgroundOne.getWidth();
+                backgroundOne.setTranslationX(translationX);
+                backgroundTwo.setTranslationX(translationX + backgroundOne.getWidth());
+            }
+        });
+        animator.start();
     }
 
     @Override
@@ -70,20 +96,23 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void process(AccessToken accessToken) {
+        avi.show();
         GraphRequest graphRequest = GraphRequest.newMeRequest(
                 accessToken,
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         String id = null;
+                        String name = null;
                         try {
                             id = object.getString("id");
-                            AccountManager.avaLink = "https://graph.facebook.com/" + id + "/picture?type=large";
+                            name = object.getString("name");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
-                        startActivity(intent);
+                        UserDatabase.facebookID = id;
+                        UserDatabase.getInstance().accessUser(name, LoginActivity.this);
                     }
                 }
         );

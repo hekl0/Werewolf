@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Utils.Constant;
 
 /**
  * Created by bùm on 21/05/2018.
@@ -17,12 +18,9 @@ import com.example.bm.werewolf.R;
 public class GridViewAdapter extends BaseAdapter {
     private static final String TAG = "GridViewAdapter";
 
-    public int[] image = new int[]{R.mipmap.ic_launcher, R.mipmap.bao_ve, R.mipmap.ma_soi, R.mipmap.dan_lang, R.mipmap.tho_san, R.mipmap.tien_tri};
-    public String[] name = new String[]{"None", "Bảo vệ", "Ma sói", "Dân làng", "Thợ săn", "Tiên tri"};
-
     @Override
     public int getCount() {
-        return name.length;
+        return Constant.nameRole.length;
     }
 
     @Override
@@ -43,8 +41,8 @@ public class GridViewAdapter extends BaseAdapter {
         ImageView iv = convertView.findViewById(R.id.iv);
         TextView tv = convertView.findViewById(R.id.tv);
 
-        iv.setImageResource(image[position]);
-        tv.setText(name[position]);
+        iv.setImageResource(Constant.imageRole[position]);
+        tv.setText(Constant.nameRole[position]);
 
         return convertView;
     }
