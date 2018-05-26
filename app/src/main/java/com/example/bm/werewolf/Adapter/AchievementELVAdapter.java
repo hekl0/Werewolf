@@ -1,8 +1,6 @@
 package com.example.bm.werewolf.Adapter;
 
 import android.content.Context;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.bm.werewolf.Database.AchievementItemModel;
-import com.example.bm.werewolf.Database.AchievementModel;
+import com.example.bm.werewolf.Model.AchievementItemModel;
+import com.example.bm.werewolf.Model.AchievementModel;
 import com.example.bm.werewolf.R;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.squareup.picasso.Picasso;
