@@ -5,9 +5,32 @@
     tools:context="com.example.bm.werewolf.Fragment.PlayFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Play" />
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/bt_create_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text=" Tạo Phòng"
+            android:drawableStart="@drawable/ic_add_room"/>
+
+        <Button
+            android:id="@+id/bt_find_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="Tìm phòng "
+            android:drawableEnd="@drawable/ic_find_room"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_rooms"
+            android:layout_below="@id/bt_create_room"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 
 </FrameLayout>
