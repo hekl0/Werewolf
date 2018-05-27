@@ -58,6 +58,7 @@ public class UserDatabase {
                     userModel.isOnline = true;
                     userModel.favoriteRole = 0;
                     userModel.name = name;
+                    userModel.cover = 0;
                     userModel.achievementList = new ArrayList<>();
                     userModel.dataWinRole = new ArrayList<>();
                     userModel.dataTotalRole = new ArrayList<>();
@@ -66,6 +67,8 @@ public class UserDatabase {
                         userModel.dataTotalRole.add(0);
                     }
                     userModel.friendList = new ArrayList<>();
+                    userModel.achievedCover = new ArrayList<>();
+                    userModel.achievedCover.add(0);
                 }
 
                 userModel.name = name;

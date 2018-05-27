@@ -4,6 +4,7 @@ package com.example.bm.werewolf.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.bm.werewolf.Adapter.CoverAdapter;
 import com.example.bm.werewolf.Adapter.FavoriteRoleAdapter;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Utils.Constant;
@@ -49,16 +51,14 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 public class UserFragment extends Fragment {
     private static final String TAG = "UserFragment";
 
-    @BindView(R.id.text)
-    TextView text;
     @BindView(R.id.iv_exit)
     ImageView ivExit;
-    @BindView(R.id.gv_list_role)
-    GridView gvListRole;
+    @BindView(R.id.gv_small_window)
+    GridView gvSmallWindow;
     @BindView(R.id.rl_small_window)
     RelativeLayout rlSmallWindow;
-    @BindView(R.id.iv_wall)
-    ImageView ivWall;
+    @BindView(R.id.iv_cover)
+    ImageView ivCover;
     @BindView(R.id.iv_ava)
     ImageView ivAva;
     @BindView(R.id.tv_lose)
@@ -76,6 +76,8 @@ public class UserFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.tv_name)
     TextView tvName;
+    @BindView(R.id.tv_small_window)
+    TextView tvSmallWindow;
 
     public UserFragment() {
         // Required empty public constructor
@@ -89,8 +91,6 @@ public class UserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        initSmallWindow();
-
         Transformation transformation = new CropCircleTransformation();
 
         Picasso.get()
@@ -100,8 +100,10 @@ public class UserFragment extends Fragment {
 
         tvWin.setText(String.valueOf(UserDatabase.getInstance().userModel.win));
         tvLose.setText(String.valueOf(UserDatabase.getInstance().userModel.lose));
+        ivCover.setImageResource(Constant.imageCover[UserDatabase.getInstance().userModel.cover]);
         tvName.setText(UserDatabase.getInstance().userModel.name);
-        if (UserDatabase.getInstance().userModel.favoriteRole == 0) ivFavoriteRole.setVisibility(View.GONE);
+        if (UserDatabase.getInstance().userModel.favoriteRole == 0)
+            ivFavoriteRole.setVisibility(View.GONE);
         else ivFavoriteRole.setVisibility(View.VISIBLE);
         ivFavoriteRole.setImageResource(Constant.imageRole[UserDatabase.getInstance().userModel.favoriteRole]);
         tvFavoriteRole.setText(Constant.nameRole[UserDatabase.getInstance().userModel.favoriteRole]);
@@ -123,10 +125,11 @@ public class UserFragment extends Fragment {
         return view;
     }
 
-    public void initSmallWindow() {
+    public void initFavoriteRole() {
+        tvSmallWindow.setText("Nhân vật yêu thích");
         final FavoriteRoleAdapter favoriteRoleAdapter = new FavoriteRoleAdapter();
-        gvListRole.setAdapter(favoriteRoleAdapter);
-        gvListRole.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gvSmallWindow.setAdapter(favoriteRoleAdapter);
+        gvSmallWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 rlSmallWindow.setVisibility(View.GONE);
@@ -136,6 +139,22 @@ public class UserFragment extends Fragment {
                 tvFavoriteRole.setText(Constant.nameRole[position]);
 
                 UserDatabase.getInstance().userModel.favoriteRole = position;
+                UserDatabase.getInstance().updateUser();
+            }
+        });
+    }
+
+    public void initCover() {
+        tvSmallWindow.setText("Chọn ảnh nền");
+        CoverAdapter coverAdapter = new CoverAdapter();
+        gvSmallWindow.setAdapter(coverAdapter);
+        gvSmallWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                rlSmallWindow.setVisibility(View.GONE);
+                ivCover.setImageResource(Constant.imageCover[UserDatabase.getInstance().userModel.achievedCover.get(position)]);
+
+                UserDatabase.getInstance().userModel.cover = UserDatabase.getInstance().userModel.achievedCover.get(position);
                 UserDatabase.getInstance().updateUser();
             }
         });
@@ -201,13 +220,18 @@ public class UserFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_exit, R.id.ll_favorite_role})
+    @OnClick({R.id.iv_exit, R.id.ll_favorite_role, R.id.iv_cover})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_exit:
                 rlSmallWindow.setVisibility(View.GONE);
                 break;
             case R.id.ll_favorite_role:
+                initFavoriteRole();
+                rlSmallWindow.setVisibility(View.VISIBLE);
+                break;
+            case R.id.iv_cover:
+                initCover();
                 rlSmallWindow.setVisibility(View.VISIBLE);
                 break;
         }

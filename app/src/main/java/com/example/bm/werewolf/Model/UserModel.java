@@ -12,7 +12,9 @@ public class UserModel {
     public boolean isOnline;
     public int favoriteRole;
     public String name;
+    public int cover;
 
+    public List<Integer> achievedCover;
     public List<Achievement> achievementList;
     public List<Integer> dataWinRole;
     public List<Integer> dataTotalRole;

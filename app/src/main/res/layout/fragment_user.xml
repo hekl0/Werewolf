@@ -29,7 +29,7 @@
         app:layout_constraintGuide_percent="0.40" />
 
     <ImageView
-        android:id="@+id/iv_wall"
+        android:id="@+id/iv_cover"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@mipmap/achieve_default"
@@ -184,7 +184,7 @@
         app:layout_constraintVertical_bias="0.981">
 
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/tv_small_window"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -202,10 +202,10 @@
             android:src="@drawable/ic_x_button" />
 
         <GridView
-            android:id="@+id/gv_list_role"
+            android:id="@+id/gv_small_window"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/text"
+            android:layout_below="@id/tv_small_window"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
