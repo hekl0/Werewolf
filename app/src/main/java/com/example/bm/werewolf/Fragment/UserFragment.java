@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.bm.werewolf.Adapter.GridViewAdapter;
+import com.example.bm.werewolf.Adapter.FavoriteRoleAdapter;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
@@ -98,6 +98,8 @@ public class UserFragment extends Fragment {
                 .transform(transformation)
                 .into(ivAva);
 
+        tvWin.setText(String.valueOf(UserDatabase.getInstance().userModel.win));
+        tvLose.setText(String.valueOf(UserDatabase.getInstance().userModel.lose));
         tvName.setText(UserDatabase.getInstance().userModel.name);
         if (UserDatabase.getInstance().userModel.favoriteRole == 0) ivFavoriteRole.setVisibility(View.GONE);
         else ivFavoriteRole.setVisibility(View.VISIBLE);
@@ -122,8 +124,8 @@ public class UserFragment extends Fragment {
     }
 
     public void initSmallWindow() {
-        final GridViewAdapter gridViewAdapter = new GridViewAdapter();
-        gvListRole.setAdapter(gridViewAdapter);
+        final FavoriteRoleAdapter favoriteRoleAdapter = new FavoriteRoleAdapter();
+        gvListRole.setAdapter(favoriteRoleAdapter);
         gvListRole.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -118,7 +118,7 @@
         android:textColor="#fff"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <com.github.mikephil.charting.charts.RadarChart
         android:id="@+id/radar_chart"
@@ -188,9 +188,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:fontFamily="@font/autour_one"
             android:padding="8dp"
-            android:text="Favorite role"
+            android:text="Nhân vật yêu thích"
             android:textColor="@color/white"
             android:textSize="18sp" />
 

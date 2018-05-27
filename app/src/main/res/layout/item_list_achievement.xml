@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="6dp">
 
     <ImageView
         android:id="@+id/iv_achievement"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:src="@mipmap/achieve_default"
-        android:padding="6dp"
         android:scaleType="centerCrop"/>
 
     <TextView

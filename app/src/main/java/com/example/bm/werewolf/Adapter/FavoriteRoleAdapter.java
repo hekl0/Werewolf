@@ -15,8 +15,8 @@ import com.example.bm.werewolf.Utils.Constant;
  * Created by bùm on 21/05/2018.
  */
 
-public class GridViewAdapter extends BaseAdapter {
-    private static final String TAG = "GridViewAdapter";
+public class FavoriteRoleAdapter extends BaseAdapter {
+    private static final String TAG = "FavoriteRoleAdapter";
 
     @Override
     public int getCount() {
