@@ -15,12 +15,24 @@
       },
       "oauth_client": [
         {
+          "client_id": "638712090649-l1oklltlo1bcqo08viksofb8rghnrhd7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bm.werewolf",
+            "certificate_hash": "238ddbe56ba188c224377b0c84884fe4250e0178"
+          }
+        },
+        {
           "client_id": "638712090649-7bdotek6sejpsmnait1bgcmtf061vv3r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.bm.werewolf",
             "certificate_hash": "5830777a7474a489e881b595242d20e0b30a2156"
           }
+        },
+        {
+          "client_id": "638712090649-k3e0758vs7phr26rob9l03fs0iiju5js.apps.googleusercontent.com",
+          "client_type": 3
         },
         {
           "client_id": "638712090649-k3e0758vs7phr26rob9l03fs0iiju5js.apps.googleusercontent.com",

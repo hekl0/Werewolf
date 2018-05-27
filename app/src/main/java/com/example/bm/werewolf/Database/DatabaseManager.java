@@ -1,7 +1,9 @@
 package com.example.bm.werewolf.Database;
 
 import android.content.Context;
-import android.util.Log;
+
+import com.example.bm.werewolf.Model.AchievementItemModel;
+import com.example.bm.werewolf.Model.AchievementModel;
 
 import java.util.ArrayList;
 import java.util.List;

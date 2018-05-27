@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.example.bm.werewolf.Adapter.AchievementELVAdapter;
-import com.example.bm.werewolf.Database.AchievementItemModel;
-import com.example.bm.werewolf.Database.AchievementModel;
+import com.example.bm.werewolf.Model.AchievementItemModel;
+import com.example.bm.werewolf.Model.AchievementModel;
 import com.example.bm.werewolf.Database.DatabaseManager;
 import com.example.bm.werewolf.R;
 

@@ -1,4 +1,4 @@
-package com.example.bm.werewolf.Database;
+package com.example.bm.werewolf.Model;
 
 public class AchievementModel {
     public int id;

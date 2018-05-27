@@ -1,8 +1,6 @@
 package com.example.bm.werewolf.Adapter;
 
 import android.content.Context;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.bm.werewolf.Database.AchievementItemModel;
-import com.example.bm.werewolf.Database.AchievementModel;
+import com.example.bm.werewolf.Model.AchievementItemModel;
+import com.example.bm.werewolf.Model.AchievementModel;
 import com.example.bm.werewolf.R;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.squareup.picasso.Picasso;
@@ -78,11 +76,8 @@ public class AchievementELVAdapter extends BaseExpandableListAdapter {
         AchievementModel achievementModel = achievementModels.get(groupPosition);
         TextView tvName = convertView.findViewById(R.id.tv_achievement);
         ImageView ivImage = convertView.findViewById(R.id.iv_achievement);
-        CircularProgressBar pbAchievement = convertView.findViewById(R.id.pb_achievement);
-        pbAchievement.setProgress((float)achievementModel.progress*100/achievementModel.total);
-        Transformation transformation = new CropCircleTransformation();
-        if (achievementModel.id == 0) Picasso.get().load(R.mipmap.achieve_vua_soi).transform(transformation).into(ivImage);
-        else Picasso.get().load(R.mipmap.achieve_gia_lang).transform(transformation).into(ivImage);
+        if (achievementModel.id == 0) Picasso.get().load(R.mipmap.achieve_vua_soi).into(ivImage);
+        else Picasso.get().load(R.mipmap.achieve_gia_lang).into(ivImage);
 
         tvName.setText(achievementModel.name);
 

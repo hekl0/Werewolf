@@ -30,7 +30,7 @@
         android:fontFamily="@font/allerta_stencil"
         android:text="Werewolf"
         android:textColor="@color/white"
-        android:textSize="65sp"
+        android:textSize="55sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
