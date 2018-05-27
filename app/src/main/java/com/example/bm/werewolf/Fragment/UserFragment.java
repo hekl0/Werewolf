@@ -95,6 +95,7 @@ public class UserFragment extends Fragment {
 
         Picasso.get()
                 .load("https://graph.facebook.com/" + UserDatabase.facebookID + "/picture?type=large")
+                .placeholder(R.drawable.progress_animation)
                 .transform(transformation)
                 .into(ivAva);
 

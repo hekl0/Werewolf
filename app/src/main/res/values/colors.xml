@@ -6,4 +6,5 @@
     <color name="navigationBarColor">#80344152</color>
     <color name="white">#ffffff</color>
     <color name="brown">#DE7B3A</color>
+    <color name="gray">#cccecece</color>
 </resources>
