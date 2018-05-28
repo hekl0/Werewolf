@@ -90,6 +90,7 @@
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/ll1"

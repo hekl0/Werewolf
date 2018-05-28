@@ -146,7 +146,7 @@ public class UserFragment extends Fragment {
     }
 
     public void initCover() {
-        tvSmallWindow.setText("Chọn ảnh nền");
+        tvSmallWindow.setText("Chọn ảnh bìa");
         CoverAdapter coverAdapter = new CoverAdapter();
         gvSmallWindow.setAdapter(coverAdapter);
         gvSmallWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
