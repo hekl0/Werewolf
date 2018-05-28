@@ -1,4 +1,4 @@
-package com.example.bm.werewolf.models;
+package com.example.bm.werewolf.Model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

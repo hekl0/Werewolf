@@ -19,9 +19,9 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.example.bm.werewolf.Adapter.LobbyAdapter;
+import com.example.bm.werewolf.Model.RoomModel;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Utils.UserDatabase;
-import com.example.bm.werewolf.models.RoomModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

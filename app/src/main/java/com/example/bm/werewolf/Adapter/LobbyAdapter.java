@@ -1,7 +1,6 @@
 package com.example.bm.werewolf.Adapter;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bm.werewolf.R;
-import com.example.bm.werewolf.models.RoomModel;
+import com.example.bm.werewolf.Model.RoomModel;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
