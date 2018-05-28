@@ -10,29 +10,32 @@ public class RoomModel {
     public String roomName;
     public String roomPassword;
     public boolean isPasswordProtected;
-    public List<Integer> players;
+    public List<String> players;
     public boolean gameInProgress;
+    public String roomMasterID;
 
     public RoomModel() {
 
     }
 
-    public RoomModel(String roomName, String roomPassword, boolean isPasswordProtected, List<Integer> players, boolean gameInProgress) {
+    public RoomModel(String roomName, String roomPassword, boolean isPasswordProtected, List<String> players, String roomMasterID, boolean gameInProgress) {
         this.roomName = roomName;
         this.roomPassword = roomPassword;
         this.isPasswordProtected = isPasswordProtected;
         this.players = players;
+        this.roomMasterID = roomMasterID;
         this.gameInProgress = gameInProgress;
     }
 
     @Override
     public String toString() {
-        return "RoomModel{\n" +
-                "roomName='" + roomName + '\n' +
-                "roomPassword='" + roomPassword + '\n' +
-                "isPasswordProtected=" + isPasswordProtected + '\n' +
-                "players=" + players + '\n' +
-                "gameInProgress=" + gameInProgress + '\n' +
+        return "RoomModel{" +
+                "roomName=" + roomName + '\n' +
+                "roomPassword=" + roomPassword + '\n' +
+                "isPasswordProtected=" + isPasswordProtected + "\n" +
+                "players=" + players +
+                "gameInProgress=" + gameInProgress +
+                "roomMasterID=" + roomMasterID +
                 '}';
     }
 }
