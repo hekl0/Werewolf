@@ -28,9 +28,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffc107" />
-                            <entry key="outputName" value="ic_lock_outline_amber_24dp" />
-                            <entry key="sourceFile" value="C:\Users\Admin\Desktop\find room.svg" />
+                            <entry key="outputName" value="wooden_board" />
+                            <entry key="sourceFile" value="C:\Users\Admin\Desktop\04.psd" />
                           </map>
                         </option>
                       </PersistentState>

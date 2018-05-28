@@ -20,6 +20,7 @@ import android.widget.EditText;
 
 import com.example.bm.werewolf.Adapter.LobbyAdapter;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Utils.UserDatabase;
 import com.example.bm.werewolf.models.RoomModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -83,8 +84,8 @@ public class PlayFragment extends Fragment {
                     RoomModel model = snapshot.getValue(RoomModel.class);
                     roomMap.put(roomID, model);
                 }
-
-
+                adapter = new LobbyAdapter(roomMap, context);
+                rvRooms.setAdapter(adapter);
             }
 
             @Override
@@ -92,12 +93,9 @@ public class PlayFragment extends Fragment {
 
             }
         });
-//        context = getContext();
-//        adapter = new LobbyAdapter(roomMap, context);
-//        rvRooms.setAdapter(adapter);
-//        GridLayoutManager layoutManager = new GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false);
-//        rvRooms.setLayoutManager(layoutManager);
-//        adapter.notifyDataSetChanged();
+        context = getContext();
+        GridLayoutManager layoutManager = new GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false);
+        rvRooms.setLayoutManager(layoutManager);
 
         return view;
     }
@@ -136,7 +134,7 @@ public class PlayFragment extends Fragment {
                                 String roomPass = etRoomPass.getText().toString();
                                 boolean isPasswordProtected = checkBox.isChecked();
                                 boolean gameInProgress = false;
-                                final int currentPlayerID = 1; //placeholder
+                                final int currentPlayerID = Integer.parseInt(UserDatabase.facebookID); //placeholder
 
                                 while (roomMap.containsKey(id)) {
                                     id++;
