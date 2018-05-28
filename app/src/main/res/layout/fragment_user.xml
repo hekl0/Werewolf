@@ -29,7 +29,7 @@
         app:layout_constraintGuide_percent="0.40" />
 
     <ImageView
-        android:id="@+id/iv_wall"
+        android:id="@+id/iv_cover"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@mipmap/achieve_default"
@@ -48,7 +48,6 @@
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:src="@color/cardview_light_background"
         app:layout_constraintBottom_toTopOf="@+id/guideline_40"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +117,7 @@
         android:textColor="#fff"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <com.github.mikephil.charting.charts.RadarChart
         android:id="@+id/radar_chart"
@@ -184,13 +183,12 @@
         app:layout_constraintVertical_bias="0.981">
 
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/tv_small_window"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:fontFamily="@font/autour_one"
             android:padding="8dp"
-            android:text="Favorite role"
+            android:text="Nhân vật yêu thích"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
@@ -203,10 +201,10 @@
             android:src="@drawable/ic_x_button" />
 
         <GridView
-            android:id="@+id/gv_list_role"
+            android:id="@+id/gv_small_window"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/text"
+            android:layout_below="@id/tv_small_window"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"

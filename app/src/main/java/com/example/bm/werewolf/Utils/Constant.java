@@ -16,4 +16,11 @@ public class Constant {
     public static int DAN_LANG = 3;
     public static int THO_SAN = 4;
     public static int TIEN_TRI = 5;
+
+    public static int[] imageCover = new int[]{R.mipmap.achieve_default, R.mipmap.achieve_gia_lang, R.mipmap.achieve_vua_soi};
+    public static String[] nameCover = new String[]{"Mặc định", "Già làng", "Ma sói"};
+
+    public static int DEFAULT = 0;
+    public static int GIALANG = 1;
+    public static int MASOI = 2;
 }
