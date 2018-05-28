@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHolder> {
+    private static final String TAG = "LobbyAdapter";
 
     Map<Integer, RoomModel> roomMap;
     List<RoomModel> roomList;
@@ -33,6 +35,7 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
         this.roomMap = roomMap;
         this.context = context;
         roomList = new ArrayList<>(roomMap.values());
+        Log.d(TAG, "LobbyAdapter: " + roomList.toString());
     }
 
     @NonNull
@@ -50,7 +53,7 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
 
     @Override
     public int getItemCount() {
-        return roomMap.size();
+        return roomList.size();
     }
 
     public class LobbyViewHolder extends  RecyclerView.ViewHolder {
@@ -72,10 +75,10 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
             ButterKnife.bind(this, itemView);
         }
 
-        public void setData(RoomModel roomModel) {
+        public void setData(final RoomModel roomModel) {
             if (roomModel.isPasswordProtected)
-                Picasso.get().load(R.drawable.ic_lock_outline_amber_24dp).into(ivLock);
-            tvRoomId.setText(String.format("ID: %d", roomMap.get(roomModel)));
+                ivLock.setVisibility(View.VISIBLE);
+            tvRoomId.setText(String.format("ID: %d", getKeyByValue(roomMap, roomModel)));
             tvCapacity.setText(String.format("%d/10", roomModel.players.size()));
             tvRoomName.setText(roomModel.roomName);
             if (roomModel.gameInProgress) {
@@ -90,8 +93,19 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
                 public void onClick(View v) {
                     //do something a room is choosen
                     Toast.makeText(context, "Room choosen", Toast.LENGTH_SHORT).show();
+                    if (roomModel.isPasswordProtected) {
+
+                    }
                 }
             });
+        }
+
+        public int getKeyByValue(Map<Integer, RoomModel> map, RoomModel value) {
+            for (Integer key : map.keySet()) {
+                if (map.get(key).equals(value))
+                    return key;
+            }
+            return -1;
         }
     }
 }
