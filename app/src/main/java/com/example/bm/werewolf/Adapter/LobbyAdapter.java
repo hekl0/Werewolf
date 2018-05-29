@@ -4,24 +4,22 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bm.werewolf.Activity.MainActivity;
-import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Model.RoomModel;
-import com.squareup.picasso.Picasso;
+import com.example.bm.werewolf.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +97,8 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
                 public void onClick(View v) {
                     //do something a room is choosen
                     Toast.makeText(context, "Room choosen", Toast.LENGTH_SHORT).show();
-                    showPasswordDialog(roomModel.roomName, roomModel.roomPassword);
+                    if (roomModel.isPasswordProtected)
+                        showPasswordDialog(roomModel.roomName, roomModel.roomPassword);
                 }
             });
         }
@@ -115,13 +114,14 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
         public void showPasswordDialog(String roomName, final String roomPass) {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
             LayoutInflater inflater = LayoutInflater.from(context);
-            final View dialogView = inflater.inflate(R.layout.room_password_dialog, null);
+            final View dialogView = inflater.inflate(R.layout.dialog_with_edittext, null);
             dialogBuilder.setView(dialogView);
 
-            final EditText etPass = dialogView.findViewById(R.id.et_room_password);
+            final EditText etPass = dialogView.findViewById(R.id.edittext);
+            etPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
             dialogBuilder.setTitle(roomName);
-            dialogBuilder.setMessage("Enter room password");
+            dialogBuilder.setMessage("Nhập mật khẩu phòng");
             dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -132,13 +132,14 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
                     }
                 }
             });
-            dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            dialogBuilder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                 }
             });
             AlertDialog ad = dialogBuilder.create();
+            ad.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#7dffffff")));
             ad.show();
         }
     }

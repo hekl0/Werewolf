@@ -4,12 +4,14 @@ package com.example.bm.werewolf.Fragment;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.bm.werewolf.Activity.WaitingRoomActivity;
 import com.example.bm.werewolf.Adapter.LobbyAdapter;
 import com.example.bm.werewolf.Model.RoomModel;
 import com.example.bm.werewolf.R;
@@ -166,7 +170,56 @@ public class PlayFragment extends Fragment {
                 alertDialog.show();
                 break;
             case R.id.bt_find_room:
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+                LayoutInflater dialogInflater = LayoutInflater.from(context);
+                final View dialogView = dialogInflater.inflate(R.layout.dialog_with_edittext, null);
+                dialogBuilder.setView(dialogView);
+
+                final EditText etRoomID = dialogView.findViewById(R.id.edittext);
+                etRoomID.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+                dialogBuilder.setTitle("Tìm phòng");
+                dialogBuilder.setMessage("Nhập ID phòng");
+                dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (etRoomID.getText().toString().isEmpty()) {
+                            etRoomID.setError("ID phòng không thể trống");
+                            return;
+                        }
+                        int roomID = Integer.parseInt(etRoomID.getText().toString());
+                        if (checkRoomID(roomID)) {
+                            //found the room
+                            Toast.makeText(context, "Thấy Phòng", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(context, WaitingRoomActivity.class);
+                            intent.putExtra("roomID", roomID);
+                            startActivity(intent);
+                        }
+                        else {
+                            Toast.makeText(context, "Không thấy phòng", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
+                        
+                    }
+                });
+                dialogBuilder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog ad = dialogBuilder.create();
+                ad.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#7dffffff")));
+                ad.show();
                 break;
         }
+    }
+
+    boolean checkRoomID(int ID) {
+        for (int roomID : roomMap.keySet()) {
+            if (roomID == ID)
+                return true;
+        }
+        return false;
     }
 }

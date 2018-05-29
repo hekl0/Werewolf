@@ -14,15 +14,17 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:text=" Tạo Phòng"
-            android:drawableStart="@drawable/ic_add_room"/>
+            android:background="@drawable/rounded_border"
+            android:drawableTop="@drawable/ic_add_room"/>
 
         <Button
             android:id="@+id/bt_find_room"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:background="@drawable/rounded_border"
             android:text="Tìm phòng "
-            android:drawableEnd="@drawable/ic_find_room"/>
+            android:drawableTop="@drawable/ic_find_room"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_rooms"

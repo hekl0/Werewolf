@@ -4,9 +4,13 @@
     android:layout_height="match_parent"
     tools:context="com.example.bm.werewolf.Fragment.FriendsFragment">
 
-    <TextView
+    <ExpandableListView
+        android:id="@+id/elv_friends"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Friends" />
+        android:divider="@null"
+        android:groupIndicator="@null">
+
+    </ExpandableListView>
 
 </FrameLayout>
