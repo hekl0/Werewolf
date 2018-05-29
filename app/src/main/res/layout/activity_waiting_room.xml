@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context="com.example.bm.werewolf.Activity.GameActivity">
+    tools:context="com.example.bm.werewolf.Activity.WaitingRoomActivity"
+    android:id="@+id/constraint_layout">
 
     <RelativeLayout
         android:id="@+id/rl1"
@@ -40,74 +41,93 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <GridView
+        android:id="@+id/gv_waiting_room"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/chat_border"
-        android:layout_below="@+id/rl1"
-        android:layout_marginTop="370dp">
+        android:layout_height="0dp"
+        android:layout_below="@id/rl1"
+        android:numColumns="3"
+        app:layout_constraintTop_toBottomOf="@id/rl1"
+        app:layout_constraintBottom_toTopOf="@id/guideline2"/>
 
-        <LinearLayout
+    <RelativeLayout
+        android:id="@+id/rl_chat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/rl1"
+        android:background="@drawable/chat_border"
+        app:layout_constraintTop_toBottomOf="@id/guideline2"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <RelativeLayout
             android:id="@+id/ll1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
             android:background="#242426"
             android:padding="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp">
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
             <EditText
                 android:id="@+id/et_chat"
-                android:layout_width="250dp"
+                android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:background="@drawable/chat_box_border"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"
                 android:layout_marginEnd="4dp"
-                android:paddingStart="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/chat_box_border"
                 android:paddingEnd="8dp"
-                android:text="aa"
+                android:paddingStart="8dp"
                 android:textColor="#F0EFF5"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:layout_toStartOf="@id/iv_chat_submit"
+                android:maxLength="200"/>
 
             <ImageView
                 android:id="@+id/iv_chat_submit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="4dp"
                 android:src="@drawable/ic_done"
-                android:padding="4dp"/>
+                android:layout_toStartOf="@id/iv_mute"/>
 
             <ImageView
                 android:id="@+id/iv_mute"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:padding="4dp"
                 android:src="@drawable/ic_speaker"
-                android:padding="4dp"/>
+                android:layout_alignParentEnd="true"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/ll1"
-            android:layout_marginTop="4dp"
-            android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
-            android:paddingTop="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:paddingEnd="8dp"
             android:paddingStart="8dp"
-            android:paddingEnd="8dp"/>
+            android:paddingTop="4dp"
+            android:overScrollMode="never"
+            android:onClick="onViewClicked"/>
 
     </RelativeLayout>
 
-    <GridView
-        android:id="@+id/gv_waiting_room"
-        android:layout_width="match_parent"
-        android:layout_height="370dp"
-        android:layout_below="@id/rl1"
-        android:numColumns="3"/>
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.75" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

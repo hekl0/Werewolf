@@ -43,7 +43,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.GameActivity"></activity>
+        <activity android:name=".Activity.WaitingRoomActivity"></activity>
     </application>
 
 </manifest>
