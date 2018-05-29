@@ -11,8 +11,7 @@
     <RelativeLayout
         android:id="@+id/rl1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/navigationBarColor">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/iv_back"
@@ -22,14 +21,16 @@
             android:src="@drawable/ic_back_arrow" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
             android:layout_centerInParent="true"
             android:fontFamily="@font/autour_one"
             android:text="12.Hahaha"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="@drawable/room_name_border"
+            android:gravity="center"/>
 
         <ImageView
             android:id="@+id/iv_invite"

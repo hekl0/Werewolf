@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="165dp"
-    android:layout_height="195dp">
-
-    <ImageView
-        android:id="@+id/iv_mark"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintEnd_toEndOf="parent" />
+    android:layout_width="115dp"
+    android:layout_height="145dp">
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
@@ -21,8 +14,8 @@
 
     <ImageView
         android:id="@+id/iv_ava"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,22 +23,29 @@
         app:layout_constraintTop_toTopOf="@+id/guideline"
         app:srcCompat="@mipmap/card_back" />
 
+    <ImageView
+        android:id="@+id/iv_mark"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@mipmap/ma_soi"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/tv_number"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:text="01"
-        android:textColor="#000000"
+        android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="135dp"
+        android:layout_width="85dp"
         android:layout_height="30dp"
         android:text="name"
-        android:textColor="#000000"
+        android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

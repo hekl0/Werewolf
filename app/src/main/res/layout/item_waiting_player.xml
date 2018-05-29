@@ -3,49 +3,58 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="8dp"
+        android:background="@drawable/waiting_player_border">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/iv_change_host"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_change_host" />
+
+            <ImageView
+                android:id="@+id/iv_host"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginStart="24dp"
+                android:src="@drawable/ic_host" />
+
+            <ImageView
+                android:id="@+id/iv_kick"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_kick" />
+
+        </LinearLayout>
 
         <ImageView
-            android:id="@+id/iv_change_host"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:src="@drawable/ic_host"/>
+            android:id="@+id/iv_ava"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
 
-        <ImageView
-            android:id="@+id/iv_host"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:src="@drawable/ic_host"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="4dp"/>
-
-        <ImageView
-            android:id="@+id/iv_kick"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:src="@drawable/ic_kick"/>
-
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="aaa"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/iv_ava"
-        android:layout_width="80dp"
-        android:layout_height="80dp" />
-
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="aaa"
-        android:textSize="12sp"
-        android:textColor="@color/white"
-        android:layout_marginTop="4dp"/>
-
 </LinearLayout>
