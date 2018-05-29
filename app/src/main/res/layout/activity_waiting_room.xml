@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="com.example.bm.werewolf.Activity.WaitingRoomActivity"
+    android:id="@+id/constraint_layout">
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:src="@drawable/ic_back_arrow" />
+
+        <TextView
+            android:layout_width="220dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/autour_one"
+            android:text="12.Hahaha"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="@drawable/room_name_border"
+            android:gravity="center"/>
+
+        <ImageView
+            android:id="@+id/iv_invite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:padding="16dp"
+            android:src="@drawable/ic_add_friend" />
+
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/gv_waiting_room"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/rl1"
+        android:numColumns="3"
+        app:layout_constraintTop_toBottomOf="@id/rl1"
+        app:layout_constraintBottom_toTopOf="@id/guideline2"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_chat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/rl1"
+        android:background="@drawable/chat_border"
+        app:layout_constraintTop_toBottomOf="@id/guideline2"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/ll1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:background="#242426"
+            android:padding="4dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <EditText
+                android:id="@+id/et_chat"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/chat_box_border"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:textColor="#F0EFF5"
+                android:textSize="13sp"
+                android:layout_toStartOf="@id/iv_chat_submit"
+                android:maxLength="200"/>
+
+            <ImageView
+                android:id="@+id/iv_chat_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:src="@drawable/ic_done"
+                android:layout_toStartOf="@id/iv_mute"/>
+
+            <ImageView
+                android:id="@+id/iv_mute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_speaker"
+                android:layout_alignParentEnd="true"/>
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/ll1"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:overScrollMode="never"
+            android:onClick="onViewClicked"/>
+
+    </RelativeLayout>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.75" />
+
+</android.support.constraint.ConstraintLayout>

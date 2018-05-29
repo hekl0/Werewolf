@@ -46,10 +46,8 @@ public class UserDatabase {
         databaseReference.orderByKey().equalTo(facebookID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onDataChange: " + dataSnapshot.getValue());
                 for (DataSnapshot userSnapShot : dataSnapshot.getChildren()) {
                     userModel = userSnapShot.getValue(UserModel.class);
-                    Log.d(TAG, "onDataChange1: " + userSnapShot.getValue(UserModel.class));
                 }
                 if (userModel == null) {
                     userModel = new UserModel();

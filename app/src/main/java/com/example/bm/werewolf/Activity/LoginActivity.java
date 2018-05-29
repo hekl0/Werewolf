@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        LoginManager.getInstance().logOut();
+        //LoginManager.getInstance().logOut();
 
         if (AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired())
             process(AccessToken.getCurrentAccessToken());
