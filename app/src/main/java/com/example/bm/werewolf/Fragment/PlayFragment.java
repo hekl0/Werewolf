@@ -134,7 +134,7 @@ public class PlayFragment extends Fragment {
                                 String roomPass = etRoomPass.getText().toString();
                                 boolean isPasswordProtected = checkBox.isChecked();
                                 boolean gameInProgress = false;
-                                final int currentPlayerID = Integer.parseInt(UserDatabase.facebookID); //placeholder
+                                final String currentPlayerID = UserDatabase.facebookID;
 
                                 while (roomMap.containsKey(id)) {
                                     id++;
@@ -143,11 +143,13 @@ public class PlayFragment extends Fragment {
                                         roomName,
                                         roomPass,
                                         isPasswordProtected,
-                                        new ArrayList<Integer>() {
+                                        new ArrayList<String>() {
                                             {
                                                 add(currentPlayerID);
                                             }
-                                        }, gameInProgress);
+                                        },
+                                        UserDatabase.facebookID,
+                                        gameInProgress);
                                 databaseReference.child(String.valueOf(id)).setValue(model);
                                 //adapter.notifyDataSetChanged();
 

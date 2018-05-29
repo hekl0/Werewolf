@@ -1,18 +1,24 @@
 package com.example.bm.werewolf.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bm.werewolf.Activity.MainActivity;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Model.RoomModel;
 import com.squareup.picasso.Picasso;
@@ -93,9 +99,7 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
                 public void onClick(View v) {
                     //do something a room is choosen
                     Toast.makeText(context, "Room choosen", Toast.LENGTH_SHORT).show();
-                    if (roomModel.isPasswordProtected) {
-
-                    }
+                    showPasswordDialog(roomModel.roomName, roomModel.roomPassword);
                 }
             });
         }
@@ -106,6 +110,36 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
                     return key;
             }
             return -1;
+        }
+
+        public void showPasswordDialog(String roomName, final String roomPass) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+            LayoutInflater inflater = LayoutInflater.from(context);
+            final View dialogView = inflater.inflate(R.layout.room_password_dialog, null);
+            dialogBuilder.setView(dialogView);
+
+            final EditText etPass = dialogView.findViewById(R.id.et_room_password);
+
+            dialogBuilder.setTitle(roomName);
+            dialogBuilder.setMessage("Enter room password");
+            dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (etPass.getText().toString().equals(roomPass))
+                        Toast.makeText(context, "Vào phòng", Toast.LENGTH_SHORT).show();
+                    else {
+                        Toast.makeText(context, "Sai mật khẩu", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog ad = dialogBuilder.create();
+            ad.show();
         }
     }
 }
