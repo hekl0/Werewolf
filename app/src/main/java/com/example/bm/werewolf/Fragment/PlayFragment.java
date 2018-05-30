@@ -74,8 +74,12 @@ public class PlayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_play, container, false);
+        final View view = inflater.inflate(R.layout.fragment_play, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        context = getContext();
+
+
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("rooms");
@@ -89,7 +93,9 @@ public class PlayFragment extends Fragment {
                     roomMap.put(roomID, model);
                 }
                 adapter = new LobbyAdapter(roomMap, context);
+                rvRooms = view.findViewById(R.id.rv_rooms);
                 rvRooms.setAdapter(adapter);
+
             }
 
             @Override
@@ -97,7 +103,8 @@ public class PlayFragment extends Fragment {
 
             }
         });
-        context = getContext();
+
+
         GridLayoutManager layoutManager = new GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false);
         rvRooms.setLayoutManager(layoutManager);
 
