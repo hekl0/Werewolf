@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +90,10 @@ public class PlayFragment extends Fragment {
                     roomMap.put(roomID, model);
                 }
                 adapter = new LobbyAdapter(roomMap, context);
+                if (rvRooms == null)
+                    Log.d(TAG, "onDataChange: rvRoom");
+                if (adapter == null)
+                    Log.d(TAG, "onDataChange: adapter");
                 rvRooms.setAdapter(adapter);
             }
 
