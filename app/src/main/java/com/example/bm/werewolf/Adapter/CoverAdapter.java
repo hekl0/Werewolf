@@ -22,7 +22,7 @@ public class CoverAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return UserDatabase.getInstance().userModel.achievedCover.size();
+        return UserDatabase.getInstance().userData.achievedCover.size();
     }
 
     @Override
@@ -43,8 +43,8 @@ public class CoverAdapter extends BaseAdapter {
         ImageView iv = convertView.findViewById(R.id.iv);
         TextView tv = convertView.findViewById(R.id.tv);
 
-        iv.setBackgroundResource(Constant.imageCover[UserDatabase.getInstance().userModel.achievedCover.get(position)]);
-        tv.setText(Constant.nameCover[UserDatabase.getInstance().userModel.achievedCover.get(position)]);
+        iv.setBackgroundResource(Constant.imageCover[UserDatabase.getInstance().userData.achievedCover.get(position)]);
+        tv.setText(Constant.nameCover[UserDatabase.getInstance().userData.achievedCover.get(position)]);
 
         return convertView;
     }

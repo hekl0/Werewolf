@@ -28,7 +28,7 @@ public class UserDatabase {
     public static UserDatabase userDatabase;
     public static String facebookID;
 
-    public UserModel userModel;
+    public UserModel userData;
 
     public static UserDatabase getInstance() {
         if (userDatabase == null)
@@ -39,7 +39,7 @@ public class UserDatabase {
     }
 
     public void updateUser() {
-        databaseReference.child(facebookID).setValue(userModel);
+        databaseReference.child(facebookID).setValue(userData);
     }
 
     public void accessUser(final String name, final Context context) {
@@ -47,30 +47,30 @@ public class UserDatabase {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapShot : dataSnapshot.getChildren()) {
-                    userModel = userSnapShot.getValue(UserModel.class);
+                    userData = userSnapShot.getValue(UserModel.class);
                 }
-                if (userModel == null) {
-                    userModel = new UserModel();
-                    userModel.win = 0;
-                    userModel.lose = 0;
-                    userModel.isOnline = true;
-                    userModel.favoriteRole = 0;
-                    userModel.name = name;
-                    userModel.cover = 0;
-                    userModel.achievementList = new ArrayList<>();
-                    userModel.dataWinRole = new ArrayList<>();
-                    userModel.dataTotalRole = new ArrayList<>();
+                if (userData == null) {
+                    userData = new UserModel();
+                    userData.win = 0;
+                    userData.lose = 0;
+                    userData.isOnline = true;
+                    userData.favoriteRole = 0;
+                    userData.name = name;
+                    userData.cover = 0;
+                    userData.achievementList = new ArrayList<>();
+                    userData.dataWinRole = new ArrayList<>();
+                    userData.dataTotalRole = new ArrayList<>();
                     for (int i = 0; i < Constant.nameRole.length - 1; i++) {
-                        userModel.dataWinRole.add(0);
-                        userModel.dataTotalRole.add(0);
+                        userData.dataWinRole.add(0);
+                        userData.dataTotalRole.add(0);
                     }
-                    userModel.friendList = new ArrayList<>();
-                    userModel.achievedCover = new ArrayList<>();
-                    userModel.achievedCover.add(0);
+                    userData.friendList = new ArrayList<>();
+                    userData.achievedCover = new ArrayList<>();
+                    userData.achievedCover.add(0);
                 }
 
-                userModel.name = name;
-                userModel.isOnline = true;
+                userData.name = name;
+                userData.isOnline = true;
 
                 updateUser();
 
@@ -87,7 +87,7 @@ public class UserDatabase {
     }
 
     public void offlineStatus() {
-        userModel.isOnline = false;
+        userData.isOnline = false;
         updateUser();
     }
 }

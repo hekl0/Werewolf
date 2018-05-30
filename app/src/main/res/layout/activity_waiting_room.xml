@@ -42,12 +42,11 @@
 
     </RelativeLayout>
 
-    <GridView
-        android:id="@+id/gv_waiting_room"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_waiting_room"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_below="@id/rl1"
-        android:numColumns="3"
         app:layout_constraintTop_toBottomOf="@id/rl1"
         app:layout_constraintBottom_toTopOf="@id/guideline2"/>
 

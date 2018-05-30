@@ -3,6 +3,7 @@ package com.example.bm.werewolf.Adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bm.werewolf.Activity.WaitingRoomActivity;
 import com.example.bm.werewolf.Model.RoomModel;
 import com.example.bm.werewolf.R;
 
@@ -82,6 +84,8 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
         public void setData(final RoomModel roomModel) {
             if (roomModel.isPasswordProtected)
                 ivLock.setVisibility(View.VISIBLE);
+            if (roomModel.players == null)
+                roomModel.players = new ArrayList<>();
             tvRoomId.setText(String.format("ID: %d", getKeyByValue(roomMap, roomModel)));
             tvCapacity.setText(String.format("%d/10", roomModel.players.size()));
             tvRoomName.setText(roomModel.roomName);
@@ -99,6 +103,12 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
                     Toast.makeText(context, "Room choosen", Toast.LENGTH_SHORT).show();
                     if (roomModel.isPasswordProtected)
                         showPasswordDialog(roomModel.roomName, roomModel.roomPassword);
+
+                    int roomID = Integer.parseInt(tvRoomId.getText().toString().split(" ")[1]);
+                    Intent intent = new Intent(context, WaitingRoomActivity.class);
+                    intent.putExtra("roomID", roomID);
+                    intent.putExtra("isHost", false);
+                    context.startActivity(intent);
                 }
             });
         }

@@ -55,7 +55,7 @@
             android:layout_below="@+id/tv_room_id"
             android:padding="8dp"
             android:layout_marginTop="24dp"
-            android:numColumns="3"></GridView>
+            android:numColumns="3" />
 
     </RelativeLayout>
 
