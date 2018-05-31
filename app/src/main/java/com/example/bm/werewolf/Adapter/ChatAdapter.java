@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Utils.UserDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +33,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
     public ChatAdapter(String roomID, final LinearLayoutManager linearLayoutManager) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference("chat").child(roomID);
+        final DatabaseReference databaseReference = firebaseDatabase.getReference("chat").child(roomID);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override

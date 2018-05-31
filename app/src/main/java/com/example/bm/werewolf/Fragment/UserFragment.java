@@ -99,15 +99,15 @@ public class UserFragment extends Fragment {
                 .transform(transformation)
                 .into(ivAva);
 
-        tvWin.setText(String.valueOf(UserDatabase.getInstance().userModel.win));
-        tvLose.setText(String.valueOf(UserDatabase.getInstance().userModel.lose));
-        ivCover.setImageResource(Constant.imageCover[UserDatabase.getInstance().userModel.cover]);
-        tvName.setText(UserDatabase.getInstance().userModel.name);
-        if (UserDatabase.getInstance().userModel.favoriteRole == 0)
+        tvWin.setText(String.valueOf(UserDatabase.getInstance().userData.win));
+        tvLose.setText(String.valueOf(UserDatabase.getInstance().userData.lose));
+        ivCover.setImageResource(Constant.imageCover[UserDatabase.getInstance().userData.cover]);
+        tvName.setText(UserDatabase.getInstance().userData.name);
+        if (UserDatabase.getInstance().userData.favoriteRole == 0)
             ivFavoriteRole.setVisibility(View.GONE);
         else ivFavoriteRole.setVisibility(View.VISIBLE);
-        ivFavoriteRole.setImageResource(Constant.imageRole[UserDatabase.getInstance().userModel.favoriteRole]);
-        tvFavoriteRole.setText(Constant.nameRole[UserDatabase.getInstance().userModel.favoriteRole]);
+        ivFavoriteRole.setImageResource(Constant.imageRole[UserDatabase.getInstance().userData.favoriteRole]);
+        tvFavoriteRole.setText(Constant.nameRole[UserDatabase.getInstance().userData.favoriteRole]);
 
         initRadarChart();
 
@@ -139,7 +139,7 @@ public class UserFragment extends Fragment {
                 ivFavoriteRole.setImageResource(Constant.imageRole[position]);
                 tvFavoriteRole.setText(Constant.nameRole[position]);
 
-                UserDatabase.getInstance().userModel.favoriteRole = position;
+                UserDatabase.getInstance().userData.favoriteRole = position;
                 UserDatabase.getInstance().updateUser();
             }
         });
@@ -153,9 +153,9 @@ public class UserFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 rlSmallWindow.setVisibility(View.GONE);
-                ivCover.setImageResource(Constant.imageCover[UserDatabase.getInstance().userModel.achievedCover.get(position)]);
+                ivCover.setImageResource(Constant.imageCover[UserDatabase.getInstance().userData.achievedCover.get(position)]);
 
-                UserDatabase.getInstance().userModel.cover = UserDatabase.getInstance().userModel.achievedCover.get(position);
+                UserDatabase.getInstance().userData.cover = UserDatabase.getInstance().userData.achievedCover.get(position);
                 UserDatabase.getInstance().updateUser();
             }
         });
@@ -163,11 +163,11 @@ public class UserFragment extends Fragment {
 
     public void initRadarChart() {
         List<RadarEntry> winEntries = new ArrayList<>();
-        for (float x : UserDatabase.getInstance().userModel.dataWinRole)
+        for (float x : UserDatabase.getInstance().userData.dataWinRole)
             winEntries.add(new RadarEntry(x));
 
         List<RadarEntry> totalEntries = new ArrayList<>();
-        for (float x : UserDatabase.getInstance().userModel.dataTotalRole)
+        for (float x : UserDatabase.getInstance().userData.dataTotalRole)
             totalEntries.add(new RadarEntry(x));
 
         RadarDataSet winDataSet = new RadarDataSet(winEntries, "số game thắng");

@@ -23,7 +23,8 @@
                 android:id="@+id/iv_change_host"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:src="@drawable/ic_change_host" />
+                android:src="@drawable/ic_change_host"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/iv_host"
@@ -32,13 +33,15 @@
                 android:layout_marginBottom="4dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginStart="24dp"
-                android:src="@drawable/ic_host" />
+                android:src="@drawable/ic_host"
+                android:visibility="invisible"/>
 
             <ImageView
                 android:id="@+id/iv_kick"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:src="@drawable/ic_kick" />
+                android:src="@drawable/ic_kick"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -53,8 +56,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:gravity="center"
-            android:text="aaa"
+            android:text="loading..."
             android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:maxLines="1"/>
     </LinearLayout>
 </LinearLayout>

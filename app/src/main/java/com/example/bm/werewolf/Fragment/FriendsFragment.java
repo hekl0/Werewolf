@@ -76,7 +76,6 @@ public class FriendsFragment extends Fragment {
 
         Intent intent = new Intent(getContext(), WaitingRoomActivity.class);
         startActivity(intent);
-
         return rootView;
     }
 

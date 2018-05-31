@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,15 +155,15 @@ public class PlayFragment extends Fragment {
                                         roomName,
                                         roomPass,
                                         isPasswordProtected,
-                                        new ArrayList<String>() {
-                                            {
-                                                add(currentPlayerID);
-                                            }
-                                        },
+                                        new ArrayList<String>(),
                                         UserDatabase.facebookID,
                                         gameInProgress);
                                 databaseReference.child(String.valueOf(id)).setValue(model);
-                                //adapter.notifyDataSetChanged();
+
+                                Intent intent = new Intent(context, WaitingRoomActivity.class);
+                                intent.putExtra("roomID", id);
+                                intent.putExtra("isHost", true);
+                                startActivity(intent);
 
                             }
                         })
@@ -200,6 +201,7 @@ public class PlayFragment extends Fragment {
                             Toast.makeText(context, "Thấy Phòng", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(context, WaitingRoomActivity.class);
                             intent.putExtra("roomID", roomID);
+                            intent.putExtra("isHost", false);
                             startActivity(intent);
                         }
                         else {
