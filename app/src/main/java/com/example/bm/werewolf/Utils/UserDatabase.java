@@ -68,6 +68,10 @@ public class UserDatabase {
                     userData.achievedCover.add(0);
                 }
 
+                if (userData.friendList == null)
+                    userData.friendList = new ArrayList<>();
+                if (userData.recentPlayWith == null)
+                    userData.recentPlayWith = new ArrayList<>();
                 userData.name = name;
                 userData.isOnline = true;
 
