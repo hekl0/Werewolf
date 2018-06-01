@@ -63,6 +63,7 @@ public class UserDatabase {
                         userData.dataTotalRole.add(0);
                     }
                     userData.friendList = new ArrayList<>();
+                    userData.recentPlayWith = new ArrayList<>();
                     userData.achievedCover = new ArrayList<>();
                     userData.achievedCover.add(0);
                 }
