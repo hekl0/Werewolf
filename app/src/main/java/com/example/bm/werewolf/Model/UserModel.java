@@ -19,6 +19,7 @@ public class UserModel {
     public List<Integer> dataWinRole;
     public List<Integer> dataTotalRole;
     public List<String> friendList;
+    public List<String> recentPlayWith;
 
     @Override
     public String toString() {

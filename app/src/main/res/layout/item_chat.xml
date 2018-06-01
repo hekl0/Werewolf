@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="[aaa]:hello"
         android:textColor="#F0EFF5"
-        android:textSize="13sp"
+        android:textSize="10sp"
         android:lineSpacingExtra="1sp"/>
 
 </RelativeLayout>

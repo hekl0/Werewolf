@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.10" />
+        app:layout_constraintGuide_percent="0.13" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline_30"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="20dp"
-        app:layout_constraintGuide_percent="0.40" />
+        app:layout_constraintGuide_percent="0.37" />
 
     <ImageView
         android:id="@+id/iv_cover"
@@ -67,6 +67,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_ava"
         android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/tv_userID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="019249184"
+        android:textColor="#ededed"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"/>
 
     <TextView
         android:id="@+id/textView"
@@ -131,7 +142,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_userID" />
 
     <LinearLayout
         android:id="@+id/ll_favorite_role"

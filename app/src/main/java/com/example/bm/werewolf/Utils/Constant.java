@@ -7,8 +7,8 @@ import com.example.bm.werewolf.R;
  */
 
 public class Constant {
-    public static int[] imageRole = new int[]{R.mipmap.card_back, R.mipmap.bao_ve, R.mipmap.ma_soi, R.mipmap.dan_lang, R.mipmap.tho_san, R.mipmap.tien_tri};
-    public static String[] nameRole = new String[]{"Không có", "Bảo vệ", "Ma sói", "Dân làng", "Thợ săn", "Tiên tri"};
+    public static int[] imageRole = new int[]{R.mipmap.card_back, R.mipmap.bao_ve, R.mipmap.ma_soi, R.mipmap.dan_lang, R.mipmap.tho_san, R.mipmap.tien_tri, R.mipmap.gia_lang, R.mipmap.phu_thuy, R.mipmap.than_tinh_yeu, R.mipmap.tho_san, R.mipmap.thoi_sao, R.mipmap.ti_hi};
+    public static String[] nameRole = new String[]{"Không có", "Bảo vệ", "Ma sói", "Dân làng", "Thợ săn", "Tiên tri", "Già làng", "Phù thuỷ", "Thần tình yêu", "Thợ săn", "Thổi sáo", "Ti hí"};
 
     public static int NONE = 0;
     public static int BAO_VE = 1;

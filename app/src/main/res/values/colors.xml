@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ffffff</color>
     <color name="navigationBarColor">#80344152</color>
+    <color name="buttonBackgroundColor">#dc25262a</color>
     <color name="white">#ffffff</color>
     <color name="brown">#DE7B3A</color>
     <color name="gray">#cccecece</color>

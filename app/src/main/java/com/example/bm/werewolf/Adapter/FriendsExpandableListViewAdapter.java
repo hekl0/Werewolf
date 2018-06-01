@@ -10,39 +10,60 @@ import android.widget.TextView;
 
 import com.example.bm.werewolf.Model.UserModel;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Utils.UserDatabase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     Context context;
-    List<String> groupName;
-    List<UserModel> childUser;
+    String[] groupName = new String[]{"Bạn bè", "Chơi cùng gần đây"};
+    List<String> friend;
+    List<String> recentPlayWith;
+    HashMap<String, String> nameFromID = new HashMap<>();
+    Map<String, Boolean> onlineStatusFromID = new HashMap<>();
 
-    public FriendsExpandableListViewAdapter(Context context, List<String> groupName, List<UserModel> childUser) {
+    public FriendsExpandableListViewAdapter(Context context) {
         this.context = context;
-        this.groupName = groupName;
-        this.childUser = childUser;
+        this.friend = UserDatabase.getInstance().userData.friendList;
+        this.recentPlayWith = UserDatabase.getInstance().userData.recentPlayWith;
     }
 
     @Override
     public int getGroupCount() {
-        return groupName.size();
+        return groupName.length;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return childUser.size();
+        if (groupPosition == 0)
+            return friend.size();
+        else
+            return recentPlayWith.size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return groupName.get(groupPosition);
+        return groupName[groupPosition];
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return childUser.get(childPosition);
+        if (groupPosition == 0)
+            return friend.get(childPosition);
+        else
+            return recentPlayWith.get(childPosition);
     }
 
     @Override
@@ -57,7 +78,7 @@ public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter 
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 
     @Override
@@ -65,7 +86,9 @@ public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         convertView = inflater.inflate(R.layout.item_list_friends, parent, false);
         ImageView ivArrow = convertView.findViewById(R.id.iv_arrow);
+        TextView tvGroupName = convertView.findViewById(R.id.tv_group_name);
 
+        tvGroupName.setText(groupName[groupPosition]);
         if (isExpanded) {
             ivArrow.setImageResource(R.drawable.ic_keyboard_arrow_up_white_24dp);
         } else {
@@ -80,14 +103,58 @@ public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         convertView = inflater.inflate(R.layout.item_list_player, parent, false);
 
-        UserModel user = (UserModel) getChild(0, childPosition);
+        final TextView tvPlayerName = convertView.findViewById(R.id.tv_player);
+        final ImageView ivOnline = convertView.findViewById(R.id.iv_online);
+        ImageView ivAva = convertView.findViewById(R.id.iv_ava);
+        ImageView ivDelete = convertView.findViewById(R.id.iv_delete_friend);
 
-        TextView tvPlayerName = convertView.findViewById(R.id.tv_player);
-        ImageView ivOnline = convertView.findViewById(R.id.iv_online);
+        final String userID = (String) getChild(groupPosition, childPosition);
 
-        tvPlayerName.setText(user.name);
-        ivOnline.setImageResource((user.isOnline) ? R.drawable.ic_grid_world_green : R.drawable.ic_grid_world_red);
+        if (nameFromID.containsKey(userID)) {
+            tvPlayerName.setText(nameFromID.get(userID));
+            if (onlineStatusFromID.get(userID))
+                ivOnline.setVisibility(View.VISIBLE);
+            else
+                ivOnline.setVisibility(View.GONE);
+        } else {
+            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference databaseReference = firebaseDatabase.getReference("User list").child(userID);
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    UserModel userModel = dataSnapshot.getValue(UserModel.class);
+                    tvPlayerName.setText(userModel.name);
+                    ivOnline.setVisibility((userModel.isOnline) ? View.VISIBLE : View.GONE);
+                    nameFromID.put(userID, userModel.name);
+                    onlineStatusFromID.put(userID, userModel.isOnline);
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        Transformation transformation = new CropCircleTransformation();
+        Picasso.get()
+                .load("https://graph.facebook.com/" + userID + "/picture?type=large")
+                .placeholder(R.drawable.progress_animation)
+                .transform(transformation)
+                .into(ivAva);
+
+        if (groupPosition == 0) {
+            ivDelete.setVisibility(View.VISIBLE);
+            ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UserDatabase.getInstance().userData.friendList.remove(userID);
+                    UserDatabase.getInstance().updateUser();
+                    friend = UserDatabase.getInstance().userData.friendList;
+                    notifyDataSetChanged();
+                }
+            });
+        }
 
         return convertView;
     }

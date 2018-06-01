@@ -66,6 +66,7 @@ public class WaitingRoomAdapter extends RecyclerView.Adapter<WaitingRoomAdapter.
                 playerList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                     playerList.add(snapshot.getValue(String.class));
+                Log.d(TAG, "onDataChange: " + playerList.get(0));
                 notifyDataSetChanged();
             }
 

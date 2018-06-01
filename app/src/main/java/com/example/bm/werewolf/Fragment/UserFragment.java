@@ -4,7 +4,6 @@ package com.example.bm.werewolf.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +77,8 @@ public class UserFragment extends Fragment {
     TextView tvName;
     @BindView(R.id.tv_small_window)
     TextView tvSmallWindow;
+    @BindView(R.id.tv_userID)
+    TextView tvUserID;
 
     public UserFragment() {
         // Required empty public constructor
@@ -92,17 +93,18 @@ public class UserFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
         Transformation transformation = new CropCircleTransformation();
-
         Picasso.get()
                 .load("https://graph.facebook.com/" + UserDatabase.facebookID + "/picture?type=large")
                 .placeholder(R.drawable.progress_animation)
                 .transform(transformation)
                 .into(ivAva);
 
+
         tvWin.setText(String.valueOf(UserDatabase.getInstance().userData.win));
         tvLose.setText(String.valueOf(UserDatabase.getInstance().userData.lose));
         ivCover.setImageResource(Constant.imageCover[UserDatabase.getInstance().userData.cover]);
         tvName.setText(UserDatabase.getInstance().userData.name);
+        tvUserID.setText("ID: " + UserDatabase.facebookID);
         if (UserDatabase.getInstance().userData.favoriteRole == 0)
             ivFavoriteRole.setVisibility(View.GONE);
         else ivFavoriteRole.setVisibility(View.VISIBLE);

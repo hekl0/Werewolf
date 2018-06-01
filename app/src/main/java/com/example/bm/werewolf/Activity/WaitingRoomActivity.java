@@ -64,10 +64,12 @@ public class WaitingRoomActivity extends AppCompatActivity {
         roomID = String.valueOf(getIntent().getIntExtra("roomID", 0));
         RoomLogin();
 
-        WaitingRoomAdapter waitingRoomAdapter = new WaitingRoomAdapter(roomID);
-        rvWaitingRoom.setAdapter(waitingRoomAdapter);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         rvWaitingRoom.setLayoutManager(gridLayoutManager);
+        rvWaitingRoom.setHasFixedSize(true);
+        rvWaitingRoom.setItemViewCacheSize(20);
+        rvWaitingRoom.setDrawingCacheEnabled(true);
+        rvWaitingRoom.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         ChatAdapter chatAdapter = new ChatAdapter(roomID, linearLayoutManager);
@@ -132,6 +134,10 @@ public class WaitingRoomActivity extends AppCompatActivity {
                     submitChat(UserDatabase.getInstance().userData.name + " đã tạo phòng.");
                 else
                     submitChat(UserDatabase.getInstance().userData.name + " đã vào phòng. Số người hiện tại là " + playerList.size() + ".");
+
+                WaitingRoomAdapter waitingRoomAdapter = new WaitingRoomAdapter(roomID);
+                waitingRoomAdapter.setHasStableIds(true);
+                rvWaitingRoom.setAdapter(waitingRoomAdapter);
             }
 
             @Override
@@ -154,7 +160,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
                         playerList.add(snapshot.getValue(String.class));
                 databaseReference.setValue(playerList);
 
-                submitChat(UserDatabase.getInstance().userData.name + " đã rời khỏi phòng. Số người hiện tại là " + playerList.size() + ".");
+                //submitChat(UserDatabase.getInstance().userData.name + " đã rời khỏi phòng. Số người hiện tại là " + playerList.size() + ".");
 
                 if (playerList.size() == 0) {
                     firebaseDatabase.getReference("chat").child(roomID).removeValue();

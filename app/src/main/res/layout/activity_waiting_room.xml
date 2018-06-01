@@ -122,6 +122,28 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/guideline2"
+        android:gravity="center"
+        android:padding="6dp"
+        android:background="@color/buttonBackgroundColor">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bắt đầu"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:background="@drawable/start_game_button_border"
+            android:paddingStart="55dp"
+            android:paddingEnd="55dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
+
+    </LinearLayout>
+
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"

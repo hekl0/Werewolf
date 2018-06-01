@@ -34,21 +34,19 @@ public class UserDatabase {
         if (userDatabase == null)
             userDatabase = new UserDatabase();
             firebaseDatabase = com.google.firebase.database.FirebaseDatabase.getInstance();
-            databaseReference = firebaseDatabase.getReference("User list");
+            databaseReference = firebaseDatabase.getReference("User list").child(facebookID);
         return userDatabase;
     }
 
     public void updateUser() {
-        databaseReference.child(facebookID).setValue(userData);
+        databaseReference.setValue(userData);
     }
 
     public void accessUser(final String name, final Context context) {
-        databaseReference.orderByKey().equalTo(facebookID).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot userSnapShot : dataSnapshot.getChildren()) {
-                    userData = userSnapShot.getValue(UserModel.class);
-                }
+                userData = dataSnapshot.getValue(UserModel.class);
                 if (userData == null) {
                     userData = new UserModel();
                     userData.win = 0;
