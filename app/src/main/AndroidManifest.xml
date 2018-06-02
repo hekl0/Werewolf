@@ -10,7 +10,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <service android:name=".Service.OnClearFromRecentService" android:stopWithTask="false" />
 
         <activity android:name=".Activity.MainActivity"></activity>
@@ -45,7 +44,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.WaitingRoomActivity"></activity>
+        <activity android:name=".Activity.WaitingRoomActivity" />
+        <activity android:name=".Activity.PlayActivity"></activity>
     </application>
 
 </manifest>

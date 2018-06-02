@@ -11,9 +11,15 @@ import android.widget.TextView;
 import com.example.bm.werewolf.R;
 
 import com.example.bm.werewolf.Model.PlayerModel;
+import com.example.bm.werewolf.Utils.Constant;
+import com.example.bm.werewolf.Utils.UserDatabase;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class GridViewAdapter extends BaseAdapter {
     List<PlayerModel> playerModels = new ArrayList<>();
@@ -49,6 +55,26 @@ public class GridViewAdapter extends BaseAdapter {
         TextView tvName = convertView.findViewById(R.id.tv_name);
         ImageView ivAva = convertView.findViewById(R.id.iv_ava);
         ImageView ivMark = convertView.findViewById(R.id.iv_mark);
+
+        tvName.setText(playerModel.name);
+        tvName.setSelected(true);
+        Transformation transformation = new CropCircleTransformation();
+        Picasso.get()
+                .load("https://graph.facebook.com/" + playerModel.id + "/picture?type=large")
+                .placeholder(R.drawable.progress_animation)
+                .transform(transformation)
+                .into(ivAva);
+        tvNum.setText(position+1 + "");
+        Picasso.get()
+                .load(Constant.imageRole[playerModel.mark])
+                .transform(transformation)
+                .into(ivMark);
+
+        ivMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
 
         return convertView;
     }

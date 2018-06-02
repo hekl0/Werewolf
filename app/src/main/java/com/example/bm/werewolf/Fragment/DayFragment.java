@@ -4,11 +4,14 @@ package com.example.bm.werewolf.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.example.bm.werewolf.Adapter.GridViewAdapter;
 import com.example.bm.werewolf.Database.DatabaseManager;
@@ -25,17 +28,26 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NightFragment extends Fragment {
+public class DayFragment extends Fragment {
 
-    @BindView(R.id.bt_ok)
-    Button btOk;
+    Context context;
+    @BindView(R.id.et_chat)
+    EditText etChat;
+    @BindView(R.id.iv_chat_submit)
+    ImageView ivChatSubmit;
+    @BindView(R.id.iv_mute)
+    ImageView ivMute;
+    @BindView(R.id.ll1)
+    RelativeLayout ll1;
+    @BindView(R.id.rv_chat)
+    RecyclerView rvChat;
+    @BindView(R.id.rl_chat)
+    RelativeLayout rlChat;
     @BindView(R.id.gv_player)
     GridView gvPlayer;
     Unbinder unbinder;
 
-    Context context;
-
-    public NightFragment() {
+    public DayFragment() {
         // Required empty public constructor
     }
 
@@ -44,8 +56,7 @@ public class NightFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        View view = inflater.inflate(R.layout.fragment_night, container, false);
+        View view = inflater.inflate(R.layout.fragment_day, container, false);
         unbinder = ButterKnife.bind(this, view);
         context = getContext();
 
@@ -63,7 +74,13 @@ public class NightFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick(R.id.bt_ok)
-    public void onViewClicked() {
+    @OnClick({R.id.iv_chat_submit, R.id.iv_mute})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_chat_submit:
+                break;
+            case R.id.iv_mute:
+                break;
+        }
     }
 }
