@@ -10,34 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_back_white_24dp"
-            android:padding="8dp"/>
-
-        <TextView
-            android:id="@+id/tv_room_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Room id"
-            android:layout_centerHorizontal="true"
-            android:padding="8dp"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/tv_timer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00"
-            android:textSize="18sp"
-            android:padding="8dp"
-            android:textColor="@color/white"
-            android:layout_alignParentRight="true"/>
-
         <Button
             android:id="@+id/bt_ok"
             android:layout_width="100dp"
@@ -50,6 +22,7 @@
             android:layout_margin="16dp"/>
 
         <GridView
+            android:id="@+id/gv_player"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_below="@+id/tv_room_id"

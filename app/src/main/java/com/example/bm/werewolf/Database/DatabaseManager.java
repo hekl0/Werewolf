@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.bm.werewolf.Model.AchievementItemModel;
 import com.example.bm.werewolf.Model.AchievementModel;
+import com.example.bm.werewolf.Model.PlayerModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,5 +50,16 @@ public class DatabaseManager {
        achievementItemModels.add(achievementItemModel);
 
        return achievementItemModels;
+   }
+
+   public List<PlayerModel> getListPlayer() {
+        List<PlayerModel> playerModels = new ArrayList<>();
+
+        PlayerModel playerModel = new PlayerModel("2012942565700579", 2, 1, true, "Trung Đào");
+        playerModels.add(playerModel);
+        playerModel = new PlayerModel("612849455731067", 1, 1, true, "Vũ Thị Thiên Anh");
+        playerModels.add(playerModel);
+
+        return playerModels;
    }
 }
