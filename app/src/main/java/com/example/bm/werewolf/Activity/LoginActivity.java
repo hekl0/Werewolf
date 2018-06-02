@@ -1,6 +1,7 @@
 package com.example.bm.werewolf.Activity;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Service.OnClearFromRecentService;
 import com.example.bm.werewolf.Utils.UserDatabase;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -48,7 +50,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        //LoginManager.getInstance().logOut();
+        startService(new Intent(getBaseContext(), OnClearFromRecentService.class));
+        OnClearFromRecentService.activity = this;
 
         if (AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired())
             process(AccessToken.getCurrentAccessToken());

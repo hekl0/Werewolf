@@ -79,7 +79,7 @@ public class UserDatabase {
 
                 Intent intent = new Intent(context, MainActivity.class);
                 context.startActivity(intent);
-                ((Activity)context).finish();
+                //((Activity)context).finish();
             }
 
             @Override

@@ -103,12 +103,13 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
                     Toast.makeText(context, "Room choosen", Toast.LENGTH_SHORT).show();
                     if (roomModel.isPasswordProtected)
                         showPasswordDialog(roomModel.roomName, roomModel.roomPassword);
-
-                    int roomID = Integer.parseInt(tvRoomId.getText().toString().split(" ")[1]);
-                    Intent intent = new Intent(context, WaitingRoomActivity.class);
-                    intent.putExtra("roomID", roomID);
-                    intent.putExtra("isHost", false);
-                    context.startActivity(intent);
+                    else {
+                        int roomID = Integer.parseInt(tvRoomId.getText().toString().split(" ")[1]);
+                        Intent intent = new Intent(context, WaitingRoomActivity.class);
+                        intent.putExtra("roomID", roomID);
+                        intent.putExtra("isHost", false);
+                        context.startActivity(intent);
+                    }
                 }
             });
         }
@@ -135,9 +136,15 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
             dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (etPass.getText().toString().equals(roomPass))
+                    if (etPass.getText().toString().equals(roomPass)) {
                         Toast.makeText(context, "Vào phòng", Toast.LENGTH_SHORT).show();
-                    else {
+
+                        int roomID = Integer.parseInt(tvRoomId.getText().toString().split(" ")[1]);
+                        Intent intent = new Intent(context, WaitingRoomActivity.class);
+                        intent.putExtra("roomID", roomID);
+                        intent.putExtra("isHost", false);
+                        context.startActivity(intent);
+                    } else {
                         Toast.makeText(context, "Sai mật khẩu", Toast.LENGTH_SHORT).show();
                     }
                 }

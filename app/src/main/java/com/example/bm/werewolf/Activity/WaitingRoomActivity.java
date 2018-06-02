@@ -1,29 +1,31 @@
 package com.example.bm.werewolf.Activity;
 
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.bm.werewolf.Adapter.ChatAdapter;
 import com.example.bm.werewolf.Adapter.WaitingRoomAdapter;
+import com.example.bm.werewolf.Model.UserModel;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Service.OnClearFromRecentService;
+import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class WaitingRoomActivity extends AppCompatActivity {
     private static final String TAG = "WaitingRoomActivity";
@@ -52,6 +55,20 @@ public class WaitingRoomActivity extends AppCompatActivity {
     RecyclerView rvWaitingRoom;
     @BindView(R.id.rl_chat)
     RelativeLayout rlChat;
+    @BindView(R.id.tv_room_name)
+    TextView tvRoomName;
+
+    //small window
+    static TextView tvName;
+    static ImageView ivCover;
+    static ImageView ivAva;
+    static TextView tvWin;
+    static TextView tvLose;
+    static ImageView ivFavoriteRole;
+    static TextView tvFavoriteRole;
+    static ImageView ivAddDeleteFriend;
+    static ImageView ivExit;
+    static RelativeLayout rlSmallWindow;
 
     String roomID = "0";
 
@@ -61,8 +78,23 @@ public class WaitingRoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_waiting_room);
         ButterKnife.bind(this);
 
+        OnClearFromRecentService.activity = this;
+
         roomID = String.valueOf(getIntent().getIntExtra("roomID", 0));
         RoomLogin();
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("rooms").child(roomID).child("roomName");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tvRoomName.setText(roomID + "." + dataSnapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         rvWaitingRoom.setLayoutManager(gridLayoutManager);
@@ -75,9 +107,20 @@ public class WaitingRoomActivity extends AppCompatActivity {
         ChatAdapter chatAdapter = new ChatAdapter(roomID, linearLayoutManager);
         rvChat.setAdapter(chatAdapter);
         rvChat.setLayoutManager(linearLayoutManager);
+
+        tvName = findViewById(R.id.tv_name);
+        ivCover = findViewById(R.id.iv_cover);
+        ivAva = findViewById(R.id.iv_ava);
+        tvWin = findViewById(R.id.tv_win);
+        tvLose = findViewById(R.id.tv_lose);
+        ivFavoriteRole = findViewById(R.id.iv_favorite_role);
+        tvFavoriteRole = findViewById(R.id.tv_favorite_role);
+        ivAddDeleteFriend = findViewById(R.id.iv_add_delete_friend);
+        ivExit = findViewById(R.id.iv_exit);
+        rlSmallWindow = findViewById(R.id.rl_small_window);
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_invite, R.id.iv_chat_submit, R.id.iv_mute})
+    @OnClick({R.id.iv_back, R.id.iv_invite, R.id.iv_chat_submit, R.id.iv_mute, R.id.iv_add_delete_friend, R.id.iv_exit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -93,6 +136,11 @@ public class WaitingRoomActivity extends AppCompatActivity {
                     submitChat("[" + UserDatabase.getInstance().userData.name + "]: " + chat);
                 break;
             case R.id.iv_mute:
+                break;
+            case R.id.iv_add_delete_friend:
+                break;
+            case R.id.iv_exit:
+                rlSmallWindow.setVisibility(View.GONE);
                 break;
         }
     }
@@ -119,8 +167,9 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
     void RoomLogin() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        final DatabaseReference databaseReference = firebaseDatabase.getReference("rooms").child(roomID).child("players");
+        final DatabaseReference databaseReference;
 
+        databaseReference = firebaseDatabase.getReference("rooms").child(roomID).child("players");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -132,8 +181,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
                 if (getIntent().getBooleanExtra("isHost", true))
                     submitChat(UserDatabase.getInstance().userData.name + " đã tạo phòng.");
-                else
-                    submitChat(UserDatabase.getInstance().userData.name + " đã vào phòng. Số người hiện tại là " + playerList.size() + ".");
+                else if (playerList.size() % 5 == 0)
+                    submitChat("Số người hiện tại là " + playerList.size() + ".");
 
                 WaitingRoomAdapter waitingRoomAdapter = new WaitingRoomAdapter(roomID);
                 waitingRoomAdapter.setHasStableIds(true);
@@ -175,6 +224,58 @@ public class WaitingRoomActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    public static void openSmallWindow(final String userID) {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference("User list").child(userID);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserModel userModel = dataSnapshot.getValue(UserModel.class);
+
+                rlSmallWindow.setVisibility(View.VISIBLE);
+                tvWin.setText("Thắng: " + userModel.win);
+                tvLose.setText("Thua: " + userModel.lose);
+                ivCover.setImageResource(Constant.imageCover[userModel.cover]);
+                tvName.setText(userModel.name);
+                if (userModel.favoriteRole == 0) ivFavoriteRole.setVisibility(View.GONE);
+                else ivFavoriteRole.setVisibility(View.VISIBLE);
+                ivFavoriteRole.setImageResource(Constant.imageRole[userModel.favoriteRole]);
+                tvFavoriteRole.setText(Constant.nameRole[userModel.favoriteRole]);
+
+                Transformation transformation = new CropCircleTransformation();
+                Picasso.get()
+                        .load("https://graph.facebook.com/" + userID + "/picture?type=large")
+                        .placeholder(R.drawable.progress_animation)
+                        .transform(transformation)
+                        .into(ivAva);
+
+                if (UserDatabase.getInstance().userData.friendList.contains(userID))
+                    ivAddDeleteFriend.setImageResource(R.drawable.ic_delete);
+                else
+                    ivAddDeleteFriend.setImageResource(R.drawable.ic_add_friend);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        ivAddDeleteFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (UserDatabase.getInstance().userData.friendList.contains(userID)) {
+                    UserDatabase.getInstance().userData.friendList.remove(userID);
+                    ivAddDeleteFriend.setImageResource(R.drawable.ic_add_friend);
+                } else {
+                    UserDatabase.getInstance().userData.friendList.add(userID);
+                    ivAddDeleteFriend.setImageResource(R.drawable.ic_delete);
+                }
+                UserDatabase.getInstance().updateUser();
             }
         });
     }
