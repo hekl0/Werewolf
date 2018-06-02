@@ -13,6 +13,7 @@ import com.example.bm.werewolf.Fragment.FriendsFragment;
 import com.example.bm.werewolf.Fragment.PlayFragment;
 import com.example.bm.werewolf.Fragment.UserFragment;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Service.OnClearFromRecentService;
 import com.example.bm.werewolf.Utils.UserDatabase;
 
 import butterknife.BindView;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        OnClearFromRecentService.activity = this;
 
         bottomNavigation.getMenu().getItem(0).getIcon().setAlpha(100);
         bottomNavigation.getMenu().getItem(1).getIcon().setAlpha(255);

@@ -16,6 +16,7 @@ import com.example.bm.werewolf.Adapter.ChatAdapter;
 import com.example.bm.werewolf.Adapter.WaitingRoomAdapter;
 import com.example.bm.werewolf.Model.UserModel;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Service.OnClearFromRecentService;
 import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
 import com.google.firebase.database.DataSnapshot;
@@ -76,6 +77,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_room);
         ButterKnife.bind(this);
+
+        OnClearFromRecentService.activity = this;
 
         roomID = String.valueOf(getIntent().getIntExtra("roomID", 0));
         RoomLogin();
@@ -178,8 +181,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
                 if (getIntent().getBooleanExtra("isHost", true))
                     submitChat(UserDatabase.getInstance().userData.name + " đã tạo phòng.");
-                else
-                    submitChat(UserDatabase.getInstance().userData.name + " đã vào phòng. Số người hiện tại là " + playerList.size() + ".");
+                else if (playerList.size() % 5 == 0)
+                    submitChat("Số người hiện tại là " + playerList.size() + ".");
 
                 WaitingRoomAdapter waitingRoomAdapter = new WaitingRoomAdapter(roomID);
                 waitingRoomAdapter.setHasStableIds(true);
