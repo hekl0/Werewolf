@@ -229,6 +229,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
     }
 
     public static void openSmallWindow(final String userID) {
+        if (userID.equals(UserDatabase.facebookID))
+            return;
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference("User list").child(userID);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {

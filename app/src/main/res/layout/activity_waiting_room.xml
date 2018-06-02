@@ -171,6 +171,7 @@
                 android:text="hekl0"
                 android:textColor="#fff"
                 android:textSize="12sp"
+                android:layout_marginTop="4dp"
                 android:gravity="center"
                 android:layout_below="@id/iv_ava"
                 android:maxLines="2"/>
@@ -179,7 +180,7 @@
                 android:id="@+id/tv_win"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="18dp"
                 android:layout_toRightOf="@id/iv_ava"
                 android:text="Thắng: 10"
