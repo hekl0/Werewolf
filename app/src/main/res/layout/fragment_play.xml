@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:text=" Tạo Phòng"
+            android:textAllCaps="false"
             android:layout_margin="5dp"
             android:background="@drawable/rounded_border"
             android:drawableTop="@drawable/ic_add_room"/>
@@ -25,6 +26,7 @@
             android:layout_alignParentEnd="true"
             android:background="@drawable/rounded_border"
             android:text="Tìm phòng "
+            android:textAllCaps="false"
             android:layout_margin="5dp"
             android:drawableTop="@drawable/ic_find_room"/>
 

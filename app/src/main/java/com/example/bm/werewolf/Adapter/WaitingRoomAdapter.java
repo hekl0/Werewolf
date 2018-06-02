@@ -9,8 +9,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.bm.werewolf.Activity.WaitingRoomActivity;
+import com.example.bm.werewolf.Model.UserModel;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Utils.UserDatabase;
 import com.google.firebase.database.DataSnapshot;
@@ -66,7 +69,6 @@ public class WaitingRoomAdapter extends RecyclerView.Adapter<WaitingRoomAdapter.
                 playerList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                     playerList.add(snapshot.getValue(String.class));
-                Log.d(TAG, "onDataChange: " + playerList.get(0));
                 notifyDataSetChanged();
             }
 
@@ -152,6 +154,7 @@ public class WaitingRoomAdapter extends RecyclerView.Adapter<WaitingRoomAdapter.
 
                     ivChangeHost.setOnClickListener(WaitingRoomViewHolder.this);
                     ivKick.setOnClickListener(WaitingRoomViewHolder.this);
+                    ivAva.setOnClickListener(WaitingRoomViewHolder.this);
                 }
 
                 @Override
@@ -189,6 +192,9 @@ public class WaitingRoomAdapter extends RecyclerView.Adapter<WaitingRoomAdapter.
 
                         }
                     });
+                    break;
+                case R.id.iv_ava:
+                    WaitingRoomActivity.openSmallWindow(playerID);
                     break;
             }
         }
