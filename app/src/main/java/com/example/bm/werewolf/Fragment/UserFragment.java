@@ -4,6 +4,7 @@ package com.example.bm.werewolf.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -201,6 +202,7 @@ public class UserFragment extends Fragment {
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
+                if (value + 1 >= Constant.nameRole.length) return "";
                 return Constant.nameRole[(int) value + 1];
             }
         });
