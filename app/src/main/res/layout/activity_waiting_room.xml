@@ -92,18 +92,18 @@
                 android:id="@+id/iv_chat_submit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@id/iv_mute"
+                android:layout_toStartOf="@id/iv_voice_call"
                 android:padding="4dp"
                 android:src="@drawable/ic_done" />
 
             <ImageView
-                android:id="@+id/iv_mute"
+                android:id="@+id/iv_voice_call"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="8dp"
                 android:padding="4dp"
-                android:src="@drawable/ic_speaker" />
+                android:src="@drawable/ic_voice_call" />
 
         </RelativeLayout>
 

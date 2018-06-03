@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,6 +16,7 @@ import com.example.bm.werewolf.Adapter.WaitingRoomAdapter;
 import com.example.bm.werewolf.Model.UserModel;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Service.OnClearFromRecentService;
+import com.example.bm.werewolf.Service.VoiceCallService;
 import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
 import com.google.firebase.database.DataSnapshot;
@@ -47,8 +47,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
     EditText etChat;
     @BindView(R.id.iv_chat_submit)
     ImageView ivChatSubmit;
-    @BindView(R.id.iv_mute)
-    ImageView ivMute;
+    @BindView(R.id.iv_voice_call)
+    ImageView ivVoiceCall;
     @BindView(R.id.rv_chat)
     RecyclerView rvChat;
     @BindView(R.id.rv_waiting_room)
@@ -71,6 +71,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
     static RelativeLayout rlSmallWindow;
 
     String roomID = "0";
+    boolean isVoiceCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
         OnClearFromRecentService.activity = this;
 
         roomID = String.valueOf(getIntent().getIntExtra("roomID", 0));
+        isVoiceCall = true;
+        VoiceCallService.joinChannel(roomID);
         RoomLogin();
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("rooms").child(roomID).child("roomName");
@@ -120,7 +123,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         rlSmallWindow = findViewById(R.id.rl_small_window);
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_invite, R.id.iv_chat_submit, R.id.iv_mute, R.id.iv_add_delete_friend, R.id.iv_exit})
+    @OnClick({R.id.iv_back, R.id.iv_invite, R.id.iv_chat_submit, R.id.iv_voice_call, R.id.iv_exit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -135,9 +138,15 @@ public class WaitingRoomActivity extends AppCompatActivity {
                 if (!chat.equals(""))
                     submitChat("[" + UserDatabase.getInstance().userData.name + "]: " + chat);
                 break;
-            case R.id.iv_mute:
-                break;
-            case R.id.iv_add_delete_friend:
+            case R.id.iv_voice_call:
+                if (isVoiceCall) {
+                    ivVoiceCall.setImageResource(R.drawable.ic_mute);
+                    VoiceCallService.leaveChannel();
+                } else {
+                    ivVoiceCall.setImageResource(R.drawable.ic_voice_call);
+                    VoiceCallService.joinChannel(roomID);
+                }
+                isVoiceCall = !isVoiceCall;
                 break;
             case R.id.iv_exit:
                 rlSmallWindow.setVisibility(View.GONE);
@@ -226,6 +235,9 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
             }
         });
+
+        if (isVoiceCall)
+            VoiceCallService.leaveChannel();
     }
 
     public static void openSmallWindow(final String userID) {
