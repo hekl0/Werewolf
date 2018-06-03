@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_arrow_back_white_24dp"
         android:padding="8dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="8dp"/>
 
     <TextView
         android:id="@+id/tv_room_id"
@@ -27,7 +27,7 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -42,12 +42,12 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="8dp"/>
 
     <FrameLayout
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/tv_room_id"></FrameLayout>
+        android:layout_below="@+id/tv_room_id" />
 
 </RelativeLayout>

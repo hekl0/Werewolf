@@ -24,4 +24,9 @@ public class Constant {
     public static int DEFAULT = 0;
     public static int GIALANG = 1;
     public static int MASOI = 2;
+
+    public static String roomID;
+    public static boolean isHost;
+    public static int totalPlayer;
+    public static int alivePlayer;
 }

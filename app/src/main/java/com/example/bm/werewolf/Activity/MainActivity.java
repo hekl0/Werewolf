@@ -1,6 +1,5 @@
 package com.example.bm.werewolf.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,7 +10,7 @@ import android.view.MenuItem;
 
 import com.example.bm.werewolf.Fragment.AchievementFragment;
 import com.example.bm.werewolf.Fragment.FriendsFragment;
-import com.example.bm.werewolf.Fragment.PlayFragment;
+import com.example.bm.werewolf.Fragment.LobbyFragment;
 import com.example.bm.werewolf.Fragment.UserFragment;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Service.OnClearFromRecentService;
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigation.setSelectedItemId(R.id.item_play);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
-        loadFragment(new PlayFragment());
+        loadFragment(new LobbyFragment());
     }
 
     @Override
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
             case R.id.item_play:
                 bottomNavigation.getMenu().getItem(1).getIcon().setAlpha(255);
-                loadFragment(new PlayFragment());
+                loadFragment(new LobbyFragment());
                 break;
             case R.id.item_achievement:
                 bottomNavigation.getMenu().getItem(2).getIcon().setAlpha(255);

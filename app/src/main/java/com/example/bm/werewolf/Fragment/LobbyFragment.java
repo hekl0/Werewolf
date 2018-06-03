@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,9 +44,9 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayFragment extends Fragment {
+public class LobbyFragment extends Fragment {
 
-    private static final String TAG = "PlayFragment";
+    private static final String TAG = "LobbyFragment";
 
     @BindView(R.id.bt_create_room)
     Button btCreateRoom;
@@ -66,7 +65,7 @@ public class PlayFragment extends Fragment {
     @BindView(R.id.rv_rooms)
     RecyclerView rvRooms;
 
-    public PlayFragment() {
+    public LobbyFragment() {
         // Required empty public constructor
     }
 
@@ -75,7 +74,7 @@ public class PlayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_play, container, false);
+        final View view = inflater.inflate(R.layout.fragment_lobby, container, false);
         unbinder = ButterKnife.bind(this, view);
 
         context = getContext();

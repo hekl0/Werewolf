@@ -1,5 +1,6 @@
 package com.example.bm.werewolf.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -28,6 +29,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -71,7 +73,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
     static RelativeLayout rlSmallWindow;
 
     String roomID = "0";
-    boolean isVoiceCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +83,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         OnClearFromRecentService.activity = this;
 
         roomID = String.valueOf(getIntent().getIntExtra("roomID", 0));
-        isVoiceCall = true;
+        VoiceCallService.isVoiceCall = true;
         VoiceCallService.joinChannel(roomID);
         RoomLogin();
 
@@ -130,6 +131,37 @@ public class WaitingRoomActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.iv_invite:
+                FirebaseDatabase.getInstance().getReference("rooms").child(roomID).child("players")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                List<String> playerList = new ArrayList<>();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                                    playerList.add(snapshot.getValue(String.class));
+                                List<Integer> roleList = new ArrayList<>();
+                                for (int i = 0; i < Constant.nameRole.length - 1; i++)
+                                    roleList.add(0);
+
+                                Collections.shuffle(playerList);
+                                FirebaseDatabase.getInstance().getReference("Ingame Data").child(roomID).child("role picking")
+                                        .child("playerList").setValue(playerList);
+
+                                FirebaseDatabase.getInstance().getReference("Ingame Data").child(roomID).child("role picking")
+                                        .child("roleList").setValue(roleList);
+
+                                Constant.totalPlayer = playerList.size();
+                                Constant.alivePlayer = playerList.size();
+                                Constant.roomID = roomID;
+                                Constant.isHost = true;
+                                Intent intent = new Intent(WaitingRoomActivity.this, PlayActivity.class);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                 break;
             case R.id.iv_chat_submit:
                 String chat = etChat.getText().toString();
@@ -139,14 +171,14 @@ public class WaitingRoomActivity extends AppCompatActivity {
                     submitChat("[" + UserDatabase.getInstance().userData.name + "]: " + chat);
                 break;
             case R.id.iv_voice_call:
-                if (isVoiceCall) {
+                if (VoiceCallService.isVoiceCall) {
                     ivVoiceCall.setImageResource(R.drawable.ic_mute);
                     VoiceCallService.leaveChannel();
                 } else {
                     ivVoiceCall.setImageResource(R.drawable.ic_voice_call);
                     VoiceCallService.joinChannel(roomID);
                 }
-                isVoiceCall = !isVoiceCall;
+                VoiceCallService.isVoiceCall = !VoiceCallService.isVoiceCall;
                 break;
             case R.id.iv_exit:
                 rlSmallWindow.setVisibility(View.GONE);
@@ -203,6 +235,24 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
             }
         });
+
+        firebaseDatabase.getReference("rooms").child(roomID).child("gameInProgress")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue(boolean.class) && !UserDatabase.facebookID.equals(WaitingRoomAdapter.hostID)) {
+                            Constant.roomID = roomID;
+                            Constant.isHost = false;
+                            Intent intent = new Intent(WaitingRoomActivity.this, PlayActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     void RoomLogout() {
@@ -236,7 +286,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
             }
         });
 
-        if (isVoiceCall)
+        if (VoiceCallService.isVoiceCall)
             VoiceCallService.leaveChannel();
     }
 

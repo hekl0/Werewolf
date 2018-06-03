@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/empty_inside_border"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/iv_role"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/card_back" />
+
+        <TextView
+            android:id="@+id/tv_role"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_role"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:text="card back"
+            android:textColor="#fff"/>
+
+        <TextView
+            android:id="@+id/tv_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_role"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/allerta_stencil"
+            android:text="0"
+            android:textSize="18sp"
+            android:textColor="#fff"/>
+
+        <ImageView
+            android:id="@+id/iv_inc"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/tv_role"
+            android:layout_marginTop="8dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_increase"
+            android:layout_marginEnd="4dp"/>
+
+        <ImageView
+            android:id="@+id/iv_dec"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/tv_role"
+            android:layout_marginTop="8dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_decline" />
+
+
+    </RelativeLayout>
+</RelativeLayout>
