@@ -64,6 +64,8 @@ public class LobbyFragment extends Fragment {
     Context context;
     @BindView(R.id.rv_rooms)
     RecyclerView rvRooms;
+    @BindView(R.id.bt_quick_find)
+    Button btQuickFind;
 
     public LobbyFragment() {
         // Required empty public constructor
@@ -78,7 +80,6 @@ public class LobbyFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
         context = getContext();
-
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -117,7 +118,7 @@ public class LobbyFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.bt_create_room, R.id.bt_find_room})
+    @OnClick({R.id.bt_create_room, R.id.bt_find_room, R.id.bt_quick_find})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_create_room:
@@ -202,12 +203,11 @@ public class LobbyFragment extends Fragment {
                             intent.putExtra("roomID", roomID);
                             intent.putExtra("isHost", false);
                             startActivity(intent);
-                        }
-                        else {
+                        } else {
                             Toast.makeText(context, "Không thấy phòng", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
-                        
+
                     }
                 });
                 dialogBuilder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -219,6 +219,8 @@ public class LobbyFragment extends Fragment {
                 AlertDialog ad = dialogBuilder.create();
                 ad.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#7dffffff")));
                 ad.show();
+                break;
+            case R.id.bt_quick_find:
                 break;
         }
     }
