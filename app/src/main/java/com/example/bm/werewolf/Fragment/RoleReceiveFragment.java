@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.bm.werewolf.Model.PlayerModel;
+import com.example.bm.werewolf.Model.UserModel;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
@@ -19,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,12 +66,19 @@ public class RoleReceiveFragment extends Fragment {
             }
         });
 
-        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("role picking")
-                .child(UserDatabase.facebookID).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                .child("Player Data").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue(Integer.class) == null) return;
-                Constant.myRole = dataSnapshot.getValue(Integer.class);
+                if (dataSnapshot.getValue() == null) return;
+
+                Constant.listPlayerModel = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    PlayerModel playerModel = snapshot.getValue(PlayerModel.class);
+                    Constant.listPlayerModel.add(playerModel);
+                    if (playerModel.id.equals(UserDatabase.facebookID))
+                        Constant.myRole = playerModel.role;
+                }
 
                 if (avi == null) avi = view.findViewById(R.id.avi);
                 if (clContent == null) clContent = view.findViewById(R.id.cl_content);

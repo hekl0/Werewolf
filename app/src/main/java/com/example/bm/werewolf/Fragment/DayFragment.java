@@ -86,27 +86,8 @@ public class DayFragment extends Fragment {
             }
         });
 
-        Constant.listPlayerModel = new ArrayList<>();
-        for (final String id : Constant.listPlayer) {
-            FirebaseDatabase.getInstance().getReference("User list").child(id).child("name")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            PlayerModel model = new PlayerModel(id, 0, 0, true, dataSnapshot.getValue(String.class));
-                            Constant.listPlayerModel.add(model);
-                            if (id == Constant.listPlayer.get(Constant.listPlayer.size() - 1)) {
-                                DayAdapter dayAdapter = new DayAdapter();
-                                gvPlayer.setAdapter(dayAdapter);
-                                tvStartGame.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-        }
+        gvPlayer.setAdapter(new DayAdapter());
+        tvStartGame.setVisibility(View.VISIBLE);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         ChatAdapter chatAdapter = new ChatAdapter(Constant.roomID, linearLayoutManager);

@@ -63,7 +63,7 @@ public class RolePickingAdapter extends BaseAdapter {
         tvRole.setText(Constant.nameRole[position+1]);
 
         FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("role picking")
-                .child("roleList").child(String.valueOf(position)).addValueEventListener(new ValueEventListener() {
+                .child(String.valueOf(position)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 tvNumber.setText(String.valueOf(dataSnapshot.getValue(Integer.class)));
@@ -94,7 +94,7 @@ public class RolePickingAdapter extends BaseAdapter {
                 }
                 count[position] += 1;
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("role picking")
-                        .child("roleList").child(String.valueOf(position)).setValue(count[position]);
+                        .child(String.valueOf(position)).setValue(count[position]);
             }
         });
 
@@ -107,7 +107,7 @@ public class RolePickingAdapter extends BaseAdapter {
                 }
                 count[position] -= 1;
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("role picking")
-                        .child("roleList").child(String.valueOf(position)).setValue(count[position]);
+                        .child(String.valueOf(position)).setValue(count[position]);
             }
         });
 
