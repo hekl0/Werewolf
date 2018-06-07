@@ -25,7 +25,7 @@ import java.util.zip.Inflater;
 
 public class RolePickingAdapter extends BaseAdapter {
     Context context;
-    int[] count = new int[Constant.nameRole.length - 1];
+    public static int[] count = new int[Constant.nameRole.length - 1];
 
     public RolePickingAdapter(Context context) {
         this.context = context;
@@ -66,7 +66,6 @@ public class RolePickingAdapter extends BaseAdapter {
                 .child("roleList").child(String.valueOf(position)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //Log.d("aa", "onDataChange: " + position + dataSnapshot);
                 tvNumber.setText(String.valueOf(dataSnapshot.getValue(Integer.class)));
             }
 
@@ -93,7 +92,6 @@ public class RolePickingAdapter extends BaseAdapter {
                     Toast.makeText(context, "Đã đủ số người", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Log.d("", "onClick: " + position);
                 count[position] += 1;
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("role picking")
                         .child("roleList").child(String.valueOf(position)).setValue(count[position]);

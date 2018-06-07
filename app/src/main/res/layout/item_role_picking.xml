@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/empty_inside_border"
+        android:background="@drawable/role_picking_border"
         android:padding="8dp">
 
         <ImageView

@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                float translationX = - (float) animation.getAnimatedValue() * backgroundOne.getWidth();
+                float translationX = -(float) animation.getAnimatedValue() * backgroundOne.getWidth();
                 backgroundOne.setTranslationX(translationX);
                 backgroundTwo.setTranslationX(translationX + backgroundOne.getWidth());
             }
@@ -130,5 +130,12 @@ public class LoginActivity extends AppCompatActivity {
         );
 
         graphRequest.executeAsync();
+    }
+
+    @Override
+    protected void onDestroy() {
+        RtcEngine.destroy();
+        UserDatabase.getInstance().offlineStatus();
+        super.onDestroy();
     }
 }

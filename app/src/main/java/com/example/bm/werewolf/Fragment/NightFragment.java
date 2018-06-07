@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 
-import com.example.bm.werewolf.Adapter.GridViewAdapter;
+import com.example.bm.werewolf.Adapter.DayAdapter;
 import com.example.bm.werewolf.Database.DatabaseManager;
 import com.example.bm.werewolf.Model.PlayerModel;
 import com.example.bm.werewolf.R;
@@ -21,16 +21,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import in.srain.cube.views.GridViewWithHeaderAndFooter;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class NightFragment extends Fragment {
 
-    @BindView(R.id.bt_ok)
-    Button btOk;
     @BindView(R.id.gv_player)
-    GridView gvPlayer;
+    GridViewWithHeaderAndFooter gvPlayer;
     Unbinder unbinder;
 
     Context context;
@@ -49,10 +48,12 @@ public class NightFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         context = getContext();
 
-        List<PlayerModel> playerModels = DatabaseManager.getInstance(context).getListPlayer();
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        View header = layoutInflater.inflate(R.layout.layout_header, null);
+        gvPlayer.addHeaderView(header);
 
-        GridViewAdapter gridViewAdapter = new GridViewAdapter(playerModels, context);
-        gvPlayer.setAdapter(gridViewAdapter);
+        DayAdapter dayAdapter = new DayAdapter();
+        gvPlayer.setAdapter(dayAdapter);
 
         return view;
     }
@@ -61,9 +62,5 @@ public class NightFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    @OnClick(R.id.bt_ok)
-    public void onViewClicked() {
     }
 }

@@ -48,15 +48,16 @@
         android:id="@+id/tv_name"
         android:layout_width="95dp"
         android:layout_height="30dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="marquee"
+        android:singleLine="true"
         android:text="name"
         android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.08"
         app:layout_constraintStart_toEndOf="@+id/tv_number"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        app:layout_constraintTop_toBottomOf="@+id/iv_ava"
-        android:layout_marginTop="4dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/iv_ava" />
 
 </android.support.constraint.ConstraintLayout>

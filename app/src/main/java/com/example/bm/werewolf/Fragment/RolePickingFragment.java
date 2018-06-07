@@ -11,9 +11,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bm.werewolf.Adapter.ChatAdapter;
 import com.example.bm.werewolf.Adapter.RolePickingAdapter;
+import com.example.bm.werewolf.Adapter.WaitingRoomAdapter;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Service.VoiceCallService;
 import com.example.bm.werewolf.Utils.Constant;
@@ -25,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,6 +53,8 @@ public class RolePickingFragment extends Fragment {
     @BindView(R.id.gv_role)
     GridView gvRole;
     Unbinder unbinder;
+    @BindView(R.id.tv_start_game)
+    TextView tvStartGame;
 
     public RolePickingFragment() {
         // Required empty public constructor
@@ -70,6 +76,9 @@ public class RolePickingFragment extends Fragment {
         RolePickingAdapter rolePickingAdapter = new RolePickingAdapter(getContext());
         gvRole.setAdapter(rolePickingAdapter);
 
+        if (VoiceCallService.isVoiceCall) ivVoiceCall.setImageResource(R.drawable.ic_voice_call);
+        else ivVoiceCall.setImageResource(R.drawable.ic_mute);
+
         return view;
     }
 
@@ -79,7 +88,7 @@ public class RolePickingFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_chat_submit, R.id.iv_voice_call})
+    @OnClick({R.id.iv_chat_submit, R.id.iv_voice_call, R.id.tv_start_game})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_chat_submit:
@@ -98,6 +107,46 @@ public class RolePickingFragment extends Fragment {
                     VoiceCallService.joinChannel(Constant.roomID);
                 }
                 VoiceCallService.isVoiceCall = !VoiceCallService.isVoiceCall;
+                break;
+            case R.id.tv_start_game:
+                int num = 0;
+                for (int x : RolePickingAdapter.count) num += x;
+                if (num < Constant.totalPlayer) {
+                    Toast.makeText(getContext(), "Chưa đủ số người", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
+                List<String> playerList = Constant.listPlayer;
+                Collections.shuffle(playerList);
+                for (final String x : playerList) {
+                    FirebaseDatabase.getInstance().getReference("User list").child(x)
+                            .child("favoriteRole").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            int favorite = dataSnapshot.getValue(Integer.class);
+                            List<Integer> role = new ArrayList<>();
+                            for (int i = 0; i < RolePickingAdapter.count.length; i++)
+                                for (int j = 0; j < RolePickingAdapter.count[i]; j++) {
+                                    role.add(i);
+                                    if (i == favorite) role.add(i);
+                                }
+                            Collections.shuffle(role);
+                            int pick = role.get(0);
+                            RolePickingAdapter.count[pick] -= 1;
+                            FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                                    .child("role picking").child(x).setValue(pick);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_container, new RoleReceiveFragment())
+                        .commit();
                 break;
         }
     }
