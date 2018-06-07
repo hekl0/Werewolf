@@ -30,7 +30,17 @@
             android:layout_margin="5dp"
             android:drawableTop="@drawable/ic_find_room"/>
 
-
+        <Button
+            android:id="@+id/bt_quick_find"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/bt_create_room"
+            android:layout_toLeftOf="@id/bt_find_room"
+            android:layout_above="@id/rv_rooms"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="Tìm nhanh"
+            android:background="#88ffff00"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_rooms"
