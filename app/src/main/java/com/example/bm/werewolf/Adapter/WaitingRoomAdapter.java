@@ -53,6 +53,11 @@ public class WaitingRoomAdapter extends RecyclerView.Adapter<WaitingRoomAdapter.
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 hostID = dataSnapshot.getValue(String.class);
+                if (hostID == null) hostID = "";
+                if (hostID.equals(UserDatabase.facebookID))
+                    WaitingRoomActivity.tvStartGame.setVisibility(View.VISIBLE);
+                else
+                    WaitingRoomActivity.tvStartGame.setVisibility(View.GONE);
                 notifyDataSetChanged();
             }
 

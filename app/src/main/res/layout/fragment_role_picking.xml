@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragment.DayFragment">
+    tools:context="com.example.bm.werewolf.Fragment.RolePickingFragment">
 
+    <!-- TODO: Update blank fragment layout -->
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -22,10 +22,9 @@
             android:id="@+id/rl_chat"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_below="@+id/rl1"
             android:background="@drawable/chat_border"
-            app:layout_constraintTop_toBottomOf="@id/guideline2"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline2">
 
             <RelativeLayout
                 android:id="@+id/ll1"
@@ -36,9 +35,9 @@
                 android:layout_marginEnd="4dp"
                 android:layout_marginStart="4dp"
                 android:background="#242426"
-                android:padding="4dp"
                 android:focusable="true"
-                android:focusableInTouchMode="true">
+                android:focusableInTouchMode="true"
+                android:padding="4dp">
 
                 <EditText
                     android:id="@+id/et_chat"
@@ -47,30 +46,30 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="4dp"
                     android:layout_marginStart="8dp"
+                    android:layout_toStartOf="@id/iv_chat_submit"
                     android:background="@drawable/chat_box_border"
+                    android:maxLength="200"
                     android:paddingEnd="8dp"
                     android:paddingStart="8dp"
                     android:textColor="#F0EFF5"
-                    android:textSize="13sp"
-                    android:layout_toStartOf="@id/iv_chat_submit"
-                    android:maxLength="200"/>
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:id="@+id/iv_chat_submit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_toStartOf="@id/iv_voice_call"
                     android:padding="4dp"
-                    android:src="@drawable/ic_done"
-                    android:layout_toStartOf="@id/iv_voice_call"/>
+                    android:src="@drawable/ic_done" />
 
                 <ImageView
                     android:id="@+id/iv_voice_call"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginEnd="8dp"
                     android:padding="4dp"
-                    android:src="@drawable/ic_voice_call"
-                    android:layout_alignParentEnd="true"/>
+                    android:src="@drawable/ic_voice_call" />
 
             </RelativeLayout>
 
@@ -82,23 +81,22 @@
                 android:layout_marginEnd="4dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
+                android:overScrollMode="never"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
-                android:paddingTop="4dp"
-                android:overScrollMode="never" />
+                android:paddingTop="4dp" />
 
         </RelativeLayout>
 
         <GridView
-            android:id="@+id/gv_player"
+            android:id="@+id/gv_role"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:numColumns="3"
+            app:layout_constraintBottom_toTopOf="@id/rl2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/rl2"
-            app:layout_constraintTop_toTopOf="parent"/>
-
+            app:layout_constraintTop_toTopOf="parent" />
 
         <RelativeLayout
             android:id="@+id/rl2"
@@ -122,62 +120,10 @@
                 android:paddingTop="10dp"
                 android:text="Bắt đầu"
                 android:textColor="#fff"
-                android:textSize="16sp"
-                android:visibility="gone"/>
+                android:textSize="16sp"/>
 
         </RelativeLayout>
 
     </android.support.constraint.ConstraintLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_small_window"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:visibility="gone">
-
-        <RelativeLayout
-            android:layout_width="350dp"
-            android:layout_height="250dp"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="148dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/small_window_border"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_small_window"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:text="Dự đoán"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:id="@+id/iv_exit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:padding="8dp"
-                android:src="@drawable/ic_x_button" />
-
-            <GridView
-                android:id="@+id/gv_small_window"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/tv_small_window"
-                android:layout_marginBottom="12dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginStart="12dp"
-                android:background="@drawable/small_content_border"
-                android:numColumns="2" />
-
-        </RelativeLayout>
-
-    </RelativeLayout>
 
 </FrameLayout>

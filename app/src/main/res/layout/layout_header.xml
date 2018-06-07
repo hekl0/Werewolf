@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_role"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/card_back"
+        android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/tv_role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Ma sói"
+        android:layout_below="@id/iv_role"
+        android:textSize="20sp"
+        android:fontFamily="@font/autour_one"
+        android:layout_marginTop="4dp"
+        android:textColor="#fff"/>
+
+    <TextView
+        android:id="@+id/tv_guide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_role"
+        android:text="Chọn một người để giết tối nay:"
+        android:padding="8dp"
+        android:textColor="#fff"
+        android:textSize="16sp"/>
+
+</RelativeLayout>

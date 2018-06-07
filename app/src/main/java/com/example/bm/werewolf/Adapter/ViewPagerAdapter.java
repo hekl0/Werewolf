@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.bm.werewolf.Fragment.AchievementFragment;
 import com.example.bm.werewolf.Fragment.FriendsFragment;
-import com.example.bm.werewolf.Fragment.PlayFragment;
+import com.example.bm.werewolf.Fragment.LobbyFragment;
 import com.example.bm.werewolf.Fragment.UserFragment;
 
 /**
@@ -22,7 +22,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0: return new FriendsFragment();
-            case 1: return new PlayFragment();
+            case 1: return new LobbyFragment();
             case 2: return new AchievementFragment();
             case 3: return new UserFragment();
         }

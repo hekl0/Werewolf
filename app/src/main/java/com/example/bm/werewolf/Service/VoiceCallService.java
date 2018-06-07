@@ -11,6 +11,7 @@ import io.agora.rtc.RtcEngine;
  */
 
 public class VoiceCallService {
+    public static boolean isVoiceCall;
     public static RtcEngine rtcEngine;
 
     public static void joinChannel(String chanelID) {

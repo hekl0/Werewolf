@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.bm.werewolf.Database.DatabaseManager;
 import com.example.bm.werewolf.Fragment.DayFragment;
 import com.example.bm.werewolf.Fragment.NightFragment;
+import com.example.bm.werewolf.Fragment.RolePickingFragment;
 import com.example.bm.werewolf.Model.PlayerModel;
 import com.example.bm.werewolf.R;
 
@@ -24,10 +25,6 @@ import butterknife.OnClick;
 public class PlayActivity extends AppCompatActivity {
     private static final String TAG = "PlayActivity";
 
-    @BindView(R.id.iv_back)
-    ImageView ivBack;
-    @BindView(R.id.tv_room_id)
-    TextView tvRoomId;
     @BindView(R.id.tv_timer)
     TextView tvTimer;
 
@@ -41,17 +38,12 @@ public class PlayActivity extends AppCompatActivity {
 
         playerModels = DatabaseManager.getInstance(this).getListPlayer();
 
-        loadFragment(new DayFragment());
+        loadFragment(new RolePickingFragment());
     }
 
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_container, fragment);
         transaction.commit();
-    }
-
-    @OnClick(R.id.iv_back)
-    public void onViewClicked() {
-        onBackPressed();
     }
 }

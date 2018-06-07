@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,9 +44,9 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayFragment extends Fragment {
+public class LobbyFragment extends Fragment {
 
-    private static final String TAG = "PlayFragment";
+    private static final String TAG = "LobbyFragment";
 
     @BindView(R.id.bt_create_room)
     Button btCreateRoom;
@@ -65,8 +64,10 @@ public class PlayFragment extends Fragment {
     Context context;
     @BindView(R.id.rv_rooms)
     RecyclerView rvRooms;
+    @BindView(R.id.bt_quick_find)
+    Button btQuickFind;
 
-    public PlayFragment() {
+    public LobbyFragment() {
         // Required empty public constructor
     }
 
@@ -75,11 +76,10 @@ public class PlayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_play, container, false);
+        final View view = inflater.inflate(R.layout.fragment_lobby, container, false);
         unbinder = ButterKnife.bind(this, view);
 
         context = getContext();
-
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -118,7 +118,7 @@ public class PlayFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.bt_create_room, R.id.bt_find_room})
+    @OnClick({R.id.bt_create_room, R.id.bt_find_room, R.id.bt_quick_find})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_create_room:
@@ -203,12 +203,11 @@ public class PlayFragment extends Fragment {
                             intent.putExtra("roomID", roomID);
                             intent.putExtra("isHost", false);
                             startActivity(intent);
-                        }
-                        else {
+                        } else {
                             Toast.makeText(context, "Không thấy phòng", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
-                        
+
                     }
                 });
                 dialogBuilder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
@@ -220,6 +219,8 @@ public class PlayFragment extends Fragment {
                 AlertDialog ad = dialogBuilder.create();
                 ad.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#7dffffff")));
                 ad.show();
+                break;
+            case R.id.bt_quick_find:
                 break;
         }
     }

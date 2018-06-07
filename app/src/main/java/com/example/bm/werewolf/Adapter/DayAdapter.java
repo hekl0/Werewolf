@@ -1,13 +1,16 @@
 package com.example.bm.werewolf.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bm.werewolf.Fragment.DayFragment;
 import com.example.bm.werewolf.R;
 
 import com.example.bm.werewolf.Model.PlayerModel;
@@ -21,23 +24,16 @@ import java.util.List;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
-public class GridViewAdapter extends BaseAdapter {
-    List<PlayerModel> playerModels = new ArrayList<>();
-    Context context;
-
-    public GridViewAdapter(List<PlayerModel> playerModels, Context context) {
-        this.playerModels = playerModels;
-        this.context = context;
-    }
+public class DayAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return playerModels.size();
+        return Constant.listPlayerModel.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return playerModels.get(position);
+        return Constant.listPlayerModel.get(position);
     }
 
     @Override
@@ -46,33 +42,45 @@ public class GridViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int pos, View convertView, ViewGroup parent) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         convertView = layoutInflater.inflate(R.layout.player_item, parent, false);
 
-        PlayerModel playerModel = playerModels.get(position);
         TextView tvNum = convertView.findViewById(R.id.tv_number);
         TextView tvName = convertView.findViewById(R.id.tv_name);
         ImageView ivAva = convertView.findViewById(R.id.iv_ava);
-        ImageView ivMark = convertView.findViewById(R.id.iv_mark);
+        final ImageView ivMark = convertView.findViewById(R.id.iv_mark);
 
-        tvName.setText(playerModel.name);
+        tvName.setText(Constant.listPlayerModel.get(pos).name);
         tvName.setSelected(true);
-        Transformation transformation = new CropCircleTransformation();
+        final Transformation transformation = new CropCircleTransformation();
         Picasso.get()
-                .load("https://graph.facebook.com/" + playerModel.id + "/picture?type=large")
+                .load("https://graph.facebook.com/" + Constant.listPlayerModel.get(pos).id + "/picture?type=large")
                 .placeholder(R.drawable.progress_animation)
                 .transform(transformation)
                 .into(ivAva);
-        tvNum.setText(position+1 + "");
+        tvNum.setText((pos + 1) + "");
         Picasso.get()
-                .load(Constant.imageRole[playerModel.mark])
+                .load(Constant.imageRole[Constant.listPlayerModel.get(pos).mark])
                 .transform(transformation)
                 .into(ivMark);
 
         ivMark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DayFragment.rlSmallWindow.setVisibility(View.VISIBLE);
+                DayFragment.gvSmallWindow.setAdapter(new FavoriteRoleAdapter());
+                DayFragment.gvSmallWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        DayFragment.rlSmallWindow.setVisibility(View.GONE);
+                        Constant.listPlayerModel.get(pos).mark = position;
+                        Picasso.get()
+                                .load(Constant.imageRole[Constant.listPlayerModel.get(pos).mark])
+                                .transform(transformation)
+                                .into(ivMark);
+                    }
+                });
             }
         });
 

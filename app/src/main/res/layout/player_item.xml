@@ -2,8 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="115dp"
-    android:layout_height="145dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
@@ -14,8 +14,8 @@
 
     <ImageView
         android:id="@+id/iv_ava"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,12 +25,11 @@
 
     <ImageView
         android:id="@+id/iv_mark"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:src="@mipmap/ma_soi"
-        app:layout_constraintBottom_toTopOf="@+id/tv_name"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="@id/iv_ava"
+        app:layout_constraintBottom_toBottomOf="@id/iv_ava"/>
 
     <TextView
         android:id="@+id/tv_number"
@@ -40,20 +39,25 @@
         android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_ava"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"/>
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="95dp"
         android:layout_height="30dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="marquee"
+        android:singleLine="true"
         android:text="name"
         android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.08"
         app:layout_constraintStart_toEndOf="@+id/tv_number"
-        android:ellipsize="marquee"
-        android:singleLine="true"
         app:layout_constraintTop_toBottomOf="@+id/iv_ava" />
 
 </android.support.constraint.ConstraintLayout>
