@@ -48,6 +48,8 @@ public class NightFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         context = getContext();
 
+        DayFragment.pick = -1;
+
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View header = layoutInflater.inflate(R.layout.layout_header, null);
         gvPlayer.addHeaderView(header);
