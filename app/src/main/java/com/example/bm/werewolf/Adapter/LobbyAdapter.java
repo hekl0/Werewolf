@@ -41,7 +41,6 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
         this.roomMap = roomMap;
         this.context = context;
         roomList = new ArrayList<>(roomMap.values());
-        Log.d(TAG, "LobbyAdapter: " + roomList.toString());
     }
 
     @NonNull

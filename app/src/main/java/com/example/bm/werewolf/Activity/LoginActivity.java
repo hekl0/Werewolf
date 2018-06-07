@@ -10,7 +10,9 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Service.EventHandler;
 import com.example.bm.werewolf.Service.OnClearFromRecentService;
+import com.example.bm.werewolf.Service.VoiceCallService;
 import com.example.bm.werewolf.Utils.UserDatabase;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -30,6 +32,7 @@ import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.agora.rtc.RtcEngine;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -49,6 +52,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        try {
+            VoiceCallService.rtcEngine = RtcEngine.create(getBaseContext(), "aed16bb36aa0410ba115391fb945692c", new EventHandler());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         startService(new Intent(getBaseContext(), OnClearFromRecentService.class));
         OnClearFromRecentService.activity = this;

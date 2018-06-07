@@ -1,6 +1,7 @@
 package com.example.bm.werewolf.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.bm.werewolf.Fragment.FriendsFragment;
 import com.example.bm.werewolf.Model.UserModel;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Utils.UserDatabase;
@@ -26,6 +28,7 @@ import java.util.Map;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter {
+    private static final String TAG = "FriendsExpandableListVi";
 
     Context context;
     String[] groupName = new String[]{"Bạn bè", "Chơi cùng gần đây"};
@@ -106,7 +109,6 @@ public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter 
         final TextView tvPlayerName = convertView.findViewById(R.id.tv_player);
         final ImageView ivOnline = convertView.findViewById(R.id.iv_online);
         ImageView ivAva = convertView.findViewById(R.id.iv_ava);
-        ImageView ivDelete = convertView.findViewById(R.id.iv_delete_friend);
 
         final String userID = (String) getChild(groupPosition, childPosition);
 
@@ -143,24 +145,23 @@ public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter 
                 .transform(transformation)
                 .into(ivAva);
 
-        if (groupPosition == 0) {
-            ivDelete.setVisibility(View.VISIBLE);
-            ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    UserDatabase.getInstance().userData.friendList.remove(userID);
-                    UserDatabase.getInstance().updateUser();
-                    friend = UserDatabase.getInstance().userData.friendList;
-                    notifyDataSetChanged();
-                }
-            });
-        }
-
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FriendsFragment.openSmallWindow(userID);
+            }
+        });
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        friend = UserDatabase.getInstance().userData.friendList;
+        super.notifyDataSetChanged();
     }
 }

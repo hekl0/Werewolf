@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.bm.werewolf.Fragment.FriendsFragment">
 
     <ExpandableListView
@@ -12,5 +13,126 @@
         android:groupIndicator="@null">
 
     </ExpandableListView>
+
+    <RelativeLayout
+        android:id="@+id/rl_small_window"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:clickable="true">
+
+        <RelativeLayout
+            android:id="@+id/content"
+            android:layout_width="330dp"
+            android:layout_height="120dp"
+            android:background="@drawable/rounded_border"
+            android:padding="2dp"
+            android:layout_margin="20dp"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/iv_cover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@mipmap/achieve_gia_lang" />
+
+            <ImageView
+                android:id="@+id/iv_ava"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_launcher_background" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="hekl0"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:layout_below="@id/iv_ava"
+                android:maxLines="2"/>
+
+            <TextView
+                android:id="@+id/tv_win"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="18dp"
+                android:layout_toRightOf="@id/iv_ava"
+                android:text="Thắng: 10"
+                android:textColor="#fff"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_lose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="18dp"
+                android:layout_toRightOf="@id/tv_win"
+                android:text="Thua: 10"
+                android:textColor="#fff"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:id="@+id/ll_favorite_role"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="20dp"
+                android:layout_toRightOf="@id/iv_ava"
+                android:background="@drawable/text_border">
+
+                <ImageView
+                    android:id="@+id/iv_favorite_role"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="#000"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_favorite_role"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="Không có"
+                    android:textAllCaps="false"
+                    android:textColor="#d1ffffff"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_add_delete_friend"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/circle_border"
+                android:padding="12dp"
+                android:src="@drawable/ic_add_friend" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_x_button"
+            android:layout_alignEnd="@id/content"
+            android:layout_alignTop="@id/content"
+            android:layout_marginEnd="-10dp"
+            android:layout_marginTop="-10dp"/>
+
+    </RelativeLayout>
 
 </FrameLayout>
