@@ -49,6 +49,7 @@ public class DayAdapter extends BaseAdapter {
         TextView tvNum = convertView.findViewById(R.id.tv_number);
         TextView tvName = convertView.findViewById(R.id.tv_name);
         ImageView ivAva = convertView.findViewById(R.id.iv_ava);
+        final ImageView ivCheck = convertView.findViewById(R.id.iv_check);
         final ImageView ivMark = convertView.findViewById(R.id.iv_mark);
 
         tvName.setText(Constant.listPlayerModel.get(pos).name);
@@ -81,6 +82,16 @@ public class DayAdapter extends BaseAdapter {
                                 .into(ivMark);
                     }
                 });
+            }
+        });
+        if (DayFragment.pick == pos) ivCheck.setVisibility(View.VISIBLE);
+        else ivCheck.setVisibility(View.GONE);
+
+        ivAva.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DayFragment.pick = pos;
+                notifyDataSetChanged();
             }
         });
 

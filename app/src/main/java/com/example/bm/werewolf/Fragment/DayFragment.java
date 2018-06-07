@@ -63,6 +63,7 @@ public class DayFragment extends Fragment {
     public static RelativeLayout rlSmallWindow;
     public static ImageView ivExit;
     public static GridView gvSmallWindow;
+    public static int pick = -1;
 
     public DayFragment() {
         // Required empty public constructor
