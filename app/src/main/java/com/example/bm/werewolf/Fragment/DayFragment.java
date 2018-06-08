@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.bm.werewolf.Activity.PlayActivity;
 import com.example.bm.werewolf.Adapter.ChatAdapter;
 import com.example.bm.werewolf.Adapter.DayAdapter;
 import com.example.bm.werewolf.Model.PlayerModel;
@@ -63,7 +64,6 @@ public class DayFragment extends Fragment {
     public static RelativeLayout rlSmallWindow;
     public static ImageView ivExit;
     public static GridView gvSmallWindow;
-    public static int pick = -1;
 
     public DayFragment() {
         // Required empty public constructor
@@ -87,7 +87,13 @@ public class DayFragment extends Fragment {
             }
         });
 
-        gvPlayer.setAdapter(new DayAdapter());
+        List<PlayerModel> playerModelList = new ArrayList<>();
+        for (PlayerModel playerModel : Constant.listPlayerModel)
+            if (playerModel.alive == true)
+                playerModelList.add(playerModel);
+        DayAdapter dayAdapter = new DayAdapter(playerModelList);
+
+        gvPlayer.setAdapter(dayAdapter);
         tvStartGame.setVisibility(View.VISIBLE);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());

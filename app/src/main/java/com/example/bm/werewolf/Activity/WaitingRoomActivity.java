@@ -131,7 +131,9 @@ public class WaitingRoomActivity extends AppCompatActivity {
                 .child("gameInProgress").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: " + dataSnapshot);
                 if (dataSnapshot.getValue(Boolean.class)) {
+                    Log.d(TAG, "onDataChange: " + dataSnapshot.getValue(Boolean.class));
                     Intent intent = new Intent(WaitingRoomActivity.this, PlayActivity.class);
                     startActivity(intent);
                 }
@@ -263,7 +265,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
                         Boolean ok = dataSnapshot.getValue(boolean.class);
                         if (ok == null) ok = false;
                         if (ok && !UserDatabase.facebookID.equals(WaitingRoomAdapter.hostID)) {
-                            Constant.roomID = Constant.roomID;
                             Constant.isHost = false;
                             Intent intent = new Intent(WaitingRoomActivity.this, PlayActivity.class);
                             startActivity(intent);

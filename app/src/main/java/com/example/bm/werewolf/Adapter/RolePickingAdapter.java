@@ -56,11 +56,11 @@ public class RolePickingAdapter extends BaseAdapter {
         ImageView ivRole = convertView.findViewById(R.id.iv_role);
         TextView tvRole = convertView.findViewById(R.id.tv_role);
         final TextView tvNumber = convertView.findViewById(R.id.tv_number);
-        ImageView ivInc = convertView.findViewById(R.id.iv_inc);
-        ImageView ivDec = convertView.findViewById(R.id.iv_dec);
+        final ImageView ivInc = convertView.findViewById(R.id.iv_inc);
+        final ImageView ivDec = convertView.findViewById(R.id.iv_dec);
 
-        ivRole.setImageResource(Constant.imageRole[position+1]);
-        tvRole.setText(Constant.nameRole[position+1]);
+        ivRole.setImageResource(Constant.imageRole[position + 1]);
+        tvRole.setText(Constant.nameRole[position + 1]);
 
         FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("role picking")
                 .child(String.valueOf(position)).addValueEventListener(new ValueEventListener() {

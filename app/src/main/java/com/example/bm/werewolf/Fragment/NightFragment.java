@@ -3,18 +3,30 @@ package com.example.bm.werewolf.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.bm.werewolf.Activity.PlayActivity;
 import com.example.bm.werewolf.Adapter.DayAdapter;
 import com.example.bm.werewolf.Database.DatabaseManager;
 import com.example.bm.werewolf.Model.PlayerModel;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Utils.Constant;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,6 +42,10 @@ public class NightFragment extends Fragment {
 
     @BindView(R.id.gv_player)
     GridViewWithHeaderAndFooter gvPlayer;
+    @BindView(R.id.tv_confirm)
+    TextView tvConfirm;
+    @BindView(R.id.tv_timer)
+    TextView tvTimer;
     Unbinder unbinder;
 
     Context context;
@@ -44,18 +60,76 @@ public class NightFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_night, container, false);
+        final View view = inflater.inflate(R.layout.fragment_night, container, false);
         unbinder = ButterKnife.bind(this, view);
         context = getContext();
-
-        DayFragment.pick = -1;
 
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View header = layoutInflater.inflate(R.layout.layout_header, null);
         gvPlayer.addHeaderView(header);
 
-        DayAdapter dayAdapter = new DayAdapter();
+        List<PlayerModel> playerModelList = new ArrayList<>();
+        for (PlayerModel playerModel : Constant.listPlayerModel)
+            if (playerModel.alive == true)
+                if (playerModel.role != PlayActivity.currentRole || PlayActivity.currentRole == Constant.BAO_VE)
+                    playerModelList.add(playerModel);
+
+        DayAdapter dayAdapter = new DayAdapter(playerModelList);
         gvPlayer.setAdapter(dayAdapter);
+
+        ImageView ivRole = header.findViewById(R.id.iv_role);
+        TextView tvRole = header.findViewById(R.id.tv_role);
+        TextView tvGuide = header.findViewById(R.id.tv_guide);
+
+        ivRole.setImageResource(Constant.imageRole[PlayActivity.currentRole + 1]);
+        tvRole.setText(Constant.nameRole[PlayActivity.currentRole + 1]);
+
+        tvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (DayAdapter.pick == -1) {
+                    Toast.makeText(getContext(), "Cần chọn mục tiêu trước!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                tvConfirm.setVisibility(View.GONE);
+
+                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                        .child("response");
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        List<String> responseList = new ArrayList<>();
+                        if (dataSnapshot.getValue() != null)
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                                responseList.add(snapshot.getValue(String.class));
+                        responseList.add(DayAdapter.playerModelList.get(DayAdapter.pick).id);
+                        databaseReference.setValue(responseList);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+
+        new CountDownTimer(15000 + PlayActivity.startTime - System.currentTimeMillis(), 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                if (tvTimer == null) tvTimer = view.findViewById(R.id.tv_timer);
+                tvTimer.setText("" + (millisUntilFinished / 1000));
+            }
+
+            public void onFinish() {
+                if (tvConfirm == null) tvConfirm = view.findViewById(R.id.tv_confirm);
+                tvConfirm.setVisibility(View.GONE);
+                if (tvTimer == null) tvTimer = view.findViewById(R.id.tv_timer);
+                tvTimer.setText("0");
+            }
+
+        }.start();
 
         return view;
     }

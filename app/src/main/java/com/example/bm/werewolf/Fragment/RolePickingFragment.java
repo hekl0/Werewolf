@@ -121,6 +121,12 @@ public class RolePickingFragment extends Fragment {
                 final List<String> playerList = Constant.listPlayer;
                 Collections.shuffle(playerList);
 
+                for (int i = 0; i < RolePickingAdapter.count.length; i++)
+                    if (RolePickingAdapter.count[i] > 0)
+                        Constant.availableRole[i] = true;
+                    else
+                        Constant.availableRole[i] = false;
+
                 Constant.listPlayerModel = new ArrayList<>();
                 for (final String x : playerList) {
                     FirebaseDatabase.getInstance().getReference("User list").child(x)
@@ -135,6 +141,7 @@ public class RolePickingFragment extends Fragment {
                                             role.add(i);
                                             if (i == favorite) role.add(i);
                                         }
+
                                     Collections.shuffle(role);
                                     int pick = role.get(0);
                                     RolePickingAdapter.count[pick] -= 1;
