@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +36,7 @@ import butterknife.Unbinder;
  * A simple {@link Fragment} subclass.
  */
 public class RoleReceiveFragment extends Fragment {
-
+    private static final String TAG = "RoleReceiveFragment";
 
     @BindView(R.id.iv_playing_role)
     ImageView ivPlayingRole;
@@ -46,6 +48,8 @@ public class RoleReceiveFragment extends Fragment {
     AVLoadingIndicatorView avi;
     Unbinder unbinder;
 
+    public static List<Integer> roleList = new ArrayList<Integer>();
+
     public RoleReceiveFragment() {
         // Required empty public constructor
     }
@@ -56,6 +60,12 @@ public class RoleReceiveFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_role_receive, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        int count = 0;
+        for(boolean i : Constant.availableRole){
+            if (i) roleList.add(count);
+            count++;
+        }
 
         FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                 .child("Player Data").addValueEventListener(new ValueEventListener() {

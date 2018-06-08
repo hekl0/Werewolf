@@ -50,6 +50,15 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="8dp"/>
+
+            <ImageView
+                android:id="@+id/iv_roles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_remove_red_eye_black_24dp"
+                android:layout_toLeftOf="@+id/tv_timer"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"/>
         </RelativeLayout>
 
         <android.support.constraint.Guideline
@@ -168,6 +177,16 @@
                 android:visibility="gone"/>
 
         </RelativeLayout>
+
+        <ListView
+            android:id="@+id/lv_roles"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/gv_player"
+            app:layout_constraintStart_toStartOf="@+id/gv_player"></ListView>
 
     </android.support.constraint.ConstraintLayout>
 
