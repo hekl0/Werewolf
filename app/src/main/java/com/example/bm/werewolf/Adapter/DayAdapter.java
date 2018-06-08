@@ -25,15 +25,25 @@ import java.util.List;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class DayAdapter extends BaseAdapter {
+    public static List<PlayerModel> playerModelList;
+    public static int pick;
 
+    public DayAdapter(List<PlayerModel> playerModelList) {
+        this.playerModelList = playerModelList;
+        if (this.playerModelList == null)
+            this.playerModelList = new ArrayList<>();
+
+        pick = -1;
+    }
+    
     @Override
     public int getCount() {
-        return Constant.listPlayerModel.size();
+        return playerModelList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return Constant.listPlayerModel.get(position);
+        return playerModelList.get(position);
     }
 
     @Override
@@ -52,45 +62,46 @@ public class DayAdapter extends BaseAdapter {
         final ImageView ivCheck = convertView.findViewById(R.id.iv_check);
         final ImageView ivMark = convertView.findViewById(R.id.iv_mark);
 
-        tvName.setText(Constant.listPlayerModel.get(pos).name);
+        tvName.setText(playerModelList.get(pos).name);
         tvName.setSelected(true);
         final Transformation transformation = new CropCircleTransformation();
         Picasso.get()
-                .load("https://graph.facebook.com/" + Constant.listPlayerModel.get(pos).id + "/picture?type=large")
+                .load("https://graph.facebook.com/" + playerModelList.get(pos).id + "/picture?type=large")
                 .placeholder(R.drawable.progress_animation)
                 .transform(transformation)
                 .into(ivAva);
         tvNum.setText((pos + 1) + "");
         Picasso.get()
-                .load(Constant.imageRole[Constant.listPlayerModel.get(pos).mark])
+                .load(Constant.imageRole[playerModelList.get(pos).mark])
                 .transform(transformation)
                 .into(ivMark);
 
         ivMark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (DayFragment.rlSmallWindow == null) return;
                 DayFragment.rlSmallWindow.setVisibility(View.VISIBLE);
                 DayFragment.gvSmallWindow.setAdapter(new FavoriteRoleAdapter());
                 DayFragment.gvSmallWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         DayFragment.rlSmallWindow.setVisibility(View.GONE);
-                        Constant.listPlayerModel.get(pos).mark = position;
+                        playerModelList.get(pos).mark = position;
                         Picasso.get()
-                                .load(Constant.imageRole[Constant.listPlayerModel.get(pos).mark])
+                                .load(Constant.imageRole[playerModelList.get(pos).mark])
                                 .transform(transformation)
                                 .into(ivMark);
                     }
                 });
             }
         });
-        if (DayFragment.pick == pos) ivCheck.setVisibility(View.VISIBLE);
+        if (pick == pos) ivCheck.setVisibility(View.VISIBLE);
         else ivCheck.setVisibility(View.GONE);
 
         ivAva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DayFragment.pick = pos;
+                pick = pos;
                 notifyDataSetChanged();
             }
         });

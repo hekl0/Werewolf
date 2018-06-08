@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.example.bm.werewolf.Adapter.ChatAdapter;
 import com.example.bm.werewolf.Adapter.RolePickingAdapter;
 import com.example.bm.werewolf.Adapter.WaitingRoomAdapter;
+import com.example.bm.werewolf.Model.PlayerModel;
+import com.example.bm.werewolf.Model.UserModel;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Service.VoiceCallService;
 import com.example.bm.werewolf.Utils.Constant;
@@ -116,37 +118,55 @@ public class RolePickingFragment extends Fragment {
                     break;
                 }
 
-                List<String> playerList = Constant.listPlayer;
+                final List<String> playerList = Constant.listPlayer;
                 Collections.shuffle(playerList);
+
+                for (int i = 0; i < RolePickingAdapter.count.length; i++)
+                    if (RolePickingAdapter.count[i] > 0)
+                        Constant.availableRole[i] = true;
+                    else
+                        Constant.availableRole[i] = false;
+
+                Constant.listPlayerModel = new ArrayList<>();
                 for (final String x : playerList) {
                     FirebaseDatabase.getInstance().getReference("User list").child(x)
-                            .child("favoriteRole").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            int favorite = dataSnapshot.getValue(Integer.class);
-                            List<Integer> role = new ArrayList<>();
-                            for (int i = 0; i < RolePickingAdapter.count.length; i++)
-                                for (int j = 0; j < RolePickingAdapter.count[i]; j++) {
-                                    role.add(i);
-                                    if (i == favorite) role.add(i);
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    UserModel userModel = dataSnapshot.getValue(UserModel.class);
+                                    int favorite = userModel.favoriteRole;
+                                    List<Integer> role = new ArrayList<>();
+                                    for (int i = 0; i < RolePickingAdapter.count.length; i++)
+                                        for (int j = 0; j < RolePickingAdapter.count[i]; j++) {
+                                            role.add(i);
+                                            if (i == favorite) role.add(i);
+                                        }
+
+                                    Collections.shuffle(role);
+                                    int pick = role.get(0);
+                                    RolePickingAdapter.count[pick] -= 1;
+
+                                    PlayerModel model = new PlayerModel(x, 0, pick, true, userModel.name);
+                                    Constant.listPlayerModel.add(model);
+
+                                    if (Constant.listPlayerModel.size() == playerList.size()) {
+                                        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                                                .child("Player Data").setValue(Constant.listPlayerModel);
+
+                                    }
                                 }
-                            Collections.shuffle(role);
-                            int pick = role.get(0);
-                            RolePickingAdapter.count[pick] -= 1;
-                            FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
-                                    .child("role picking").child(x).setValue(pick);
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
+                                }
+                            });
                 }
 
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.frame_container, new RoleReceiveFragment())
                         .commit();
+
                 break;
         }
     }

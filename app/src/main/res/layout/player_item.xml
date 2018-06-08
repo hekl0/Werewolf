@@ -67,10 +67,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:src="@drawable/ic_check_green_100dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="16dp" />
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@id/iv_ava"
+        app:layout_constraintStart_toStartOf="@id/iv_ava"
+        app:layout_constraintTop_toTopOf="@id/iv_ava"
+        app:layout_constraintBottom_toBottomOf="@id/iv_ava"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -83,6 +83,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         OnClearFromRecentService.activity = this;
 
+        Constant.isHost = false;
         Constant.roomID = String.valueOf(getIntent().getIntExtra("roomID", 0));
         VoiceCallService.isVoiceCall = true;
         VoiceCallService.joinChannel(Constant.roomID);
@@ -125,6 +126,24 @@ public class WaitingRoomActivity extends AppCompatActivity {
         rlSmallWindow = findViewById(R.id.rl_small_window);
         tvStartGame = findViewById(R.id.tv_start_game);
         tvStartGame.setVisibility(View.GONE);
+
+        FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID)
+                .child("gameInProgress").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: " + dataSnapshot);
+                if (dataSnapshot.getValue(Boolean.class)) {
+                    Log.d(TAG, "onDataChange: " + dataSnapshot.getValue(Boolean.class));
+                    Intent intent = new Intent(WaitingRoomActivity.this, PlayActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @OnClick({R.id.iv_back, R.id.iv_invite, R.id.iv_chat_submit, R.id.iv_voice_call, R.id.iv_exit, R.id.tv_start_game})
@@ -146,14 +165,15 @@ public class WaitingRoomActivity extends AppCompatActivity {
                                 for (int i = 0; i < Constant.nameRole.length - 1; i++)
                                     roleList.add(0);
                                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).removeValue();
-                                FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("role picking")
-                                        .child("roleList").setValue(roleList);
+                                FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                                        .child("role picking").setValue(roleList);
 
                                 Constant.totalPlayer = Constant.listPlayer.size();
 
                                 Constant.isHost = true;
-                                Intent intent = new Intent(WaitingRoomActivity.this, PlayActivity.class);
-                                startActivity(intent);
+
+                                FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID)
+                                        .child("gameInProgress").setValue(true);
                             }
 
                             @Override
@@ -161,6 +181,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
                             }
                         });
+
                 break;
             case R.id.iv_chat_submit:
                 String chat = etChat.getText().toString();
@@ -226,7 +247,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
                 else if (playerList.size() % 5 == 0)
                     submitChat("Số người hiện tại là " + playerList.size() + ".");
 
-                WaitingRoomAdapter waitingRoomAdapter = new WaitingRoomAdapter(Constant.roomID);
+                WaitingRoomAdapter waitingRoomAdapter = new WaitingRoomAdapter(Constant.roomID, WaitingRoomActivity.this);
                 waitingRoomAdapter.setHasStableIds(true);
                 rvWaitingRoom.setAdapter(waitingRoomAdapter);
             }
@@ -244,7 +265,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
                         Boolean ok = dataSnapshot.getValue(boolean.class);
                         if (ok == null) ok = false;
                         if (ok && !UserDatabase.facebookID.equals(WaitingRoomAdapter.hostID)) {
-                            Constant.roomID = Constant.roomID;
                             Constant.isHost = false;
                             Intent intent = new Intent(WaitingRoomActivity.this, PlayActivity.class);
                             startActivity(intent);

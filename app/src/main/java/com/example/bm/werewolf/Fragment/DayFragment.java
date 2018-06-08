@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.bm.werewolf.Activity.PlayActivity;
 import com.example.bm.werewolf.Adapter.ChatAdapter;
 import com.example.bm.werewolf.Adapter.DayAdapter;
 import com.example.bm.werewolf.Model.PlayerModel;
@@ -63,7 +64,6 @@ public class DayFragment extends Fragment {
     public static RelativeLayout rlSmallWindow;
     public static ImageView ivExit;
     public static GridView gvSmallWindow;
-    public static int pick = -1;
 
     public DayFragment() {
         // Required empty public constructor
@@ -87,27 +87,14 @@ public class DayFragment extends Fragment {
             }
         });
 
-        Constant.listPlayerModel = new ArrayList<>();
-        for (final String id : Constant.listPlayer) {
-            FirebaseDatabase.getInstance().getReference("User list").child(id).child("name")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            PlayerModel model = new PlayerModel(id, 0, 0, true, dataSnapshot.getValue(String.class));
-                            Constant.listPlayerModel.add(model);
-                            if (id == Constant.listPlayer.get(Constant.listPlayer.size() - 1)) {
-                                DayAdapter dayAdapter = new DayAdapter();
-                                gvPlayer.setAdapter(dayAdapter);
-                                tvStartGame.setVisibility(View.VISIBLE);
-                            }
-                        }
+        List<PlayerModel> playerModelList = new ArrayList<>();
+        for (PlayerModel playerModel : Constant.listPlayerModel)
+            if (playerModel.alive == true)
+                playerModelList.add(playerModel);
+        DayAdapter dayAdapter = new DayAdapter(playerModelList);
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-        }
+        gvPlayer.setAdapter(dayAdapter);
+        tvStartGame.setVisibility(View.VISIBLE);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         ChatAdapter chatAdapter = new ChatAdapter(Constant.roomID, linearLayoutManager);

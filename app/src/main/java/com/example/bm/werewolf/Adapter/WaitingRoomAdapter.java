@@ -1,5 +1,7 @@
 package com.example.bm.werewolf.Adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -41,8 +43,10 @@ public class WaitingRoomAdapter extends RecyclerView.Adapter<WaitingRoomAdapter.
     public static List<String> playerList = new ArrayList<>();
     public static String hostID;
     public String roomID;
+    public Activity activity;
 
-    public WaitingRoomAdapter(String roomID) {
+    public WaitingRoomAdapter(String roomID, final Activity activity) {
+        this.activity = activity;
         this.roomID = roomID;
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -74,6 +78,8 @@ public class WaitingRoomAdapter extends RecyclerView.Adapter<WaitingRoomAdapter.
                 playerList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                     playerList.add(snapshot.getValue(String.class));
+                if (!playerList.contains(UserDatabase.facebookID))
+                    activity.finish();
                 notifyDataSetChanged();
             }
 
