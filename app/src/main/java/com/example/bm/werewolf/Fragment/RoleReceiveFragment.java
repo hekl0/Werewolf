@@ -62,12 +62,6 @@ public class RoleReceiveFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_role_receive, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        int count = 0;
-        for(boolean i : Constant.availableRole){
-            if (i) roleList.add(count);
-            count++;
-        }
-
         valueEventListener = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                 .child("Player Data").addValueEventListener(new ValueEventListener() {
             @Override
@@ -81,6 +75,19 @@ public class RoleReceiveFragment extends Fragment {
                     if (playerModel.id.equals(UserDatabase.facebookID))
                         Constant.myRole = playerModel.role;
                 }
+
+                for (int i = 0; i <= 5; i++)
+                    Constant.availableRole[i] = false;
+                for (PlayerModel i: Constant.listPlayerModel)
+                {
+                    Constant.availableRole[i.role] = true;
+                }
+                int count = 0;
+                for(boolean i : Constant.availableRole){
+                    if (i) roleList.add(count);
+                    count++;
+                }
+
 
                 if (avi == null) avi = view.findViewById(R.id.avi);
                 if (clContent == null) clContent = view.findViewById(R.id.cl_content);
