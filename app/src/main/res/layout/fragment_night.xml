@@ -106,6 +106,17 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_noti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/gv_player"
+            android:layout_centerHorizontal="true"
+            android:text="Kill or Save"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:visibility="gone"/>
+
         <ListView
             android:id="@+id/lv_roles"
             android:layout_width="300dp"
