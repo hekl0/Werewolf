@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +49,7 @@ public class RoleReceiveFragment extends Fragment {
     Unbinder unbinder;
 
     ValueEventListener valueEventListener;
+    public static List<Integer> roleList = new ArrayList<Integer>();
 
     public RoleReceiveFragment() {
         // Required empty public constructor
@@ -59,6 +61,12 @@ public class RoleReceiveFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_role_receive, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        int count = 0;
+        for(boolean i : Constant.availableRole){
+            if (i) roleList.add(count);
+            count++;
+        }
 
         valueEventListener = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                 .child("Player Data").addValueEventListener(new ValueEventListener() {
@@ -84,7 +92,6 @@ public class RoleReceiveFragment extends Fragment {
                 ivPlayingRole.setImageResource(Constant.imageRole[Constant.myRole + 1]);
                 tvRoleName.setText(Constant.nameRole[Constant.myRole + 1]);
 
-                Log.d(TAG, "onDataChange: receive " + dataSnapshot);
                 PlayActivity.nextTurn();
             }
 

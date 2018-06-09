@@ -6,18 +6,20 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.bm.werewolf.Activity.PlayActivity;
 import com.example.bm.werewolf.Adapter.ChatAdapter;
 import com.example.bm.werewolf.Adapter.DayAdapter;
+import com.example.bm.werewolf.Adapter.RoleListViewAdapter;
 import com.example.bm.werewolf.Model.PlayerModel;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Service.VoiceCallService;
@@ -41,6 +43,7 @@ import butterknife.Unbinder;
  * A simple {@link Fragment} subclass.
  */
 public class DayFragment extends Fragment {
+    private static final String TAG = "DayFragment";
 
     Context context;
     @BindView(R.id.et_chat)
@@ -64,6 +67,10 @@ public class DayFragment extends Fragment {
     public static RelativeLayout rlSmallWindow;
     public static ImageView ivExit;
     public static GridView gvSmallWindow;
+    @BindView(R.id.iv_roles)
+    ImageView ivRoles;
+    @BindView(R.id.lv_roles)
+    ListView lvRoles;
 
     public DayFragment() {
         // Required empty public constructor
@@ -77,6 +84,9 @@ public class DayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_day, container, false);
         unbinder = ButterKnife.bind(this, view);
         context = getContext();
+
+        RoleListViewAdapter roleListViewAdapter = new RoleListViewAdapter(RoleReceiveFragment.roleList);
+        lvRoles.setAdapter(roleListViewAdapter);
 
         tvStartGame.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,5 +171,13 @@ public class DayFragment extends Fragment {
 
             }
         });
+    }
+
+    @OnClick(R.id.iv_roles)
+    public void onViewClicked() {
+        if (lvRoles.getVisibility() == View.VISIBLE)
+            lvRoles.setVisibility(View.GONE);
+        else
+            lvRoles.setVisibility(View.VISIBLE);
     }
 }

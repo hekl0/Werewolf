@@ -5,18 +5,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bm.werewolf.Activity.PlayActivity;
 import com.example.bm.werewolf.Adapter.DayAdapter;
-import com.example.bm.werewolf.Database.DatabaseManager;
+import com.example.bm.werewolf.Adapter.RoleListViewAdapter;
 import com.example.bm.werewolf.Model.PlayerModel;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Utils.Constant;
@@ -39,6 +39,7 @@ import in.srain.cube.views.GridViewWithHeaderAndFooter;
  * A simple {@link Fragment} subclass.
  */
 public class NightFragment extends Fragment {
+    private static final String TAG = "NightFragment";
 
     @BindView(R.id.gv_player)
     GridViewWithHeaderAndFooter gvPlayer;
@@ -49,6 +50,10 @@ public class NightFragment extends Fragment {
     Unbinder unbinder;
 
     Context context;
+    @BindView(R.id.iv_roles)
+    ImageView ivRoles;
+    @BindView(R.id.lv_roles)
+    ListView lvRoles;
 
     public NightFragment() {
         // Required empty public constructor
@@ -63,6 +68,9 @@ public class NightFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_night, container, false);
         unbinder = ButterKnife.bind(this, view);
         context = getContext();
+
+        RoleListViewAdapter roleListViewAdapter = new RoleListViewAdapter(RoleReceiveFragment.roleList);
+        lvRoles.setAdapter(roleListViewAdapter);
 
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View header = layoutInflater.inflate(R.layout.layout_header, null);
@@ -138,5 +146,13 @@ public class NightFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick(R.id.iv_roles)
+    public void onViewClicked() {
+        if (lvRoles.getVisibility() == View.VISIBLE)
+            lvRoles.setVisibility(View.GONE);
+        else
+            lvRoles.setVisibility(View.VISIBLE);
     }
 }
