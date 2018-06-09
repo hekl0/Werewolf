@@ -131,9 +131,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
                 .child("gameInProgress").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onDataChange: " + dataSnapshot);
                 if (dataSnapshot.getValue(Boolean.class)) {
-                    Log.d(TAG, "onDataChange: " + dataSnapshot.getValue(Boolean.class));
                     Intent intent = new Intent(WaitingRoomActivity.this, PlayActivity.class);
                     startActivity(intent);
                 }

@@ -41,7 +41,8 @@ public class PlayActivity extends AppCompatActivity {
     public static long startTime;
 
     static List<String> response;
-    static CountDownTimer countDownTimer;
+    static ValueEventListener updateTurnListener;
+    static ValueEventListener responseListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +50,14 @@ public class PlayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play);
         ButterKnife.bind(this);
 
-        currentRole = Constant.NONE;
         loadFragment(new RolePickingFragment());
         updateTurn();
+    }
+
+    @Override
+    protected void onResume() {
+        currentRole = Constant.NONE;
+        super.onResume();
     }
 
     public void loadFragment(Fragment fragment) {
@@ -69,11 +75,13 @@ public class PlayActivity extends AppCompatActivity {
         int pos;
         for (pos = 0; pos < roleSequence.length; pos++)
             if (roleSequence[pos] == currentRole) break;
-        Log.d(TAG, "nextTurn: " + pos);
+
         int nextRole;
         for (nextRole = pos + 1; nextRole < roleSequence.length; nextRole++)
             if (roleSequence[nextRole] == Constant.NONE) break;
             else if (Constant.availableRole[roleSequence[nextRole]]) break;
+
+        currentRole = roleSequence[nextRole];
 
         Handler handler = new Handler();
         final int finalNextRole = nextRole;
@@ -81,6 +89,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Log.d(TAG, "run: " + System.currentTimeMillis());
+                Log.d(TAG, "onData: set");
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
                         .child("currentRole").setValue(roleSequence[finalNextRole]);
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
@@ -94,9 +103,11 @@ public class PlayActivity extends AppCompatActivity {
         response = new ArrayList<>();
 
         int count = 0;
-        for (PlayerModel playerModel : Constant.listPlayerModel)
+        for (PlayerModel playerModel : Constant.listPlayerModel) {
             if (playerModel.alive && playerModel.role == currentRole)
                 count += 1;
+            Log.d(TAG, "receiveResponse: " + playerModel.alive + " " + playerModel.role + " " + currentRole);
+        }
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Ingame Data")
                 .child(Constant.roomID).child("response");
@@ -105,18 +116,19 @@ public class PlayActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
+                Log.d(TAG, "run: fail");
             }
         }, 17000);
 
         final int finalCount = count;
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        responseListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 response = new ArrayList<>();
                 if (dataSnapshot.getValue() == null) return;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                     response.add(snapshot.getValue(String.class));
+
                 if (response.size() != finalCount) return;
                 handler.removeCallbacksAndMessages(null);
             }
@@ -129,10 +141,11 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     public void updateTurn() {
-        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
+        updateTurnListener = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
                 .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: " + dataSnapshot);
                 if (dataSnapshot.getValue() == null) return;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                     if (snapshot.getKey().equals("currentRole"))
@@ -153,5 +166,20 @@ public class PlayActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        FirebaseDatabase.getInstance().getReference("Ingame Data")
+                .child(Constant.roomID).child("response").removeEventListener(responseListener);
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
+                .removeEventListener(updateTurnListener);
+        super.onDestroy();
     }
 }

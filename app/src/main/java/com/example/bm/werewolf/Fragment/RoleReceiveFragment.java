@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ import butterknife.Unbinder;
  * A simple {@link Fragment} subclass.
  */
 public class RoleReceiveFragment extends Fragment {
-
+    private static final String TAG = "RoleReceiveFragment";
 
     @BindView(R.id.iv_playing_role)
     ImageView ivPlayingRole;
@@ -45,6 +46,8 @@ public class RoleReceiveFragment extends Fragment {
     @BindView(R.id.avi)
     AVLoadingIndicatorView avi;
     Unbinder unbinder;
+
+    ValueEventListener valueEventListener;
 
     public RoleReceiveFragment() {
         // Required empty public constructor
@@ -57,7 +60,7 @@ public class RoleReceiveFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_role_receive, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+        valueEventListener = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                 .child("Player Data").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -81,6 +84,7 @@ public class RoleReceiveFragment extends Fragment {
                 ivPlayingRole.setImageResource(Constant.imageRole[Constant.myRole + 1]);
                 tvRoleName.setText(Constant.nameRole[Constant.myRole + 1]);
 
+                Log.d(TAG, "onDataChange: receive " + dataSnapshot);
                 PlayActivity.nextTurn();
             }
 
@@ -97,5 +101,12 @@ public class RoleReceiveFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onDestroy() {
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                .child("Player Data").removeEventListener(valueEventListener);
+        super.onDestroy();
     }
 }
