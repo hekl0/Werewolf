@@ -45,6 +45,8 @@ public class NightFragment extends Fragment {
     GridViewWithHeaderAndFooter gvPlayer;
     @BindView(R.id.tv_confirm)
     TextView tvConfirm;
+    @BindView(R.id.tv_skip)
+    TextView tvSkip;
     @BindView(R.id.tv_timer)
     TextView tvTimer;
     Unbinder unbinder;
@@ -87,23 +89,57 @@ public class NightFragment extends Fragment {
 
         ImageView ivRole = header.findViewById(R.id.iv_role);
         TextView tvRole = header.findViewById(R.id.tv_role);
-        TextView tvGuide = header.findViewById(R.id.tv_guide);
 
         ivRole.setImageResource(Constant.imageRole[PlayActivity.currentRole + 1]);
         tvRole.setText(Constant.nameRole[PlayActivity.currentRole + 1]);
 
-        tvConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        new CountDownTimer(15000 + PlayActivity.startTime - System.currentTimeMillis(), 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                if (tvTimer == null) tvTimer = view.findViewById(R.id.tv_timer);
+                tvTimer.setText("" + (millisUntilFinished / 1000));
+            }
+
+            public void onFinish() {
+                if (tvConfirm == null) tvConfirm = view.findViewById(R.id.tv_confirm);
+                if (tvSkip == null) tvSkip = view.findViewById(R.id.tv_skip);
+                tvConfirm.setVisibility(View.GONE);
+                tvSkip.setVisibility(View.GONE);
+                if (tvTimer == null) tvTimer = view.findViewById(R.id.tv_timer);
+                tvTimer.setText("0");
+            }
+
+        }.start();
+
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @OnClick({R.id.iv_roles, R.id.tv_confirm, R.id.tv_skip})
+    public void onViewClicked(View view) {
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                .child("response");
+
+        switch (view.getId()) {
+            case R.id.iv_roles:
+                if (lvRoles.getVisibility() == View.VISIBLE)
+                    lvRoles.setVisibility(View.GONE);
+                else
+                    lvRoles.setVisibility(View.VISIBLE);
+                break;
+            case R.id.tv_confirm:
                 if (DayAdapter.pick == -1) {
                     Toast.makeText(getContext(), "Cần chọn mục tiêu trước!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 tvConfirm.setVisibility(View.GONE);
-
-                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
-                        .child("response");
+                tvSkip.setVisibility(View.GONE);
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -120,39 +156,27 @@ public class NightFragment extends Fragment {
 
                     }
                 });
-            }
-        });
-
-        new CountDownTimer(15000 + PlayActivity.startTime - System.currentTimeMillis(), 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                if (tvTimer == null) tvTimer = view.findViewById(R.id.tv_timer);
-                tvTimer.setText("" + (millisUntilFinished / 1000));
-            }
-
-            public void onFinish() {
-                if (tvConfirm == null) tvConfirm = view.findViewById(R.id.tv_confirm);
+                break;
+            case R.id.tv_skip:
                 tvConfirm.setVisibility(View.GONE);
-                if (tvTimer == null) tvTimer = view.findViewById(R.id.tv_timer);
-                tvTimer.setText("0");
-            }
+                tvSkip.setVisibility(View.GONE);
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        List<String> responseList = new ArrayList<>();
+                        if (dataSnapshot.getValue() != null)
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                                responseList.add(snapshot.getValue(String.class));
+                        responseList.add("");
+                        databaseReference.setValue(responseList);
+                    }
 
-        }.start();
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-        return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @OnClick(R.id.iv_roles)
-    public void onViewClicked() {
-        if (lvRoles.getVisibility() == View.VISIBLE)
-            lvRoles.setVisibility(View.GONE);
-        else
-            lvRoles.setVisibility(View.VISIBLE);
+                    }
+                });
+                break;
+        }
     }
 }

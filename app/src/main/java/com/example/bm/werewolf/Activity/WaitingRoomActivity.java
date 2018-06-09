@@ -75,6 +75,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
     static ImageView ivExit;
     static RelativeLayout rlSmallWindow;
 
+    ValueEventListener gameProgressListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +129,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         tvStartGame = findViewById(R.id.tv_start_game);
         tvStartGame.setVisibility(View.GONE);
 
-        FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID)
+        gameProgressListener = FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID)
                 .child("gameInProgress").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -255,28 +257,9 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
             }
         });
-
-        firebaseDatabase.getReference("rooms").child(Constant.roomID).child("gameInProgress")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Boolean ok = dataSnapshot.getValue(boolean.class);
-                        if (ok == null) ok = false;
-                        if (ok && !UserDatabase.facebookID.equals(WaitingRoomAdapter.hostID)) {
-                            Constant.isHost = false;
-                            Intent intent = new Intent(WaitingRoomActivity.this, PlayActivity.class);
-                            startActivity(intent);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
     }
 
-    public static void RoomLogout() {
+    public void RoomLogout() {
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
         final DatabaseReference host = firebaseDatabase.getReference("rooms").child(Constant.roomID).child("roomMasterID");
@@ -310,6 +293,9 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         if (VoiceCallService.isVoiceCall)
             VoiceCallService.leaveChannel();
+
+        FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID)
+                .child("gameInProgress").removeEventListener(gameProgressListener);
     }
 
     public static void openSmallWindow(final String userID) {

@@ -24,14 +24,4 @@
         android:layout_marginTop="4dp"
         android:textColor="#fff"/>
 
-    <TextView
-        android:id="@+id/tv_guide"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_role"
-        android:text="Chọn một người:"
-        android:padding="8dp"
-        android:textColor="#fff"
-        android:textSize="16sp"/>
-
 </RelativeLayout>

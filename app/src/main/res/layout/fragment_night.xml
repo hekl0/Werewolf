@@ -68,29 +68,43 @@
             android:padding="8dp"
             android:numColumns="3" />
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/rl2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#9d383840"
             android:padding="8dp"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/skip_turn_button_border"
+                android:paddingBottom="10dp"
+                android:paddingEnd="40dp"
+                android:paddingStart="40dp"
+                android:paddingTop="10dp"
+                android:text="Bỏ lượt"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:layout_marginEnd="24dp"/>
 
             <TextView
                 android:id="@+id/tv_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:background="@drawable/start_game_button_border"
                 android:paddingBottom="10dp"
-                android:paddingEnd="60dp"
-                android:paddingStart="60dp"
+                android:paddingEnd="40dp"
+                android:paddingStart="40dp"
                 android:paddingTop="10dp"
                 android:text="Xác nhận"
                 android:textColor="#fff"
                 android:textSize="16sp"/>
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <ListView
             android:id="@+id/lv_roles"
@@ -98,7 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:visibility="gone"
-            android:layout_below="@+id/tv_room_id"></ListView>
+            android:layout_below="@+id/tv_room_id" />
 
     </RelativeLayout>
 
