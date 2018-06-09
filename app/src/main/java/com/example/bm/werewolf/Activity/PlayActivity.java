@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -44,6 +45,12 @@ public class PlayActivity extends AppCompatActivity {
     static ValueEventListener updateTurnListener;
     static ValueEventListener responseListener;
 
+    static boolean healPotionWitchAvailable;
+    static boolean toxicPotionWitchAvailable;
+    static String lastProtectedPlayerID;
+    static List<String> dyingPlayerID;
+    static String playerIDaimedByHunter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +64,11 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         currentRole = Constant.NONE;
+        healPotionWitchAvailable = true;
+        toxicPotionWitchAvailable = true;
+        lastProtectedPlayerID = "";
+        dyingPlayerID = new ArrayList<>();
+        playerIDaimedByHunter = "";
         super.onResume();
     }
 
@@ -70,7 +82,6 @@ public class PlayActivity extends AppCompatActivity {
     static int[] roleSequence = new int[]{Constant.NONE, Constant.MA_SOI, Constant.BAO_VE, Constant.THO_SAN, Constant.PHU_THUY, Constant.TIEN_TRI, Constant.NONE};
 
     public static void nextTurn() {
-        Log.d(TAG, "nextTurn: " + Constant.availableRole[1] + " " + currentRole);
         if (!Constant.isHost) return;
         int pos;
         for (pos = 0; pos < roleSequence.length; pos++)
@@ -82,6 +93,9 @@ public class PlayActivity extends AppCompatActivity {
             else if (Constant.availableRole[roleSequence[nextRole]]) break;
 
         currentRole = roleSequence[nextRole];
+        if (currentRole == Constant.NONE) {
+            dyingPlayerID = new ArrayList<>();
+        }
 
         Handler handler = new Handler();
         final int finalNextRole = nextRole;
@@ -100,17 +114,18 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     public static void receiveResponse() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Ingame Data")
+                .child(Constant.roomID).child("response");
+
+        databaseReference.setValue(null);
         response = new ArrayList<>();
 
         int count = 0;
-        for (PlayerModel playerModel : Constant.listPlayerModel) {
-            if (playerModel.alive && playerModel.role == currentRole)
+        for (PlayerModel playerModel : Constant.listPlayerModel)
+            if (playerModel.alive && playerModel.role == currentRole) {
                 count += 1;
-            Log.d(TAG, "receiveResponse: " + playerModel.alive + " " + playerModel.role + " " + currentRole);
-        }
-
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Ingame Data")
-                .child(Constant.roomID).child("response");
+                if (currentRole == Constant.PHU_THUY) count += 1;
+            }
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -120,6 +135,10 @@ public class PlayActivity extends AppCompatActivity {
             }
         }, 17000);
 
+        if (responseListener != null) {
+            databaseReference.removeEventListener(responseListener);
+            responseListener = null;
+        }
         final int finalCount = count;
         responseListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -138,6 +157,33 @@ public class PlayActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public static void analyzeResponse() {
+        int maxCount = 0;
+        for (String x : response)
+            if (Collections.frequency(response, x) > maxCount && !x.equals(""))
+                maxCount = Collections.frequency(response, x);
+
+        if (maxCount != 0) {
+            String kq = "";
+            Collections.shuffle(response);
+            for (String x : response)
+                if (Collections.frequency(response, x) == maxCount && !x.equals(""))
+                    kq = x;
+
+            if (currentRole == Constant.MA_SOI)
+                dyingPlayerID.add(kq);
+            if (currentRole == Constant.BAO_VE)
+                lastProtectedPlayerID = kq;
+            if (currentRole == Constant.THO_SAN)
+                playerIDaimedByHunter = kq;
+            if (currentRole == Constant.PHU_THUY) {
+
+            }
+        }
+
+        nextTurn();
     }
 
     public void updateTurn() {
