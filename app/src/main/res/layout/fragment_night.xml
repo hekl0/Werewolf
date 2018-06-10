@@ -56,8 +56,8 @@
             android:src="@drawable/ic_remove_red_eye_black_24dp"
             android:padding="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_toLeftOf="@+id/tv_timer"/>
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/tv_timer"/>
 
         <in.srain.cube.views.GridViewWithHeaderAndFooter
             android:id="@+id/gv_player"
@@ -66,7 +66,8 @@
             android:layout_above="@+id/rl2"
             android:layout_below="@+id/tv_room_id"
             android:padding="8dp"
-            android:numColumns="3" />
+            android:numColumns="3"
+            android:gravity="center"/>
 
         <LinearLayout
             android:id="@+id/rl2"
@@ -103,6 +104,35 @@
                 android:text="Xác nhận"
                 android:textColor="#fff"
                 android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_not_saving"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/skip_turn_button_border"
+                android:paddingBottom="10dp"
+                android:paddingEnd="40dp"
+                android:paddingStart="40dp"
+                android:paddingTop="10dp"
+                android:text="Bỏ lượt"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:layout_marginEnd="24dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_saving"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/start_game_button_border"
+                android:paddingBottom="10dp"
+                android:paddingEnd="40dp"
+                android:paddingStart="40dp"
+                android:paddingTop="10dp"
+                android:text="Cứu giúp"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

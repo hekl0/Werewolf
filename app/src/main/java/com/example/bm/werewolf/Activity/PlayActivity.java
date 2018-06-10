@@ -45,11 +45,11 @@ public class PlayActivity extends AppCompatActivity {
     static ValueEventListener updateTurnListener;
     static ValueEventListener responseListener;
 
-    static boolean healPotionWitchAvailable;
-    static boolean toxicPotionWitchAvailable;
-    static String lastProtectedPlayerID;
-    static List<String> dyingPlayerID;
-    static String playerIDaimedByHunter;
+    public static Boolean healPotion;
+    public static Boolean toxicPotion;
+    public static String lastProtectedPlayerID;
+    public static List<String> dyingPlayerID;
+    public static String lastTargetPlayerID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,19 +57,76 @@ public class PlayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play);
         ButterKnife.bind(this);
 
-        loadFragment(new RolePickingFragment());
-        updateTurn();
-    }
-
-    @Override
-    protected void onResume() {
         currentRole = Constant.NONE;
-        healPotionWitchAvailable = true;
-        toxicPotionWitchAvailable = true;
-        lastProtectedPlayerID = "";
         dyingPlayerID = new ArrayList<>();
-        playerIDaimedByHunter = "";
-        super.onResume();
+        Constant.listPlayerModel = null;
+        healPotion = null;
+        toxicPotion = null;
+        lastProtectedPlayerID = null;
+        lastTargetPlayerID = null;
+
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                .child("healPotion").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null) healPotion = true;
+                else healPotion = dataSnapshot.getValue(Boolean.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                .child("toxicPotion").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null) toxicPotion = true;
+                else toxicPotion = dataSnapshot.getValue(Boolean.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                .child("lastProtectedPlayerID").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null) lastProtectedPlayerID = "";
+                else lastProtectedPlayerID = dataSnapshot.getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                .child("lastTargetPlayerID").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null) lastTargetPlayerID = "";
+                else lastTargetPlayerID = dataSnapshot.getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        loadFragment(new RolePickingFragment());
+
+//        while (Constant.listPlayerModel == null || healPotion == null || toxicPotion == null
+//                || lastProtectedPlayerID == null || lastTargetPlayerID == null) {}
+
+        updateTurn();
     }
 
     public void loadFragment(Fragment fragment) {
@@ -83,6 +140,13 @@ public class PlayActivity extends AppCompatActivity {
 
     public static void nextTurn() {
         if (!Constant.isHost) return;
+
+        if (currentRole == Constant.NONE) {
+            dyingPlayerID = new ArrayList<>();
+            FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                    .child("dyingPlayer").setValue(dyingPlayerID);
+        }
+
         int pos;
         for (pos = 0; pos < roleSequence.length; pos++)
             if (roleSequence[pos] == currentRole) break;
@@ -93,9 +157,6 @@ public class PlayActivity extends AppCompatActivity {
             else if (Constant.availableRole[roleSequence[nextRole]]) break;
 
         currentRole = roleSequence[nextRole];
-        if (currentRole == Constant.NONE) {
-            dyingPlayerID = new ArrayList<>();
-        }
 
         Handler handler = new Handler();
         final int finalNextRole = nextRole;
@@ -110,7 +171,7 @@ public class PlayActivity extends AppCompatActivity {
                         .child("startTime").setValue(System.currentTimeMillis());
                 receiveResponse();
             }
-        }, 3000);
+        }, 2000);
     }
 
     public static void receiveResponse() {
@@ -132,6 +193,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Log.d(TAG, "run: fail");
+                analyzeResponse();
             }
         }, 17000);
 
@@ -150,6 +212,8 @@ public class PlayActivity extends AppCompatActivity {
 
                 if (response.size() != finalCount) return;
                 handler.removeCallbacksAndMessages(null);
+
+                analyzeResponse();
             }
 
             @Override
@@ -174,13 +238,34 @@ public class PlayActivity extends AppCompatActivity {
 
             if (currentRole == Constant.MA_SOI)
                 dyingPlayerID.add(kq);
-            if (currentRole == Constant.BAO_VE)
+            if (currentRole == Constant.BAO_VE) {
                 lastProtectedPlayerID = kq;
-            if (currentRole == Constant.THO_SAN)
-                playerIDaimedByHunter = kq;
-            if (currentRole == Constant.PHU_THUY) {
-
+                FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                        .child("lastProtectedPlayerID").setValue(lastProtectedPlayerID);
+                if (dyingPlayerID.contains(kq)) dyingPlayerID = new ArrayList<>();
             }
+            if (currentRole == Constant.THO_SAN) {
+                lastTargetPlayerID = kq;
+                FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                        .child("lastTargetPlayerID").setValue(lastTargetPlayerID);
+            }
+            if (currentRole == Constant.PHU_THUY) {
+                for (String x : response)
+                    if (x.equals("saving")) {
+                        dyingPlayerID = new ArrayList<>();
+                        healPotion = false;
+                        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                                .child("healPotion").setValue(healPotion);
+                    } else if (!x.equals("")) {
+                        dyingPlayerID.add(x);
+                        toxicPotion = false;
+                        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                                .child("toxicPotion").setValue(toxicPotion);
+                    }
+            }
+
+            FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                    .child("dyingPlayer").setValue(dyingPlayerID);
         }
 
         nextTurn();
@@ -189,29 +274,29 @@ public class PlayActivity extends AppCompatActivity {
     public void updateTurn() {
         updateTurnListener = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
                 .addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onDataChange: " + dataSnapshot);
-                if (dataSnapshot.getValue() == null) return;
-                for (DataSnapshot snapshot : dataSnapshot.getChildren())
-                    if (snapshot.getKey().equals("currentRole"))
-                        currentRole = snapshot.getValue(Integer.class);
-                    else
-                        startTime = snapshot.getValue(long.class);
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.d(TAG, "onDataChange: " + dataSnapshot);
+                        if (dataSnapshot.getValue() == null) return;
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                            if (snapshot.getKey().equals("currentRole"))
+                                currentRole = snapshot.getValue(Integer.class);
+                            else
+                                startTime = snapshot.getValue(long.class);
 
-                if (currentRole == Constant.NONE)
-                    loadFragment(new DayFragment());
-                else if (Constant.myRole == currentRole)
-                    loadFragment(new NightFragment());
-                else
-                    loadFragment(new NightWaitingFragment());
-            }
+                        if (currentRole == Constant.NONE)
+                            loadFragment(new DayFragment());
+                        else if (Constant.myRole == currentRole)
+                            loadFragment(new NightFragment());
+                        else
+                            loadFragment(new NightWaitingFragment());
+                    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                    }
+                });
     }
 
     @Override
