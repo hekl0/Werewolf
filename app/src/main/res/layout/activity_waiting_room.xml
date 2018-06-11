@@ -33,14 +33,6 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/iv_invite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_add_friend" />
-
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
