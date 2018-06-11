@@ -27,6 +27,8 @@ import java.util.Map;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
+import static android.view.View.GONE;
+
 public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter {
     private static final String TAG = "FriendsExpandableListVi";
 
@@ -34,13 +36,19 @@ public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter 
     String[] groupName = new String[]{"Bạn bè", "Chơi cùng gần đây"};
     List<String> friend;
     List<String> recentPlayWith;
+
     HashMap<String, String> nameFromID = new HashMap<>();
     Map<String, Boolean> onlineStatusFromID = new HashMap<>();
+    HashMap<String, String> roomFromID = new HashMap<>();
 
     public FriendsExpandableListViewAdapter(Context context) {
         this.context = context;
         this.friend = UserDatabase.getInstance().userData.friendList;
         this.recentPlayWith = UserDatabase.getInstance().userData.recentPlayWith;
+
+        nameFromID = new HashMap<>();
+        onlineStatusFromID = new HashMap<>();
+        roomFromID = new HashMap<>();
     }
 
     @Override
@@ -109,15 +117,24 @@ public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter 
         final TextView tvPlayerName = convertView.findViewById(R.id.tv_player);
         final ImageView ivOnline = convertView.findViewById(R.id.iv_online);
         ImageView ivAva = convertView.findViewById(R.id.iv_ava);
+        final TextView tvCurrentRoom = convertView.findViewById(R.id.tv_current_room);
+
+        ivOnline.setVisibility(GONE);
+        tvCurrentRoom.setVisibility(GONE);
 
         final String userID = (String) getChild(groupPosition, childPosition);
 
         if (nameFromID.containsKey(userID)) {
             tvPlayerName.setText(nameFromID.get(userID));
-            if (onlineStatusFromID.get(userID))
+            if (onlineStatusFromID.get(userID) && roomFromID.get(userID) == null) {
                 ivOnline.setVisibility(View.VISIBLE);
-            else
-                ivOnline.setVisibility(View.GONE);
+                ivOnline.setImageResource(R.drawable.ic_online_dot);
+            } else if (onlineStatusFromID.get(userID) && roomFromID.get(userID) != null) {
+                ivOnline.setImageResource(R.drawable.ic_busy_dot);
+                ivOnline.setVisibility(View.VISIBLE);
+                tvCurrentRoom.setText("Đang ở phòng " + roomFromID.get(userID));
+                tvCurrentRoom.setVisibility(View.VISIBLE);
+            }
         } else {
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference databaseReference = firebaseDatabase.getReference("User list").child(userID);
@@ -125,10 +142,21 @@ public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     UserModel userModel = dataSnapshot.getValue(UserModel.class);
+
                     tvPlayerName.setText(userModel.name);
-                    ivOnline.setVisibility((userModel.isOnline) ? View.VISIBLE : View.GONE);
+                    if (userModel.isOnline && userModel.currentRoom == null) {
+                        ivOnline.setVisibility(View.VISIBLE);
+                        ivOnline.setImageResource(R.drawable.ic_online_dot);
+                    } else if (userModel.isOnline && userModel.currentRoom != null) {
+                        ivOnline.setImageResource(R.drawable.ic_busy_dot);
+                        ivOnline.setVisibility(View.VISIBLE);
+                        tvCurrentRoom.setText("Đang ở phòng " + userModel.currentRoom);
+                        tvCurrentRoom.setVisibility(View.VISIBLE);
+                    }
+
                     nameFromID.put(userID, userModel.name);
                     onlineStatusFromID.put(userID, userModel.isOnline);
+                    roomFromID.put(userID, userModel.currentRoom);
                 }
 
                 @Override

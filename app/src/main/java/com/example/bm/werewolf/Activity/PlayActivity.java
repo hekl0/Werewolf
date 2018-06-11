@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.example.bm.werewolf.Fragment.RolePickingFragment;
 import com.example.bm.werewolf.Model.PlayerModel;
 import com.example.bm.werewolf.Model.UserModel;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Service.VoiceCallService;
 import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
 import com.google.firebase.database.DataSnapshot;
@@ -51,11 +53,15 @@ public class PlayActivity extends AppCompatActivity {
     public static List<String> dyingPlayerID;
     public static String lastTargetPlayerID;
 
+    static FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
         ButterKnife.bind(this);
+
+        fragmentManager = getSupportFragmentManager();
 
         currentRole = Constant.NONE;
         dyingPlayerID = new ArrayList<>();
@@ -122,15 +128,10 @@ public class PlayActivity extends AppCompatActivity {
         });
 
         loadFragment(new RolePickingFragment());
-
-//        while (Constant.listPlayerModel == null || healPotion == null || toxicPotion == null
-//                || lastProtectedPlayerID == null || lastTargetPlayerID == null) {}
-
-        updateTurn();
     }
 
-    public void loadFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    public static void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.frame_container, fragment);
         transaction.commitAllowingStateLoss();
     }
@@ -271,7 +272,7 @@ public class PlayActivity extends AppCompatActivity {
         nextTurn();
     }
 
-    public void updateTurn() {
+    public static void updateTurn() {
         updateTurnListener = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -283,6 +284,12 @@ public class PlayActivity extends AppCompatActivity {
                                 currentRole = snapshot.getValue(Integer.class);
                             else
                                 startTime = snapshot.getValue(long.class);
+
+                        if (VoiceCallService.isVoiceCall)
+                            if (currentRole == Constant.NONE)
+                                VoiceCallService.joinChannel(Constant.roomID);
+                            else
+                                VoiceCallService.leaveChannel();
 
                         if (currentRole == Constant.NONE)
                             loadFragment(new DayFragment());
@@ -307,10 +314,12 @@ public class PlayActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        FirebaseDatabase.getInstance().getReference("Ingame Data")
-                .child(Constant.roomID).child("response").removeEventListener(responseListener);
-        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
-                .removeEventListener(updateTurnListener);
+        if (responseListener != null)
+            FirebaseDatabase.getInstance().getReference("Ingame Data")
+                    .child(Constant.roomID).child("response").removeEventListener(responseListener);
+        if (updateTurnListener != null)
+            FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
+                    .removeEventListener(updateTurnListener);
         super.onDestroy();
     }
 }

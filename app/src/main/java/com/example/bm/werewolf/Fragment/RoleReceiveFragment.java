@@ -101,6 +101,7 @@ public class RoleReceiveFragment extends Fragment {
                 tvRoleName.setText(Constant.nameRole[Constant.myRole + 1]);
 
                 PlayActivity.nextTurn();
+                PlayActivity.updateTurn();
             }
 
             @Override
