@@ -10,15 +10,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.bm.werewolf.Adapter.ChatAdapter;
 import com.example.bm.werewolf.Adapter.DayAdapter;
+import com.example.bm.werewolf.Adapter.DyingAdapter;
 import com.example.bm.werewolf.Adapter.RoleListViewAdapter;
 import com.example.bm.werewolf.Model.PlayerModel;
 import com.example.bm.werewolf.R;
@@ -71,6 +74,13 @@ public class DayFragment extends Fragment {
     ImageView ivRoles;
     @BindView(R.id.lv_roles)
     ListView lvRoles;
+    public List<String> dyingList = new ArrayList<>();
+    @BindView(R.id.bt_dying)
+    Button btDying;
+    @BindView(R.id.ll_dying)
+    LinearLayout llDying;
+    @BindView(R.id.lv_dying)
+    ListView lvDying;
 
     public DayFragment() {
         // Required empty public constructor
@@ -85,15 +95,18 @@ public class DayFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         context = getContext();
 
+        getDyingList();
+        DyingAdapter dyingAdapter = new DyingAdapter(dyingList);
+        lvDying.setAdapter(dyingAdapter);
+
         RoleListViewAdapter roleListViewAdapter = new RoleListViewAdapter(RoleReceiveFragment.roleList);
         lvRoles.setAdapter(roleListViewAdapter);
 
         tvStartGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_container, new NightFragment())
-                        .commit();
+                FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).
+                        child("Vote").child(UserDatabase.facebookID).setValue(DayAdapter.pick);
             }
         });
 
@@ -127,7 +140,7 @@ public class DayFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_chat_submit, R.id.iv_voice_call, R.id.iv_exit})
+    @OnClick({R.id.iv_chat_submit, R.id.iv_voice_call, R.id.iv_exit, R.id.bt_dying})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_chat_submit:
@@ -149,6 +162,9 @@ public class DayFragment extends Fragment {
                 break;
             case R.id.iv_exit:
                 rlSmallWindow.setVisibility(View.GONE);
+                break;
+            case R.id.bt_dying:
+                llDying.setVisibility(View.GONE);
                 break;
         }
     }
@@ -179,5 +195,23 @@ public class DayFragment extends Fragment {
             lvRoles.setVisibility(View.GONE);
         else
             lvRoles.setVisibility(View.VISIBLE);
+    }
+
+    public void getDyingList() {
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("dyingPlayer").
+                addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            String a = snapshot.getValue(String.class);
+                            dyingList.add(a);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 }

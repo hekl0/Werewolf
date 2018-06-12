@@ -171,7 +171,7 @@
                 android:paddingEnd="60dp"
                 android:paddingStart="60dp"
                 android:paddingTop="10dp"
-                android:text="Bắt đầu"
+                android:text="Treo cổ"
                 android:textColor="#fff"
                 android:textSize="16sp"
                 android:visibility="gone"/>
@@ -186,7 +186,47 @@
             android:layout_marginStart="8dp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/gv_player"
-            app:layout_constraintStart_toStartOf="@+id/gv_player"></ListView>
+            app:layout_constraintStart_toStartOf="@+id/gv_player"
+            app:layout_constraintTop_toTopOf="@+id/gv_player"></ListView>
+
+        <LinearLayout
+            android:id="@+id/ll_dying"
+            android:layout_width="wrap_content"
+            android:layout_height="400dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="@+id/gv_player"
+            app:layout_constraintStart_toStartOf="@+id/gv_player"
+            app:layout_constraintTop_toTopOf="@+id/gv_player"
+            android:orientation="vertical"
+            android:background="@drawable/small_window_border">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Người chết đêm qua"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <ListView
+                android:id="@+id/lv_dying"
+                android:layout_width="300dp"
+                android:layout_height="330dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:visibility="visible"
+                android:background="@drawable/small_content_border"></ListView>
+
+            <Button
+                android:id="@+id/bt_dying"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/start_game_button_border"
+                android:text="OK"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>
 
