@@ -1,6 +1,7 @@
 package com.example.bm.werewolf.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import com.example.bm.werewolf.Fragment.NightWaitingFragment;
 import com.example.bm.werewolf.Fragment.RolePickingFragment;
 import com.example.bm.werewolf.Model.PlayerModel;
 import com.example.bm.werewolf.Model.UserModel;
+import com.example.bm.werewolf.Model.VoteModel;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Service.VoiceCallService;
 import com.example.bm.werewolf.Utils.Constant;
@@ -52,6 +54,9 @@ public class PlayActivity extends AppCompatActivity {
     public static String lastProtectedPlayerID;
     public static List<String> dyingPlayerID;
     public static String lastTargetPlayerID;
+
+    final List<Integer> result = new ArrayList<>();
+    final List<VoteModel> voteModels = new ArrayList<>();
 
     static FragmentManager fragmentManager;
 
@@ -290,7 +295,7 @@ public class PlayActivity extends AppCompatActivity {
                                 VoiceCallService.joinChannel(Constant.roomID);
                             else
                                 VoiceCallService.leaveChannel();
-
+                        currentRole = -1;
                         if (currentRole == Constant.NONE)
                             loadFragment(new DayFragment());
                         else if (Constant.myRole == currentRole)
@@ -321,5 +326,73 @@ public class PlayActivity extends AppCompatActivity {
             FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
                     .removeEventListener(updateTurnListener);
         super.onDestroy();
+    }
+
+    public void Vote() {
+        for (int i = 0; i <= Constant.listPlayerModel.size(); i++)
+            result.add(0);
+        final int[] count = {0};
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child("Vote").
+                addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            String voter = snapshot.getKey();
+                            int vote = snapshot.getValue(int.class);
+                            for (PlayerModel i : Constant.listPlayerModel)
+                                if (i.id.equals(voter)) {
+                                    VoteModel voteModel = new VoteModel(i.name, Constant.listPlayerModel.get(vote).name);
+                                    voteModels.add(voteModel);
+                                    break;
+                                }
+                            int a = result.get(vote);
+                            a++;
+                            count[0]++;
+                            if (count[0] == a) FinishVote();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    public void FinishVote() {
+        int maxvalue = 0;
+        int die = 0;
+        for (int i = 0; i <= result.size(); i++)
+        {
+            if (result.get(i) > maxvalue)
+            {
+                maxvalue = result.get(i);
+                die = i;
+            }
+        }
+        for (VoteModel i : voteModels)
+        {
+            submitChat(i.voter + " treo cổ " + i.vote);
+        }
+    }
+
+    void submitChat(final String chat) {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        final DatabaseReference databaseReference = firebaseDatabase.getReference("chat").child(Constant.roomID);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<String> chatList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                    chatList.add(snapshot.getValue(String.class));
+                chatList.add(chat);
+                databaseReference.setValue(chatList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

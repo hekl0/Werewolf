@@ -24,19 +24,22 @@
 
             <TextView
                 android:id="@+id/tv_room_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="180dp"
+                android:layout_height="40dp"
                 android:layout_centerHorizontal="true"
+                android:gravity="center"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:padding="8dp"
                 android:text="Room id"
+                android:fontFamily="@font/autour_one"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/room_name_border"/>
 
             <TextView
                 android:id="@+id/tv_timer"
@@ -159,22 +162,41 @@
             android:background="#9d383840"
             android:padding="4dp"
             app:layout_constraintBottom_toTopOf="@id/rl_chat"
+            android:orientation="horizontal"
             tools:layout_editor_absoluteX="0dp">
 
-            <TextView
-                android:id="@+id/tv_start_game"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/start_game_button_border"
-                android:paddingBottom="10dp"
-                android:paddingEnd="60dp"
-                android:paddingStart="60dp"
-                android:paddingTop="10dp"
-                android:text="Treo cổ"
-                android:textColor="#fff"
-                android:textSize="16sp"
-                android:visibility="gone"/>
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:id="@+id/tv_skip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/skip_turn_button_border"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="60dp"
+                    android:paddingStart="60dp"
+                    android:paddingTop="10dp"
+                    android:text="Bỏ qua"
+                    android:textColor="#fff"
+                    android:textSize="16sp"
+                    android:layout_marginRight="10dp"/>
+
+                <TextView
+                    android:id="@+id/tv_start_game"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/start_game_button_border"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="60dp"
+                    android:paddingStart="60dp"
+                    android:paddingTop="10dp"
+                    android:text="Treo cổ"
+                    android:textColor="#fff"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
         </RelativeLayout>
 

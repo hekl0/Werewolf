@@ -3,10 +3,10 @@ package com.example.bm.werewolf.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +19,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.bm.werewolf.Activity.PlayActivity;
+import com.example.bm.werewolf.Activity.WaitingRoomActivity;
 import com.example.bm.werewolf.Adapter.ChatAdapter;
 import com.example.bm.werewolf.Adapter.DayAdapter;
 import com.example.bm.werewolf.Adapter.DyingAdapter;
@@ -81,6 +83,15 @@ public class DayFragment extends Fragment {
     LinearLayout llDying;
     @BindView(R.id.lv_dying)
     ListView lvDying;
+    @BindView(R.id.tv_skip)
+    TextView tvSkip;
+    Boolean picked = false;
+    @BindView(R.id.iv_back)
+    ImageView ivBack;
+    @BindView(R.id.tv_room_id)
+    TextView tvRoomId;
+    @BindView(R.id.tv_timer)
+    TextView tvTimer;
 
     public DayFragment() {
         // Required empty public constructor
@@ -95,20 +106,14 @@ public class DayFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         context = getContext();
 
+        setupUI(view);
+
         getDyingList();
         DyingAdapter dyingAdapter = new DyingAdapter(dyingList);
         lvDying.setAdapter(dyingAdapter);
 
         RoleListViewAdapter roleListViewAdapter = new RoleListViewAdapter(RoleReceiveFragment.roleList);
         lvRoles.setAdapter(roleListViewAdapter);
-
-        tvStartGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).
-                        child("Vote").child(UserDatabase.facebookID).setValue(DayAdapter.pick);
-            }
-        });
 
         List<PlayerModel> playerModelList = new ArrayList<>();
         for (PlayerModel playerModel : Constant.listPlayerModel)
@@ -134,13 +139,31 @@ public class DayFragment extends Fragment {
         return view;
     }
 
+    private void setupUI(final View view) {
+        tvRoomId.setText(Constant.roomID);
+        new CountDownTimer(120000 + PlayActivity.startTime - System.currentTimeMillis(), 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                if (tvTimer == null) tvTimer = view.findViewById(R.id.tv_timer);
+                tvTimer.setText("" + millisUntilFinished/1000);
+            }
+
+            @Override
+            public void onFinish() {
+                tvTimer.setText("0");
+                FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).
+                        child("Vote").child(UserDatabase.facebookID).setValue(-1);
+            }
+        }.start();
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_chat_submit, R.id.iv_voice_call, R.id.iv_exit, R.id.bt_dying})
+    @OnClick({R.id.iv_chat_submit, R.id.iv_voice_call, R.id.iv_exit, R.id.bt_dying, R.id.tv_skip, R.id.tv_start_game,R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_chat_submit:
@@ -165,6 +188,22 @@ public class DayFragment extends Fragment {
                 break;
             case R.id.bt_dying:
                 llDying.setVisibility(View.GONE);
+                break;
+            case R.id.tv_skip:
+                if (picked) break;
+                FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).
+                        child("Vote").child(UserDatabase.facebookID).setValue(-1);
+                picked = true;
+                break;
+            case R.id.tv_start_game:
+                if (DayAdapter.pick == -1) break;
+                if (picked) break;
+                FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).
+                        child("Vote").child(UserDatabase.facebookID).setValue(DayAdapter.pick);
+                picked = true;
+                break;
+            case R.id.iv_back:
+                getActivity().onBackPressed();
                 break;
         }
     }
