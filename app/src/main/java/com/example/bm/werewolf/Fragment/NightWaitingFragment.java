@@ -42,6 +42,7 @@ public class NightWaitingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_night_waiting, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
         RoleListViewAdapter roleListViewAdapter = new RoleListViewAdapter(RoleReceiveFragment.roleList);
         lvRoles.setAdapter(roleListViewAdapter);
@@ -51,8 +52,6 @@ public class NightWaitingFragment extends Fragment {
 
         ivPlayingRole.setImageResource(Constant.imageRole[PlayActivity.currentRole + 1]);
         tvRoleName.setText(Constant.nameRole[PlayActivity.currentRole + 1]);
-
-        unbinder = ButterKnife.bind(this, view);
         return view;
     }
 

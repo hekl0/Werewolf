@@ -20,6 +20,7 @@ public class VoiceCallService {
     }
 
     public static void leaveChannel() {
+        if (rtcEngine == null) return;
         rtcEngine.leaveChannel();
     }
 }

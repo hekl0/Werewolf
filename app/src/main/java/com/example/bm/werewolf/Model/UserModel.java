@@ -13,6 +13,7 @@ public class UserModel {
     public int favoriteRole;
     public String name;
     public int cover;
+    public String currentRoom;
 
     public List<Integer> achievedCover;
     public List<Achievement> achievementList;

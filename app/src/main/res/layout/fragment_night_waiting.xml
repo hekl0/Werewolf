@@ -91,6 +91,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:visibility="gone"
-        android:layout_below="@+id/tv_room_id"></ListView>
+        android:layout_below="@+id/tv_room_id" />
 
 </RelativeLayout>

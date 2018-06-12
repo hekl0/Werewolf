@@ -225,6 +225,9 @@ public class WaitingRoomActivity extends AppCompatActivity {
     }
 
     void RoomLogin() {
+        UserDatabase.getInstance().userData.currentRoom = Constant.roomID;
+        UserDatabase.getInstance().updateUser();
+
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference;
 
@@ -256,6 +259,9 @@ public class WaitingRoomActivity extends AppCompatActivity {
     }
 
     public void RoomLogout() {
+        UserDatabase.getInstance().userData.currentRoom = null;
+        UserDatabase.getInstance().updateUser();
+
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
         final DatabaseReference host = firebaseDatabase.getReference("rooms").child(Constant.roomID).child("roomMasterID");

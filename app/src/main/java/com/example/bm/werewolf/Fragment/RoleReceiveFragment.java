@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -43,7 +44,7 @@ public class RoleReceiveFragment extends Fragment {
     @BindView(R.id.tv_role_name)
     TextView tvRoleName;
     @BindView(R.id.cl_content)
-    ConstraintLayout clContent;
+    LinearLayout clContent;
     @BindView(R.id.avi)
     AVLoadingIndicatorView avi;
     Unbinder unbinder;
@@ -100,6 +101,7 @@ public class RoleReceiveFragment extends Fragment {
                 tvRoleName.setText(Constant.nameRole[Constant.myRole + 1]);
 
                 PlayActivity.nextTurn();
+                PlayActivity.updateTurn();
             }
 
             @Override

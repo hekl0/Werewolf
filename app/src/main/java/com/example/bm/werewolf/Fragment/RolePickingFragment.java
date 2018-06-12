@@ -58,6 +58,8 @@ public class RolePickingFragment extends Fragment {
     @BindView(R.id.tv_start_game)
     TextView tvStartGame;
 
+    ValueEventListener valueEventListener;
+
     public RolePickingFragment() {
         // Required empty public constructor
     }
@@ -80,6 +82,25 @@ public class RolePickingFragment extends Fragment {
 
         if (VoiceCallService.isVoiceCall) ivVoiceCall.setImageResource(R.drawable.ic_voice_call);
         else ivVoiceCall.setImageResource(R.drawable.ic_mute);
+
+        valueEventListener = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                .child("pickingFinish").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() == null) return;
+                        if (dataSnapshot.getValue(Boolean.class))
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.frame_container, new RoleReceiveFragment())
+                                    .commit();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+        if (!Constant.isHost) tvStartGame.setVisibility(View.GONE);
 
         return view;
     }
@@ -149,11 +170,9 @@ public class RolePickingFragment extends Fragment {
                                     PlayerModel model = new PlayerModel(x, 0, pick, true, userModel.name);
                                     Constant.listPlayerModel.add(model);
 
-                                    if (Constant.listPlayerModel.size() == playerList.size()) {
+                                    if (Constant.listPlayerModel.size() == playerList.size())
                                         FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                                                 .child("Player Data").setValue(Constant.listPlayerModel);
-
-                                    }
                                 }
 
                                 @Override
@@ -163,9 +182,8 @@ public class RolePickingFragment extends Fragment {
                             });
                 }
 
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_container, new RoleReceiveFragment())
-                        .commit();
+                FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                        .child("pickingFinish").setValue(true);
 
                 break;
         }
@@ -189,5 +207,12 @@ public class RolePickingFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                .child("pickingFinish").removeEventListener(valueEventListener);
+        super.onDestroy();
     }
 }
