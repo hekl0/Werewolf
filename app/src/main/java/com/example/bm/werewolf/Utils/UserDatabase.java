@@ -35,6 +35,7 @@ public class UserDatabase {
         if (userDatabase == null)
             userDatabase = new UserDatabase();
         databaseReference = FirebaseDatabase.getInstance().getReference("User list").child(facebookID);
+
         return userDatabase;
     }
 
@@ -66,6 +67,7 @@ public class UserDatabase {
                     userData.recentPlayWith = new ArrayList<>();
                     userData.achievedCover = new ArrayList<>();
                     userData.achievedCover.add(0);
+                    userData.id = facebookID;
                 }
 
                 if (userData.friendList == null)
@@ -74,6 +76,7 @@ public class UserDatabase {
                     userData.recentPlayWith = new ArrayList<>();
                 userData.name = name;
                 userData.isOnline = true;
+                userData.id = facebookID;
 
                 updateUser();
 

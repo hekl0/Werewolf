@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,13 +30,15 @@ import butterknife.ButterKnife;
  */
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
-    List<String> chatData = new ArrayList<>();
+    public static List<String> chatData = new ArrayList<>();
+
+    public static ValueEventListener valueEventListener;
 
     public ChatAdapter(String roomID, final LinearLayoutManager linearLayoutManager) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = firebaseDatabase.getReference("chat").child(roomID);
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        valueEventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 chatData = new ArrayList<>();
@@ -91,5 +94,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             else
                 tvChat.setTextColor(Color.parseColor("#F0EFF5"));
         }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if (valueEventListener != null)
+            FirebaseDatabase.getInstance().getReference("chat")
+                    .child(Constant.roomID).removeEventListener(valueEventListener);
+        super.finalize();
     }
 }
