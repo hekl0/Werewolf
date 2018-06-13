@@ -203,7 +203,7 @@ public class DayFragment extends Fragment {
                 picked = true;
                 break;
             case R.id.iv_back:
-                getActivity().onBackPressed();
+                getActivity().finish();
                 break;
         }
     }

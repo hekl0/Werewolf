@@ -295,7 +295,7 @@ public class PlayActivity extends AppCompatActivity {
                                 VoiceCallService.joinChannel(Constant.roomID);
                             else
                                 VoiceCallService.leaveChannel();
-                        currentRole = -1;
+
                         if (currentRole == Constant.NONE)
                             loadFragment(new DayFragment());
                         else if (Constant.myRole == currentRole)
