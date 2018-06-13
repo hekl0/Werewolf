@@ -1,24 +1,19 @@
 package com.example.bm.werewolf.Activity;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.bm.werewolf.Database.DatabaseManager;
+import com.example.bm.werewolf.Adapter.ChatAdapter;
 import com.example.bm.werewolf.Fragment.DayFragment;
 import com.example.bm.werewolf.Fragment.NightFragment;
 import com.example.bm.werewolf.Fragment.NightWaitingFragment;
 import com.example.bm.werewolf.Fragment.RolePickingFragment;
 import com.example.bm.werewolf.Model.PlayerModel;
-import com.example.bm.werewolf.Model.UserModel;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Service.VoiceCallService;
 import com.example.bm.werewolf.Utils.Constant;
@@ -33,9 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class PlayActivity extends AppCompatActivity {
     private static final String TAG = "PlayActivity";
@@ -46,6 +39,7 @@ public class PlayActivity extends AppCompatActivity {
     static List<String> response;
     static ValueEventListener updateTurnListener;
     static ValueEventListener responseListener;
+    static ValueEventListener voteListener;
 
     public static Boolean healPotion;
     public static Boolean toxicPotion;
@@ -54,6 +48,9 @@ public class PlayActivity extends AppCompatActivity {
     public static String lastTargetPlayerID;
 
     static FragmentManager fragmentManager;
+
+    static List<String> voter;
+    static List<String> votedPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,8 +133,43 @@ public class PlayActivity extends AppCompatActivity {
         transaction.commitAllowingStateLoss();
     }
 
+    public static void updateTurn() {
+        updateTurnListener = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.d(TAG, "onDataChange: " + dataSnapshot);
+                        if (dataSnapshot.getValue() == null) return;
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                            if (snapshot.getKey().equals("currentRole"))
+                                currentRole = snapshot.getValue(Integer.class);
+                            else
+                                startTime = snapshot.getValue(long.class);
+
+                        if (VoiceCallService.isVoiceCall)
+                            if (currentRole == Constant.NONE)
+                                VoiceCallService.joinChannel(Constant.roomID);
+                            else
+                                VoiceCallService.leaveChannel();
+
+                        if (currentRole == Constant.NONE)
+                            loadFragment(new DayFragment());
+                        else if (Constant.myRole == currentRole && getPlayerModelByID(UserDatabase.facebookID).alive)
+                            loadFragment(new NightFragment());
+                        else
+                            loadFragment(new NightWaitingFragment());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
     //Soi, Bao ve, Tho San, Phu Thuy, Tien tri
     static int[] roleSequence = new int[]{Constant.NONE, Constant.MA_SOI, Constant.BAO_VE, Constant.THO_SAN, Constant.PHU_THUY, Constant.TIEN_TRI, Constant.NONE};
+
     public static void nextTurn() {
         if (!Constant.isHost) return;
 
@@ -145,6 +177,9 @@ public class PlayActivity extends AppCompatActivity {
             dyingPlayerID = new ArrayList<>();
             FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                     .child("dyingPlayer").setValue(dyingPlayerID);
+            FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("hangedPlayerID").setValue(null);
+            FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                    .child("Player Data").setValue(Constant.listPlayerModel);
         }
 
         int pos;
@@ -169,7 +204,9 @@ public class PlayActivity extends AppCompatActivity {
                         .child("currentRole").setValue(roleSequence[finalNextRole]);
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
                         .child("startTime").setValue(System.currentTimeMillis());
-                receiveResponse();
+
+                if (currentRole == Constant.NONE) Vote();
+                else receiveResponse();
             }
         }, 2000);
     }
@@ -177,7 +214,6 @@ public class PlayActivity extends AppCompatActivity {
     public static void receiveResponse() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Ingame Data")
                 .child(Constant.roomID).child("response");
-
         databaseReference.setValue(null);
         response = new ArrayList<>();
 
@@ -195,7 +231,7 @@ public class PlayActivity extends AppCompatActivity {
                 Log.d(TAG, "run: fail");
                 analyzeResponse();
             }
-        }, 17000);
+        }, 16000);
 
         if (responseListener != null) {
             databaseReference.removeEventListener(responseListener);
@@ -211,8 +247,8 @@ public class PlayActivity extends AppCompatActivity {
                     response.add(snapshot.getValue(String.class));
 
                 if (response.size() != finalCount) return;
-                handler.removeCallbacksAndMessages(null);
 
+                handler.removeCallbacksAndMessages(null);
                 analyzeResponse();
             }
 
@@ -224,6 +260,10 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     public static void analyzeResponse() {
+        FirebaseDatabase.getInstance().getReference("Ingame Data")
+                .child(Constant.roomID).child("response").removeEventListener(responseListener);
+        responseListener = null;
+
         int maxCount = 0;
         for (String x : response)
             if (Collections.frequency(response, x) > maxCount && !x.equals(""))
@@ -271,38 +311,123 @@ public class PlayActivity extends AppCompatActivity {
         nextTurn();
     }
 
-    public static void updateTurn() {
-        updateTurnListener = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "onDataChange: " + dataSnapshot);
-                        if (dataSnapshot.getValue() == null) return;
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren())
-                            if (snapshot.getKey().equals("currentRole"))
-                                currentRole = snapshot.getValue(Integer.class);
-                            else
-                                startTime = snapshot.getValue(long.class);
+    public static void Vote() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Vote");
+        databaseReference.setValue(null);
+        voter = new ArrayList<>();
+        votedPlayer = new ArrayList<>();
 
-                        if (VoiceCallService.isVoiceCall)
-                            if (currentRole == Constant.NONE)
-                                VoiceCallService.joinChannel(Constant.roomID);
-                            else
-                                VoiceCallService.leaveChannel();
+        int count = 0;
+        for (PlayerModel playerModel : Constant.listPlayerModel)
+            if (playerModel.alive) count++;
 
-                        if (currentRole == Constant.NONE)
-                            loadFragment(new DayFragment());
-                        else if (Constant.myRole == currentRole)
-                            loadFragment(new NightFragment());
-                        else
-                            loadFragment(new NightWaitingFragment());
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "run: fail");
+                finishVote();
+            }
+        }, 122000);
+
+        final int finalCount = count;
+        voteListener = databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                voter = new ArrayList<>();
+                votedPlayer = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                    if (!snapshot.getValue(String.class).equals("")) {
+                        voter.add(snapshot.getKey());
+                        votedPlayer.add(snapshot.getValue(String.class));
                     }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                if (voter.size() != finalCount) return;
 
-                    }
-                });
+                handler.removeCallbacksAndMessages(null);
+                finishVote();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public static void finishVote() {
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                .child("Vote").removeEventListener(voteListener);
+        voteListener = null;
+
+        String hangedPlayerID = "";
+
+        for (String s : votedPlayer) {
+            if (s.equals("")) continue;
+            int count = 0;
+            for (String x : votedPlayer)
+                if (s.equals(x)) count++;
+
+            if (count > votedPlayer.size() / 2) hangedPlayerID = s;
+        }
+
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                .child("hangedPlayerID").setValue(hangedPlayerID);
+
+        String systemChat = "";
+
+        for (int i = 0; i < votedPlayer.size(); i++) {
+            String id = votedPlayer.get(i);
+            if (id.equals("")) continue;
+
+            List<String> voterList = new ArrayList<>();
+            for (int j = 0; j < votedPlayer.size(); j++)
+                if (votedPlayer.get(j).equals(id))
+                    voterList.add(voter.get(j));
+
+            String chat = getPlayerModelByID(id).name + " đã bị bỏ phiếu bởi " + voterList.size() + " người: ";
+            for (int j = 0; j < voterList.size(); j++) {
+                chat += getPlayerModelByID(voterList.get(j)).name;
+                if (j != voterList.size() - 1) chat += ", ";
+                else chat += ".";
+            }
+
+            if (voterList.size() > 0) {
+                if (!systemChat.equals("")) systemChat += "\n";
+                systemChat += chat;
+            }
+        }
+
+        if (!hangedPlayerID.equals("")) {
+            if (!systemChat.equals("")) systemChat += "\n";
+            systemChat += getPlayerModelByID(hangedPlayerID).name + " đã bị treo cổ.";
+        } else {
+            if (!systemChat.equals("")) systemChat += "\n";
+            systemChat += "Ý kiến không thống nhất, không ai bị treo cổ.";
+        }
+
+        submitChat(systemChat);
+        submitChat("10s nữa sẽ đến tối");
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                nextTurn();
+            }
+        }, 8000);
+    }
+
+    public static PlayerModel getPlayerModelByID(String id) {
+        for (PlayerModel playerModel : Constant.listPlayerModel)
+            if (playerModel.id.equals(id))
+                return playerModel;
+        return null;
+    }
+
+    static void submitChat(final String chat) {
+        ChatAdapter.chatData.add(chat);
+        FirebaseDatabase.getInstance().getReference("chat").child(Constant.roomID).setValue(ChatAdapter.chatData);
     }
 
     @Override
@@ -313,6 +438,9 @@ public class PlayActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        if (voteListener != null)
+            FirebaseDatabase.getInstance().getReference("Ingame Data")
+                    .child(Constant.roomID).child("Vote").removeEventListener(voteListener);
         if (responseListener != null)
             FirebaseDatabase.getInstance().getReference("Ingame Data")
                     .child(Constant.roomID).child("response").removeEventListener(responseListener);

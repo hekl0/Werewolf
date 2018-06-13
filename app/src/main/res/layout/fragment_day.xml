@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment.DayFragment">
 
     <android.support.constraint.ConstraintLayout
@@ -14,27 +14,31 @@
             android:id="@+id/rl_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/iv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_back_white_24dp"
+                android:layout_marginTop="8dp"
                 android:padding="8dp"
-                android:layout_marginTop="8dp"/>
+                android:src="@drawable/ic_arrow_back_white_24dp" />
 
             <TextView
                 android:id="@+id/tv_room_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="180dp"
+                android:layout_height="40dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/room_name_border"
+                android:fontFamily="@font/autour_one"
+                android:gravity="center"
                 android:padding="8dp"
                 android:text="Room id"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -44,21 +48,21 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
                 android:padding="8dp"
                 android:text="00"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="8dp"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageView
                 android:id="@+id/iv_roles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_remove_red_eye_black_24dp"
+                android:layout_marginTop="8dp"
                 android:layout_toLeftOf="@+id/tv_timer"
                 android:padding="8dp"
-                android:layout_marginTop="8dp"/>
+                android:src="@drawable/ic_remove_red_eye_black_24dp" />
         </RelativeLayout>
 
         <android.support.constraint.Guideline
@@ -75,8 +79,8 @@
             android:layout_height="0dp"
             android:layout_below="@+id/rl1"
             android:background="@drawable/chat_border"
-            app:layout_constraintTop_toBottomOf="@id/guideline2"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline2">
 
             <RelativeLayout
                 android:id="@+id/ll1"
@@ -87,9 +91,9 @@
                 android:layout_marginEnd="4dp"
                 android:layout_marginStart="4dp"
                 android:background="#242426"
-                android:padding="4dp"
                 android:focusable="true"
-                android:focusableInTouchMode="true">
+                android:focusableInTouchMode="true"
+                android:padding="4dp">
 
                 <EditText
                     android:id="@+id/et_chat"
@@ -98,30 +102,30 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="4dp"
                     android:layout_marginStart="8dp"
+                    android:layout_toStartOf="@id/iv_chat_submit"
                     android:background="@drawable/chat_box_border"
+                    android:maxLength="200"
                     android:paddingEnd="8dp"
                     android:paddingStart="8dp"
                     android:textColor="#F0EFF5"
-                    android:textSize="13sp"
-                    android:layout_toStartOf="@id/iv_chat_submit"
-                    android:maxLength="200"/>
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:id="@+id/iv_chat_submit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_toStartOf="@id/iv_voice_call"
                     android:padding="4dp"
-                    android:src="@drawable/ic_done"
-                    android:layout_toStartOf="@id/iv_voice_call"/>
+                    android:src="@drawable/ic_done" />
 
                 <ImageView
                     android:id="@+id/iv_voice_call"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginEnd="8dp"
                     android:padding="4dp"
-                    android:src="@drawable/ic_voice_call"
-                    android:layout_alignParentEnd="true"/>
+                    android:src="@drawable/ic_voice_call" />
 
             </RelativeLayout>
 
@@ -133,10 +137,10 @@
                 android:layout_marginEnd="4dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
+                android:overScrollMode="never"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
-                android:paddingTop="4dp"
-                android:overScrollMode="never" />
+                android:paddingTop="4dp" />
 
         </RelativeLayout>
 
@@ -145,10 +149,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:numColumns="3"
+            app:layout_constraintBottom_toTopOf="@id/rl2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/rl2"
-            app:layout_constraintTop_toBottomOf="@id/rl_bar"/>
+            app:layout_constraintTop_toBottomOf="@id/rl_bar" />
 
 
         <RelativeLayout
@@ -157,24 +161,43 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="-10dp"
             android:background="#9d383840"
+            android:orientation="horizontal"
             android:padding="4dp"
             app:layout_constraintBottom_toTopOf="@id/rl_chat"
             tools:layout_editor_absoluteX="0dp">
 
-            <TextView
-                android:id="@+id/tv_start_game"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/start_game_button_border"
-                android:paddingBottom="10dp"
-                android:paddingEnd="60dp"
-                android:paddingStart="60dp"
-                android:paddingTop="10dp"
-                android:text="Bắt đầu"
-                android:textColor="#fff"
-                android:textSize="16sp"
-                android:visibility="gone"/>
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:id="@+id/tv_skip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/skip_turn_button_border"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="60dp"
+                    android:paddingStart="60dp"
+                    android:paddingTop="10dp"
+                    android:text="Bỏ qua"
+                    android:textColor="#fff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_start_game"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/start_game_button_border"
+                    android:paddingBottom="10dp"
+                    android:paddingEnd="60dp"
+                    android:paddingStart="60dp"
+                    android:paddingTop="10dp"
+                    android:text="Treo cổ"
+                    android:textColor="#fff"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
         </RelativeLayout>
 
@@ -186,7 +209,56 @@
             android:layout_marginStart="8dp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/gv_player"
-            app:layout_constraintStart_toStartOf="@+id/gv_player"></ListView>
+            app:layout_constraintStart_toStartOf="@+id/gv_player"
+            app:layout_constraintTop_toTopOf="@+id/gv_player" />
+
+        <LinearLayout
+            android:id="@+id/ll_dying"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clickable="true"
+            app:layout_constraintBottom_toTopOf="@id/rl_chat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/small_window_border"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Người chết đêm qua"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <ListView
+                    android:id="@+id/lv_dying"
+                    android:layout_width="300dp"
+                    android:layout_height="250dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/small_content_border"
+                    android:visibility="visible" />
+
+                <Button
+                    android:id="@+id/bt_dying"
+                    android:layout_width="150dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/start_game_button_border"
+                    android:text="OK"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>
 

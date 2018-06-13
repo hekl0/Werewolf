@@ -189,24 +189,9 @@ public class RolePickingFragment extends Fragment {
         }
     }
 
-    void submitChat(final String chat) {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        final DatabaseReference databaseReference = firebaseDatabase.getReference("chat").child(Constant.roomID);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<String> chatList = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren())
-                    chatList.add(snapshot.getValue(String.class));
-                chatList.add(chat);
-                databaseReference.setValue(chatList);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    static void submitChat(final String chat) {
+        ChatAdapter.chatData.add(chat);
+        FirebaseDatabase.getInstance().getReference("chat").child(Constant.roomID).setValue(ChatAdapter.chatData);
     }
 
     @Override

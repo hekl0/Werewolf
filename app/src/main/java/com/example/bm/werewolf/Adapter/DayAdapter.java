@@ -35,7 +35,7 @@ public class DayAdapter extends BaseAdapter {
 
         pick = -1;
     }
-    
+
     @Override
     public int getCount() {
         return playerModelList.size();
@@ -64,12 +64,21 @@ public class DayAdapter extends BaseAdapter {
 
         tvName.setText(playerModelList.get(pos).name);
         tvName.setSelected(true);
+
         final Transformation transformation = new CropCircleTransformation();
-        Picasso.get()
-                .load("https://graph.facebook.com/" + playerModelList.get(pos).id + "/picture?type=large")
-                .placeholder(R.drawable.progress_animation)
-                .transform(transformation)
-                .into(ivAva);
+        if (playerModelList.get(pos).alive)
+            Picasso.get()
+                    .load("https://graph.facebook.com/" + playerModelList.get(pos).id + "/picture?type=large")
+                    .placeholder(R.drawable.progress_animation)
+                    .transform(transformation)
+                    .into(ivAva);
+        else
+            Picasso.get()
+                    .load(R.drawable.die)
+                    .placeholder(R.drawable.progress_animation)
+                    .transform(transformation)
+                    .into(ivAva);
+
         tvNum.setText((pos + 1) + "");
         Picasso.get()
                 .load(Constant.imageRole[playerModelList.get(pos).mark])
@@ -101,8 +110,10 @@ public class DayAdapter extends BaseAdapter {
         ivAva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pick = pos;
-                notifyDataSetChanged();
+                if (playerModelList.get(pos).alive == true) {
+                    pick = pos;
+                    notifyDataSetChanged();
+                }
             }
         });
 

@@ -10,6 +10,7 @@ import com.example.bm.werewolf.Model.UserModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -33,8 +34,8 @@ public class UserDatabase {
     public static UserDatabase getInstance() {
         if (userDatabase == null)
             userDatabase = new UserDatabase();
-        firebaseDatabase = com.google.firebase.database.FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("User list").child(facebookID);
+        databaseReference = FirebaseDatabase.getInstance().getReference("User list").child(facebookID);
+
         return userDatabase;
     }
 
@@ -92,6 +93,7 @@ public class UserDatabase {
     }
 
     public void offlineStatus() {
+        if (userData == null) return;
         userData.isOnline = false;
         updateUser();
     }
