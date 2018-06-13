@@ -1,6 +1,7 @@
 package com.example.bm.werewolf.Fragment;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,13 +9,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.bm.werewolf.Activity.WaitingRoomActivity;
 import com.example.bm.werewolf.Adapter.FriendsExpandableListViewAdapter;
+import com.example.bm.werewolf.Adapter.UserSearchAdapter;
 import com.example.bm.werewolf.Model.UserModel;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Utils.Constant;
@@ -26,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +57,13 @@ public class FriendsFragment extends Fragment {
     static ImageView ivAddDeleteFriend;
     static ImageView ivExit;
     static RelativeLayout rlSmallWindow;
+
+    public EditText etSearch;
+    public ImageView ivSearch;
+    public RelativeLayout rlSearch;
+    public ListView lvSearch;
+    public AVLoadingIndicatorView avLoading;
+    public TextView tvOk;
 
     public FriendsFragment() {
         // Required empty public constructor
@@ -85,13 +97,59 @@ public class FriendsFragment extends Fragment {
             }
         });
 
+        etSearch = rootView.findViewById(R.id.et_search);
+        ivSearch = rootView.findViewById(R.id.iv_search);
+        rlSearch = rootView.findViewById(R.id.rl_search);
+        lvSearch = rootView.findViewById(R.id.lv_search);
+        avLoading = rootView.findViewById(R.id.av_loading);
+        tvOk = rootView.findViewById(R.id.tv_ok);
+
+        tvOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rlSearch.setVisibility(View.GONE);
+            }
+        });
+
+        ivSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String textSearch = etSearch.getText().toString().toLowerCase();
+                avLoading.setVisibility(View.VISIBLE);
+
+                rlSearch.setVisibility(View.VISIBLE);
+                FirebaseDatabase.getInstance().getReference("User list")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                List<UserModel> userModelList = new ArrayList<>();
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                                    userModelList.add(snapshot.getValue(UserModel.class));
+
+                                List<UserModel> matchUser = new ArrayList<>();
+                                for (UserModel userModel : userModelList)
+                                    if (userModel.name.toLowerCase().contains(textSearch))
+                                        matchUser.add(userModel);
+
+                                avLoading.setVisibility(View.GONE);
+
+                                UserSearchAdapter userSearchAdapter = new UserSearchAdapter(matchUser);
+                                lvSearch.setAdapter(userSearchAdapter);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+            }
+        });
+
         return rootView;
     }
 
 
     public static void openSmallWindow(final String userID) {
-        if (userID.equals(UserDatabase.facebookID))
-            return;
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference("User list").child(userID);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {

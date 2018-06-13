@@ -44,8 +44,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
     @BindView(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.iv_invite)
-    ImageView ivInvite;
     @BindView(R.id.et_chat)
     EditText etChat;
     @BindView(R.id.iv_chat_submit)
@@ -146,7 +144,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick({R.id.iv_back, R.id.iv_invite, R.id.iv_chat_submit, R.id.iv_voice_call, R.id.iv_exit, R.id.tv_start_game})
+    @OnClick({R.id.iv_back, R.id.iv_chat_submit, R.id.iv_voice_call, R.id.iv_exit, R.id.tv_start_game})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -202,8 +200,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
                 break;
             case R.id.iv_exit:
                 rlSmallWindow.setVisibility(View.GONE);
-                break;
-            case R.id.iv_invite:
                 break;
         }
     }

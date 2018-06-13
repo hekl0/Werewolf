@@ -138,7 +138,6 @@ public class PlayActivity extends AppCompatActivity {
 
     //Soi, Bao ve, Tho San, Phu Thuy, Tien tri
     static int[] roleSequence = new int[]{Constant.NONE, Constant.MA_SOI, Constant.BAO_VE, Constant.THO_SAN, Constant.PHU_THUY, Constant.TIEN_TRI, Constant.NONE};
-
     public static void nextTurn() {
         if (!Constant.isHost) return;
 

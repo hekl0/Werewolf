@@ -33,8 +33,8 @@ public class UserDatabase {
     public static UserDatabase getInstance() {
         if (userDatabase == null)
             userDatabase = new UserDatabase();
-            firebaseDatabase = com.google.firebase.database.FirebaseDatabase.getInstance();
-            databaseReference = firebaseDatabase.getReference("User list").child(facebookID);
+        firebaseDatabase = com.google.firebase.database.FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("User list").child(facebookID);
         return userDatabase;
     }
 
@@ -66,6 +66,7 @@ public class UserDatabase {
                     userData.recentPlayWith = new ArrayList<>();
                     userData.achievedCover = new ArrayList<>();
                     userData.achievedCover.add(0);
+                    userData.id = facebookID;
                 }
 
                 if (userData.friendList == null)
@@ -74,6 +75,7 @@ public class UserDatabase {
                     userData.recentPlayWith = new ArrayList<>();
                 userData.name = name;
                 userData.isOnline = true;
+                userData.id = facebookID;
 
                 updateUser();
 

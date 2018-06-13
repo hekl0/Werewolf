@@ -14,6 +14,7 @@ public class UserModel {
     public String name;
     public int cover;
     public String currentRoom;
+    public String id;
 
     public List<Integer> achievedCover;
     public List<Achievement> achievementList;
