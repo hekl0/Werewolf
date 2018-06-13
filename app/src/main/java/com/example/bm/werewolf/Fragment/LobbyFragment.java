@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.bm.werewolf.Activity.WaitingRoomActivity;
@@ -48,10 +49,10 @@ public class LobbyFragment extends Fragment {
 
     private static final String TAG = "LobbyFragment";
 
-    @BindView(R.id.bt_create_room)
-    Button btCreateRoom;
-    @BindView(R.id.bt_find_room)
-    Button btFindRoom;
+    @BindView(R.id.iv_create_room)
+    ImageView ivCreateRoom;
+    @BindView(R.id.iv_find_room)
+    ImageView ivFindRoom;
     Unbinder unbinder;
 
     FirebaseAuth firebaseAuth;
@@ -64,8 +65,6 @@ public class LobbyFragment extends Fragment {
     Context context;
     @BindView(R.id.rv_rooms)
     RecyclerView rvRooms;
-    @BindView(R.id.bt_quick_find)
-    Button btQuickFind;
 
     public LobbyFragment() {
         // Required empty public constructor
@@ -118,10 +117,10 @@ public class LobbyFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.bt_create_room, R.id.bt_find_room, R.id.bt_quick_find})
+    @OnClick({R.id.iv_create_room, R.id.iv_find_room})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.bt_create_room:
+            case R.id.iv_create_room:
                 LayoutInflater inflater = LayoutInflater.from(getActivity());
                 View mView = inflater.inflate(R.layout.create_room_dialog_box, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -177,7 +176,7 @@ public class LobbyFragment extends Fragment {
                 alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#7dffffff")));
                 alertDialog.show();
                 break;
-            case R.id.bt_find_room:
+            case R.id.iv_find_room:
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
                 LayoutInflater dialogInflater = LayoutInflater.from(context);
                 final View dialogView = dialogInflater.inflate(R.layout.dialog_with_edittext, null);
@@ -219,8 +218,6 @@ public class LobbyFragment extends Fragment {
                 AlertDialog ad = dialogBuilder.create();
                 ad.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#7dffffff")));
                 ad.show();
-                break;
-            case R.id.bt_quick_find:
                 break;
         }
     }
