@@ -59,12 +59,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        try {
-            VoiceCallService.rtcEngine = RtcEngine.create(getBaseContext(), "aed16bb36aa0410ba115391fb945692c", new EventHandler());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         startService(new Intent(getBaseContext(), OnClearFromRecentService.class));
         OnClearFromRecentService.activity = this;
 
@@ -159,12 +153,5 @@ public class LoginActivity extends AppCompatActivity {
         );
 
         graphRequest.executeAsync();
-    }
-
-    @Override
-    protected void onDestroy() {
-        RtcEngine.destroy();
-        UserDatabase.getInstance().offlineStatus();
-        super.onDestroy();
     }
 }

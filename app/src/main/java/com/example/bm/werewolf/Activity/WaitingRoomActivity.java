@@ -85,8 +85,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         Constant.isHost = false;
         Constant.roomID = String.valueOf(getIntent().getIntExtra("roomID", 0));
-        VoiceCallService.isVoiceCall = true;
-        VoiceCallService.joinChannel(Constant.roomID);
+
         RoomLogin();
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID).child("roomName");
@@ -131,9 +130,11 @@ public class WaitingRoomActivity extends AppCompatActivity {
                 .child("gameInProgress").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null) return;
                 if (dataSnapshot.getValue(Boolean.class)) {
                     Intent intent = new Intent(WaitingRoomActivity.this, PlayActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
 

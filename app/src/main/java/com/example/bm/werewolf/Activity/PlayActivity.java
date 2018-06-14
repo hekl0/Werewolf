@@ -15,6 +15,7 @@ import com.example.bm.werewolf.Fragment.NightWaitingFragment;
 import com.example.bm.werewolf.Fragment.RolePickingFragment;
 import com.example.bm.werewolf.Model.PlayerModel;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Service.OnClearFromRecentService;
 import com.example.bm.werewolf.Service.VoiceCallService;
 import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
@@ -51,6 +52,8 @@ public class PlayActivity extends AppCompatActivity {
 
     static List<String> voter;
     static List<String> votedPlayer;
+
+    public static boolean isWin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,6 +223,7 @@ public class PlayActivity extends AppCompatActivity {
         databaseReference.setValue(null);
         response = new ArrayList<>();
 
+        //counting number of response need to receive
         int count = 0;
         for (PlayerModel playerModel : Constant.listPlayerModel)
             if (playerModel.alive && playerModel.role == currentRole) {
@@ -236,10 +240,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         }, 16000);
 
-        if (responseListener != null) {
-            databaseReference.removeEventListener(responseListener);
-            responseListener = null;
-        }
         final int finalCount = count;
         responseListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -267,16 +267,19 @@ public class PlayActivity extends AppCompatActivity {
                 .child(Constant.roomID).child("response").removeEventListener(responseListener);
         responseListener = null;
 
+        while (response.contains(""))
+            response.remove("");
+
         int maxCount = 0;
         for (String x : response)
-            if (Collections.frequency(response, x) > maxCount && !x.equals(""))
+            if (Collections.frequency(response, x) > maxCount)
                 maxCount = Collections.frequency(response, x);
 
         if (maxCount != 0) {
             String kq = "";
             Collections.shuffle(response);
             for (String x : response)
-                if (Collections.frequency(response, x) == maxCount && !x.equals(""))
+                if (Collections.frequency(response, x) == maxCount)
                     kq = x;
 
             if (currentRole == Constant.MA_SOI)
@@ -285,14 +288,14 @@ public class PlayActivity extends AppCompatActivity {
                 lastProtectedPlayerID = kq;
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                         .child("lastProtectedPlayerID").setValue(lastProtectedPlayerID);
-                if (dyingPlayerID.contains(kq)) {
-                    dyingPlayerID.remove(kq);
-                    if (getPlayerModelByID(kq).role == Constant.THO_SAN)
-                        dyingPlayerID = new ArrayList<>();
-                }
+                if (dyingPlayerID.contains(kq)) dyingPlayerID.remove(kq);
             }
             if (currentRole == Constant.THO_SAN) {
                 lastTargetPlayerID = kq;
+                for (PlayerModel playerModel : Constant.listPlayerModel)
+                    if (playerModel.role == Constant.THO_SAN)
+                        if (dyingPlayerID.contains(playerModel.id))
+                            dyingPlayerID.add(lastTargetPlayerID);
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                         .child("lastTargetPlayerID").setValue(lastTargetPlayerID);
             }
@@ -303,7 +306,7 @@ public class PlayActivity extends AppCompatActivity {
                         healPotion = false;
                         FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                                 .child("healPotion").setValue(healPotion);
-                    } else if (!x.equals("")) {
+                    } else {
                         dyingPlayerID.add(x);
                         toxicPotion = false;
                         FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
@@ -369,7 +372,7 @@ public class PlayActivity extends AppCompatActivity {
         String hangedPlayerID = "";
 
         int total = 0;
-        for(String s : votedPlayer)
+        for (String s : votedPlayer)
             if (!s.equals("")) total++;
         for (String s : votedPlayer) {
             if (s.equals("")) continue;
@@ -456,6 +459,25 @@ public class PlayActivity extends AppCompatActivity {
         if (updateTurnListener != null)
             FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
                     .removeEventListener(updateTurnListener);
+
+        int temp;
+        if (!isWin) {
+            UserDatabase.getInstance().userData.lose++;
+            temp = UserDatabase.getInstance().userData.dataTotalRole.get(Constant.myRole);
+            temp++;
+        } else {
+            UserDatabase.getInstance().userData.win++;
+            temp = UserDatabase.getInstance().userData.dataTotalRole.get(Constant.myRole);
+            temp++;
+            temp = UserDatabase.getInstance().userData.dataWinRole.get(Constant.myRole);
+            temp++;
+        }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        OnClearFromRecentService.activity = this;
+        super.onResume();
     }
 }

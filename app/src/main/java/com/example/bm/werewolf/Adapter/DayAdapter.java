@@ -93,6 +93,7 @@ public class DayAdapter extends BaseAdapter {
         ivMark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (PlayActivity.currentRole != Constant.NONE) return;
                 if (DayFragment.rlSmallWindow == null) return;
                 DayFragment.rlSmallWindow.setVisibility(View.VISIBLE);
                 DayFragment.gvSmallWindow.setAdapter(new FavoriteRoleAdapter());
