@@ -98,6 +98,11 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.LobbyViewHol
             rlRoomItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //chech is room playing
+                    if (roomModel.gameInProgress) {
+                        Toast.makeText(context, "Phòng đang chơi", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     //do something a room is choosen
                     Toast.makeText(context, "Room choosen", Toast.LENGTH_SHORT).show();
                     if (roomModel.isPasswordProtected)

@@ -288,6 +288,17 @@ public class DayFragment extends Fragment {
             tvStartGame.setVisibility(View.VISIBLE);
             tvSkip.setVisibility(View.VISIBLE);
         }
+
+        int total = 0;
+        int wolf = 0;
+        for (PlayerModel playerModel : Constant.listPlayerModel)
+            if (playerModel.alive) {
+                total++;
+                if (playerModel.role == Constant.MA_SOI) wolf++;
+            }
+
+        if (wolf == 0 || wolf*2 >= total)
+            PlayActivity.loadFragment(new EndGameFragment());
     }
 
     @Override

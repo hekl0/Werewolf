@@ -37,10 +37,10 @@ public class PlayActivity extends AppCompatActivity {
     public static int currentRole;
     public static long startTime;
 
-    static List<String> response;
-    static ValueEventListener updateTurnListener;
-    static ValueEventListener responseListener;
-    static ValueEventListener voteListener;
+    public static List<String> response;
+    public static ValueEventListener updateTurnListener;
+    public static ValueEventListener responseListener;
+    public static ValueEventListener voteListener;
 
     public static Boolean healPotion;
     public static Boolean toxicPotion;
@@ -54,6 +54,7 @@ public class PlayActivity extends AppCompatActivity {
     static List<String> votedPlayer;
 
     public static boolean isWin = false;
+    public static Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +200,7 @@ public class PlayActivity extends AppCompatActivity {
 
         currentRole = roleSequence[nextRole];
 
-        Handler handler = new Handler();
+        handler = new Handler();
         final int finalNextRole = nextRole;
         handler.postDelayed(new Runnable() {
             @Override
@@ -231,7 +232,7 @@ public class PlayActivity extends AppCompatActivity {
                 if (currentRole == Constant.PHU_THUY) count += 1;
             }
 
-        final Handler handler = new Handler();
+        handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -265,7 +266,6 @@ public class PlayActivity extends AppCompatActivity {
     public static void analyzeResponse() {
         FirebaseDatabase.getInstance().getReference("Ingame Data")
                 .child(Constant.roomID).child("response").removeEventListener(responseListener);
-        responseListener = null;
 
         while (response.contains(""))
             response.remove("");
@@ -331,7 +331,7 @@ public class PlayActivity extends AppCompatActivity {
         for (PlayerModel playerModel : Constant.listPlayerModel)
             if (playerModel.alive && !dyingPlayerID.contains(playerModel.id)) count++;
 
-        final Handler handler = new Handler();
+        handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -367,7 +367,6 @@ public class PlayActivity extends AppCompatActivity {
     public static void finishVote() {
         FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                 .child("Vote").removeEventListener(voteListener);
-        voteListener = null;
 
         String hangedPlayerID = "";
 
@@ -450,28 +449,40 @@ public class PlayActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (voteListener != null)
-            FirebaseDatabase.getInstance().getReference("Ingame Data")
-                    .child(Constant.roomID).child("Vote").removeEventListener(voteListener);
-        if (responseListener != null)
-            FirebaseDatabase.getInstance().getReference("Ingame Data")
-                    .child(Constant.roomID).child("response").removeEventListener(responseListener);
-        if (updateTurnListener != null)
-            FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
-                    .removeEventListener(updateTurnListener);
+        handler.removeCallbacksAndMessages(null);
+        FirebaseDatabase.getInstance().getReference("Ingame Data")
+                .child(Constant.roomID).child("Vote").removeEventListener(voteListener);
+        FirebaseDatabase.getInstance().getReference("Ingame Data")
+                .child(Constant.roomID).child("response").removeEventListener(responseListener);
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
+                .removeEventListener(updateTurnListener);
 
         int temp;
         if (!isWin) {
             UserDatabase.getInstance().userData.lose++;
             temp = UserDatabase.getInstance().userData.dataTotalRole.get(Constant.myRole);
-            temp++;
+            UserDatabase.getInstance().userData.dataTotalRole.set(Constant.myRole, temp + 1);
         } else {
             UserDatabase.getInstance().userData.win++;
+            Log.d(TAG, "onDestroy: " + UserDatabase.getInstance().userData.dataTotalRole.get(Constant.myRole));
             temp = UserDatabase.getInstance().userData.dataTotalRole.get(Constant.myRole);
-            temp++;
+            UserDatabase.getInstance().userData.dataTotalRole.set(Constant.myRole, temp + 1);
+            Log.d(TAG, "onDestroy: " + UserDatabase.getInstance().userData.dataTotalRole.get(Constant.myRole));
             temp = UserDatabase.getInstance().userData.dataWinRole.get(Constant.myRole);
-            temp++;
+            UserDatabase.getInstance().userData.dataWinRole.set(Constant.myRole, temp + 1);
         }
+
+        List<String> recent = new ArrayList<>();
+        for (PlayerModel playerModel : Constant.listPlayerModel)
+            if (!playerModel.id.equals(UserDatabase.facebookID))
+                recent.add(playerModel.id);
+        for (String s : UserDatabase.getInstance().userData.recentPlayWith) {
+            if (recent.size() >= 30) break;
+            recent.add(s);
+        }
+        UserDatabase.getInstance().userData.recentPlayWith = recent;
+
+        UserDatabase.getInstance().updateUser();
         super.onDestroy();
     }
 
