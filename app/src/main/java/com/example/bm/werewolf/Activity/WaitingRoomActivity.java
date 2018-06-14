@@ -196,7 +196,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
                     ivVoiceCall.setImageResource(R.drawable.ic_voice_call);
                     VoiceCallService.joinChannel(Constant.roomID);
                 }
-                VoiceCallService.isVoiceCall = !VoiceCallService.isVoiceCall;
                 break;
             case R.id.iv_exit:
                 rlSmallWindow.setVisibility(View.GONE);

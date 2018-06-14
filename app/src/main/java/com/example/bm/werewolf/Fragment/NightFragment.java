@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,12 +20,15 @@ import com.example.bm.werewolf.Adapter.DayAdapter;
 import com.example.bm.werewolf.Adapter.RoleListViewAdapter;
 import com.example.bm.werewolf.Model.PlayerModel;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Service.VoiceCallService;
 import com.example.bm.werewolf.Utils.Constant;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +38,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import in.srain.cube.views.GridViewWithHeaderAndFooter;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,14 +58,27 @@ public class NightFragment extends Fragment {
     TextView tvNotSaving;
     @BindView(R.id.tv_timer)
     TextView tvTimer;
-    Unbinder unbinder;
-
-    Context context;
     @BindView(R.id.iv_roles)
     ImageView ivRoles;
     @BindView(R.id.lv_roles)
     ListView lvRoles;
+    @BindView(R.id.rl_seer)
+    RelativeLayout rlSeer;
+    @BindView(R.id.iv_ava)
+    ImageView ivAva;
+    @BindView(R.id.iv_mark)
+    ImageView ivMark;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.iv_seer)
+    ImageView ivSeer;
+    @BindView(R.id.tv_seer)
+    TextView tvSeer;
+    @BindView(R.id.tv_ok)
+    TextView tvOk;
+    Unbinder unbinder;
 
+    Context context;
     View view;
 
     public NightFragment() {
@@ -76,6 +94,9 @@ public class NightFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_night, container, false);
         unbinder = ButterKnife.bind(this, view);
         context = getContext();
+
+        if (PlayActivity.currentRole == Constant.MA_SOI)
+            VoiceCallService.joinChannel(Constant.roomID);
 
         RoleListViewAdapter roleListViewAdapter = new RoleListViewAdapter(RoleReceiveFragment.roleList);
         lvRoles.setAdapter(roleListViewAdapter);
@@ -126,15 +147,7 @@ public class NightFragment extends Fragment {
         if (PlayActivity.currentRole == Constant.PHU_THUY && !PlayActivity.toxicPotion)
             tvConfirm.setVisibility(View.GONE);
 
-        List<PlayerModel> playerModelList = new ArrayList<>();
-        for (PlayerModel playerModel : Constant.listPlayerModel)
-            if (playerModel.alive)
-                if (playerModel.role != PlayActivity.currentRole || PlayActivity.currentRole == Constant.BAO_VE)
-                    if ((PlayActivity.currentRole != Constant.BAO_VE || !playerModel.id.equals(PlayActivity.lastProtectedPlayerID))
-                            && (PlayActivity.currentRole != Constant.THO_SAN || !playerModel.id.equals(PlayActivity.lastTargetPlayerID)))
-                        playerModelList.add(playerModel);
-
-        DayAdapter dayAdapter = new DayAdapter(playerModelList);
+        DayAdapter dayAdapter = new DayAdapter(Constant.listPlayerModel, getContext());
         gvPlayer.setAdapter(dayAdapter);
     }
 
@@ -159,7 +172,7 @@ public class NightFragment extends Fragment {
                                     playerModelList.add(playerModel);
 
                 if (gvPlayer == null) gvPlayer = view.findViewById(R.id.gv_player);
-                DayAdapter dayAdapter = new DayAdapter(playerModelList);
+                DayAdapter dayAdapter = new DayAdapter(playerModelList, getContext());
                 gvPlayer.setAdapter(dayAdapter);
             }
 
@@ -198,6 +211,12 @@ public class NightFragment extends Fragment {
                 if (tvSkip == null) tvSkip = view.findViewById(R.id.tv_skip);
                 tvConfirm.setVisibility(View.GONE);
                 tvSkip.setVisibility(View.GONE);
+
+                if (PlayActivity.currentRole == Constant.TIEN_TRI) {
+                    seerTurn();
+                    break;
+                }
+
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -286,5 +305,48 @@ public class NightFragment extends Fragment {
                 normalInit();
                 break;
         }
+    }
+
+    private void seerTurn() {
+        PlayerModel playerModel = DayAdapter.playerModelList.get(DayAdapter.pick);
+
+        rlSeer.setVisibility(View.VISIBLE);
+
+        Transformation transformation = new CropCircleTransformation();
+        Picasso.get()
+                .load("https://graph.facebook.com/" + playerModel.id + "/picture?type=large")
+                .placeholder(R.drawable.progress_animation)
+                .transform(transformation)
+                .into(ivAva);
+        Picasso.get()
+                .load(Constant.imageRole[playerModel.mark])
+                .transform(transformation)
+                .into(ivMark);
+        tvName.setText(playerModel.name);
+
+        if (playerModel.role != Constant.MA_SOI) {
+            ivSeer.setImageResource(R.drawable.ic_check_green_100dp);
+            tvSeer.setText("Là người");
+        } else {
+            ivSeer.setImageResource(R.drawable.ic_wrong);
+            tvSeer.setText("Là sói");
+        }
+
+        tvOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rlSeer.setVisibility(View.GONE);
+                List<String> response = new ArrayList<>();
+                response.add("");
+                FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
+                        .child("response").setValue(response);
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        VoiceCallService.leaveChannel();
+        super.onDestroy();
     }
 }

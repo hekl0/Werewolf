@@ -9,7 +9,9 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.bm.werewolf.Activity.PlayActivity;
 import com.example.bm.werewolf.Fragment.DayFragment;
 import com.example.bm.werewolf.R;
 
@@ -28,12 +30,15 @@ public class DayAdapter extends BaseAdapter {
     public static List<PlayerModel> playerModelList;
     public static int pick;
 
-    public DayAdapter(List<PlayerModel> playerModelList) {
+    Context context;
+
+    public DayAdapter(List<PlayerModel> playerModelList, Context context) {
         this.playerModelList = playerModelList;
         if (this.playerModelList == null)
             this.playerModelList = new ArrayList<>();
 
         pick = -1;
+        this.context = context;
     }
 
     @Override
@@ -110,7 +115,20 @@ public class DayAdapter extends BaseAdapter {
         ivAva.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (playerModelList.get(pos).alive == true) {
+                PlayerModel playerModel = playerModelList.get(pos);
+                if (playerModelList.get(pos).alive) {
+                    if (playerModel.role == PlayActivity.currentRole && PlayActivity.currentRole != Constant.BAO_VE) {
+                        Toast.makeText(context, "Không thể chọn đồng đội", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (PlayActivity.currentRole == Constant.BAO_VE && playerModel.id.equals(PlayActivity.lastProtectedPlayerID)) {
+                        Toast.makeText(context, "Không thể bảo vệ cùng một người 2 đêm liên tiếp", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (PlayActivity.currentRole == Constant.THO_SAN && playerModel.id.equals(PlayActivity.lastTargetPlayerID)) {
+                        Toast.makeText(context, "Không thể nhắm vào cùng một người 2 đêm liên tiếp", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     pick = pos;
                     notifyDataSetChanged();
                 }

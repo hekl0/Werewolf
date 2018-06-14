@@ -16,11 +16,13 @@ public class VoiceCallService {
 
     public static void joinChannel(String chanelID) {
         if (rtcEngine == null) return;
+        isVoiceCall = true;
         rtcEngine.joinChannel(null, chanelID, "Extra Optional Data", 0); // if you do not specify the uid, we will generate the uid for you
     }
 
     public static void leaveChannel() {
         if (rtcEngine == null) return;
+        isVoiceCall = false;
         rtcEngine.leaveChannel();
     }
 }

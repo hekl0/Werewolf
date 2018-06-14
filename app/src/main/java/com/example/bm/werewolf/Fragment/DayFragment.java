@@ -110,8 +110,8 @@ public class DayFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         context = getContext();
 
+        checkAlive();
         setupUI(view);
-
         getDyingList();
 
         RoleListViewAdapter roleListViewAdapter = new RoleListViewAdapter(RoleReceiveFragment.roleList);
@@ -139,6 +139,7 @@ public class DayFragment extends Fragment {
                         for (PlayerModel playerModel : Constant.listPlayerModel)
                             if (playerModel.id.equals(dataSnapshot.getValue(String.class)))
                                 playerModel.alive = false;
+                        checkAlive();
                     }
 
                     @Override
@@ -195,7 +196,6 @@ public class DayFragment extends Fragment {
                     ivVoiceCall.setImageResource(R.drawable.ic_voice_call);
                     VoiceCallService.joinChannel(Constant.roomID);
                 }
-                VoiceCallService.isVoiceCall = !VoiceCallService.isVoiceCall;
                 break;
             case R.id.iv_exit:
                 rlSmallWindow.setVisibility(View.GONE);
@@ -255,12 +255,10 @@ public class DayFragment extends Fragment {
                         DyingAdapter dyingAdapter = new DyingAdapter(dyingList);
                         lvDying.setAdapter(dyingAdapter);
 
-                        List<PlayerModel> playerModelList = new ArrayList<>();
-                        for (PlayerModel playerModel : Constant.listPlayerModel)
-                            if (playerModel.alive)
-                                playerModelList.add(playerModel);
-                        DayAdapter dayAdapter = new DayAdapter(playerModelList);
+                        DayAdapter dayAdapter = new DayAdapter(Constant.listPlayerModel, getContext());
                         gvPlayer.setAdapter(dayAdapter);
+
+                        checkAlive();
                     }
 
                     @Override
@@ -268,6 +266,28 @@ public class DayFragment extends Fragment {
 
                     }
                 });
+    }
+
+    void checkAlive() {
+        boolean alive = true;
+        for (PlayerModel playerModel : Constant.listPlayerModel)
+            if (playerModel.id.equals(UserDatabase.facebookID))
+                alive = playerModel.alive;
+
+        if (!alive) {
+            if (tvStartGame == null) tvStartGame = view.findViewById(R.id.tv_start_game);
+            if (tvSkip == null) tvSkip = view.findViewById(R.id.tv_skip);
+            if (ll1 == null) ll1 = view.findViewById(R.id.ll1);
+            if (VoiceCallService.isVoiceCall) VoiceCallService.leaveChannel();
+            tvStartGame.setVisibility(View.GONE);
+            tvSkip.setVisibility(View.GONE);
+            ll1.setVisibility(View.GONE);
+        } else {
+            if (tvStartGame == null) tvStartGame = view.findViewById(R.id.tv_start_game);
+            if (tvSkip == null) tvSkip = view.findViewById(R.id.tv_skip);
+            tvStartGame.setVisibility(View.VISIBLE);
+            tvSkip.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
