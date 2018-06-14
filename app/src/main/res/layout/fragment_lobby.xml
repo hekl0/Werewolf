@@ -8,43 +8,31 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <Button
-            android:id="@+id/bt_create_room"
+        <ImageView
+            android:id="@+id/iv_create_room"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:text=" Tạo Phòng"
             android:textAllCaps="false"
             android:layout_margin="5dp"
-            android:background="@drawable/rounded_border"
-            android:drawableTop="@drawable/ic_add_room"/>
+            android:src="@drawable/ic_add_room"
+            android:background="@drawable/friend_list_background"
+            android:padding="16dp"/>
 
-        <Button
-            android:id="@+id/bt_find_room"
+        <ImageView
+            android:id="@+id/iv_find_room"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/rounded_border"
-            android:text="Tìm phòng "
+            android:src="@drawable/ic_find_room"
             android:textAllCaps="false"
             android:layout_margin="5dp"
-            android:drawableTop="@drawable/ic_find_room"/>
-
-        <Button
-            android:id="@+id/bt_quick_find"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/bt_create_room"
-            android:layout_toLeftOf="@id/bt_find_room"
-            android:layout_above="@id/rv_rooms"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:text="Tìm nhanh"
-            android:background="#88ffff00"/>
+            android:padding="16dp"
+            android:background="@drawable/friend_list_background"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_rooms"
-            android:layout_below="@id/bt_create_room"
+            android:layout_below="@id/iv_create_room"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

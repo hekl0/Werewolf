@@ -32,6 +32,8 @@ public class NightWaitingFragment extends Fragment {
     @BindView(R.id.lv_roles)
     ListView lvRoles;
     Unbinder unbinder;
+    @BindView(R.id.iv_back)
+    ImageView ivBack;
 
     public NightWaitingFragment() {
         // Required empty public constructor

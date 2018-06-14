@@ -98,6 +98,7 @@ public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter 
         convertView = inflater.inflate(R.layout.item_list_friends, parent, false);
         ImageView ivArrow = convertView.findViewById(R.id.iv_arrow);
         TextView tvGroupName = convertView.findViewById(R.id.tv_group_name);
+        ImageView ivIcon = convertView.findViewById(R.id.iv_icon);
 
         tvGroupName.setText(groupName[groupPosition]);
         if (isExpanded) {
@@ -105,6 +106,9 @@ public class FriendsExpandableListViewAdapter extends BaseExpandableListAdapter 
         } else {
             ivArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_white_24dp);
         }
+
+        if(groupPosition == 0) ivIcon.setImageResource(R.drawable.icon_friend);
+        else ivIcon.setImageResource(R.drawable.icon_recent);
 
         return convertView;
     }

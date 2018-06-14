@@ -47,7 +47,7 @@ public class UserDatabase {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                userData = dataSnapshot.getValue(UserModel.class);
+                 userData = dataSnapshot.getValue(UserModel.class);
                 if (userData == null) {
                     userData = new UserModel();
                     userData.win = 0;

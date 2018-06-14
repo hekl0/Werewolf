@@ -220,7 +220,7 @@ public class DayFragment extends Fragment {
                         child("Vote").child(UserDatabase.facebookID).setValue(DayAdapter.playerModelList.get(DayAdapter.pick).id);
                 break;
             case R.id.iv_back:
-                getActivity().onBackPressed();
+                getActivity().finish();
                 break;
             case R.id.iv_roles:
                 if (lvRoles.getVisibility() == View.VISIBLE)
