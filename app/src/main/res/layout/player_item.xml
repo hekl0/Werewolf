@@ -21,7 +21,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:srcCompat="@mipmap/card_back" />
+        app:srcCompat="@mipmap/card_back"
+        android:background="@drawable/custom_circular_boder"/>
 
     <ImageView
         android:id="@+id/iv_mark"
