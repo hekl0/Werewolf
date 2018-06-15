@@ -12,25 +12,32 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="15dp" />
 
-    <ImageView
-        android:id="@+id/iv_ava"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        android:id="@+id/rl_boder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:srcCompat="@mipmap/card_back"
-        android:background="@drawable/custom_circular_boder"/>
+        android:background="@drawable/custom_circular_boder">
+
+        <ImageView
+            android:id="@+id/iv_ava"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            app:srcCompat="@mipmap/card_back" />
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/iv_mark"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:src="@mipmap/ma_soi"
-        app:layout_constraintEnd_toEndOf="@id/iv_ava"
-        app:layout_constraintBottom_toBottomOf="@id/iv_ava"/>
+        app:layout_constraintEnd_toEndOf="@id/rl_boder"
+        app:layout_constraintBottom_toBottomOf="@id/rl_boder"/>
 
     <TextView
         android:id="@+id/tv_number"
@@ -41,7 +48,7 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_ava"
+        app:layout_constraintTop_toBottomOf="@+id/rl_boder"
         android:layout_marginTop="4dp"
         android:layout_marginStart="8dp"/>
 
@@ -59,7 +66,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.08"
         app:layout_constraintStart_toEndOf="@+id/tv_number"
-        app:layout_constraintTop_toBottomOf="@+id/iv_ava" />
+        app:layout_constraintTop_toBottomOf="@+id/rl_boder" />
 
     <ImageView
         android:id="@+id/iv_check"
@@ -69,9 +76,9 @@
         android:layout_marginStart="8dp"
         android:src="@drawable/ic_check_green_100dp"
         android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@id/iv_ava"
-        app:layout_constraintStart_toStartOf="@id/iv_ava"
-        app:layout_constraintTop_toTopOf="@id/iv_ava"
-        app:layout_constraintBottom_toBottomOf="@id/iv_ava"/>
+        app:layout_constraintEnd_toEndOf="@id/rl_boder"
+        app:layout_constraintStart_toStartOf="@id/rl_boder"
+        app:layout_constraintTop_toTopOf="@id/rl_boder"
+        app:layout_constraintBottom_toBottomOf="@id/rl_boder"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -129,7 +129,6 @@ public class RolePickingFragment extends Fragment {
                     ivVoiceCall.setImageResource(R.drawable.ic_voice_call);
                     VoiceCallService.joinChannel(Constant.roomID);
                 }
-                VoiceCallService.isVoiceCall = !VoiceCallService.isVoiceCall;
                 break;
             case R.id.tv_start_game:
                 int num = 0;

@@ -13,11 +13,14 @@ import com.example.bm.werewolf.Fragment.FriendsFragment;
 import com.example.bm.werewolf.Fragment.LobbyFragment;
 import com.example.bm.werewolf.Fragment.UserFragment;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Service.EventHandler;
 import com.example.bm.werewolf.Service.OnClearFromRecentService;
+import com.example.bm.werewolf.Service.VoiceCallService;
 import com.example.bm.werewolf.Utils.UserDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.agora.rtc.RtcEngine;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
@@ -30,6 +33,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        try {
+            VoiceCallService.rtcEngine = RtcEngine.create(getBaseContext(), "aed16bb36aa0410ba115391fb945692c", new EventHandler());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         bottomNavigation.getMenu().getItem(0).getIcon().setAlpha(100);
         bottomNavigation.getMenu().getItem(1).getIcon().setAlpha(255);
@@ -79,5 +88,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onResume() {
         OnClearFromRecentService.activity = this;
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        RtcEngine.destroy();
+        UserDatabase.getInstance().offlineStatus();
+        super.onDestroy();
     }
 }

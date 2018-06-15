@@ -196,6 +196,11 @@ public class LobbyFragment extends Fragment {
                         }
                         int roomID = Integer.parseInt(etRoomID.getText().toString());
                         if (checkRoomID(roomID)) {
+                            //chech is room playing
+                            if (roomMap.get(roomID).gameInProgress) {
+                                Toast.makeText(context, "Phòng đang chơi", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             //found the room
                             Toast.makeText(context, "Thấy Phòng", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(context, WaitingRoomActivity.class);

@@ -15,6 +15,7 @@ import com.example.bm.werewolf.Fragment.NightWaitingFragment;
 import com.example.bm.werewolf.Fragment.RolePickingFragment;
 import com.example.bm.werewolf.Model.PlayerModel;
 import com.example.bm.werewolf.R;
+import com.example.bm.werewolf.Service.OnClearFromRecentService;
 import com.example.bm.werewolf.Service.VoiceCallService;
 import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
@@ -36,10 +37,10 @@ public class PlayActivity extends AppCompatActivity {
     public static int currentRole;
     public static long startTime;
 
-    static List<String> response;
-    static ValueEventListener updateTurnListener;
-    static ValueEventListener responseListener;
-    static ValueEventListener voteListener;
+    public static List<String> response;
+    public static ValueEventListener updateTurnListener;
+    public static ValueEventListener responseListener;
+    public static ValueEventListener voteListener;
 
     public static Boolean healPotion;
     public static Boolean toxicPotion;
@@ -51,6 +52,9 @@ public class PlayActivity extends AppCompatActivity {
 
     static List<String> voter;
     static List<String> votedPlayer;
+
+    public static boolean isWin = false;
+    public static Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +138,8 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     public static void updateTurn() {
+        final boolean[] isOn = {false};
+
         updateTurnListener = FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -146,11 +152,12 @@ public class PlayActivity extends AppCompatActivity {
                             else
                                 startTime = snapshot.getValue(long.class);
 
-                        if (VoiceCallService.isVoiceCall)
-                            if (currentRole == Constant.NONE)
-                                VoiceCallService.joinChannel(Constant.roomID);
-                            else
-                                VoiceCallService.leaveChannel();
+                        if (currentRole == Constant.NONE && isOn[0])
+                            VoiceCallService.joinChannel(Constant.roomID);
+                        else {
+                            isOn[0] = VoiceCallService.isVoiceCall;
+                            VoiceCallService.leaveChannel();
+                        }
 
                         if (currentRole == Constant.NONE)
                             loadFragment(new DayFragment());
@@ -193,7 +200,7 @@ public class PlayActivity extends AppCompatActivity {
 
         currentRole = roleSequence[nextRole];
 
-        Handler handler = new Handler();
+        handler = new Handler();
         final int finalNextRole = nextRole;
         handler.postDelayed(new Runnable() {
             @Override
@@ -217,6 +224,7 @@ public class PlayActivity extends AppCompatActivity {
         databaseReference.setValue(null);
         response = new ArrayList<>();
 
+        //counting number of response need to receive
         int count = 0;
         for (PlayerModel playerModel : Constant.listPlayerModel)
             if (playerModel.alive && playerModel.role == currentRole) {
@@ -224,7 +232,7 @@ public class PlayActivity extends AppCompatActivity {
                 if (currentRole == Constant.PHU_THUY) count += 1;
             }
 
-        final Handler handler = new Handler();
+        handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -233,10 +241,6 @@ public class PlayActivity extends AppCompatActivity {
             }
         }, 16000);
 
-        if (responseListener != null) {
-            databaseReference.removeEventListener(responseListener);
-            responseListener = null;
-        }
         final int finalCount = count;
         responseListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -262,18 +266,20 @@ public class PlayActivity extends AppCompatActivity {
     public static void analyzeResponse() {
         FirebaseDatabase.getInstance().getReference("Ingame Data")
                 .child(Constant.roomID).child("response").removeEventListener(responseListener);
-        responseListener = null;
+
+        while (response.contains(""))
+            response.remove("");
 
         int maxCount = 0;
         for (String x : response)
-            if (Collections.frequency(response, x) > maxCount && !x.equals(""))
+            if (Collections.frequency(response, x) > maxCount)
                 maxCount = Collections.frequency(response, x);
 
         if (maxCount != 0) {
             String kq = "";
             Collections.shuffle(response);
             for (String x : response)
-                if (Collections.frequency(response, x) == maxCount && !x.equals(""))
+                if (Collections.frequency(response, x) == maxCount)
                     kq = x;
 
             if (currentRole == Constant.MA_SOI)
@@ -282,10 +288,14 @@ public class PlayActivity extends AppCompatActivity {
                 lastProtectedPlayerID = kq;
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                         .child("lastProtectedPlayerID").setValue(lastProtectedPlayerID);
-                if (dyingPlayerID.contains(kq)) dyingPlayerID = new ArrayList<>();
+                if (dyingPlayerID.contains(kq)) dyingPlayerID.remove(kq);
             }
             if (currentRole == Constant.THO_SAN) {
                 lastTargetPlayerID = kq;
+                for (PlayerModel playerModel : Constant.listPlayerModel)
+                    if (playerModel.role == Constant.THO_SAN)
+                        if (dyingPlayerID.contains(playerModel.id))
+                            dyingPlayerID.add(lastTargetPlayerID);
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                         .child("lastTargetPlayerID").setValue(lastTargetPlayerID);
             }
@@ -296,7 +306,7 @@ public class PlayActivity extends AppCompatActivity {
                         healPotion = false;
                         FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                                 .child("healPotion").setValue(healPotion);
-                    } else if (!x.equals("")) {
+                    } else {
                         dyingPlayerID.add(x);
                         toxicPotion = false;
                         FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
@@ -319,9 +329,9 @@ public class PlayActivity extends AppCompatActivity {
 
         int count = 0;
         for (PlayerModel playerModel : Constant.listPlayerModel)
-            if (playerModel.alive) count++;
+            if (playerModel.alive && !dyingPlayerID.contains(playerModel.id)) count++;
 
-        final Handler handler = new Handler();
+        handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -336,11 +346,10 @@ public class PlayActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 voter = new ArrayList<>();
                 votedPlayer = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren())
-                    if (!snapshot.getValue(String.class).equals("")) {
-                        voter.add(snapshot.getKey());
-                        votedPlayer.add(snapshot.getValue(String.class));
-                    }
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    voter.add(snapshot.getKey());
+                    votedPlayer.add(snapshot.getValue(String.class));
+                }
 
                 if (voter.size() != finalCount) return;
 
@@ -358,17 +367,19 @@ public class PlayActivity extends AppCompatActivity {
     public static void finishVote() {
         FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
                 .child("Vote").removeEventListener(voteListener);
-        voteListener = null;
 
         String hangedPlayerID = "";
 
+        int total = 0;
+        for (String s : votedPlayer)
+            if (!s.equals("")) total++;
         for (String s : votedPlayer) {
             if (s.equals("")) continue;
             int count = 0;
             for (String x : votedPlayer)
                 if (s.equals(x)) count++;
 
-            if (count > votedPlayer.size() / 2) hangedPlayerID = s;
+            if (count > total / 2) hangedPlayerID = s;
         }
 
         FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
@@ -438,15 +449,46 @@ public class PlayActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (voteListener != null)
-            FirebaseDatabase.getInstance().getReference("Ingame Data")
-                    .child(Constant.roomID).child("Vote").removeEventListener(voteListener);
-        if (responseListener != null)
-            FirebaseDatabase.getInstance().getReference("Ingame Data")
-                    .child(Constant.roomID).child("response").removeEventListener(responseListener);
-        if (updateTurnListener != null)
-            FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
-                    .removeEventListener(updateTurnListener);
+        handler.removeCallbacksAndMessages(null);
+        FirebaseDatabase.getInstance().getReference("Ingame Data")
+                .child(Constant.roomID).child("Vote").removeEventListener(voteListener);
+        FirebaseDatabase.getInstance().getReference("Ingame Data")
+                .child(Constant.roomID).child("response").removeEventListener(responseListener);
+        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
+                .removeEventListener(updateTurnListener);
+
+        int temp;
+        if (!isWin) {
+            UserDatabase.getInstance().userData.lose++;
+            temp = UserDatabase.getInstance().userData.dataTotalRole.get(Constant.myRole);
+            UserDatabase.getInstance().userData.dataTotalRole.set(Constant.myRole, temp + 1);
+        } else {
+            UserDatabase.getInstance().userData.win++;
+            Log.d(TAG, "onDestroy: " + UserDatabase.getInstance().userData.dataTotalRole.get(Constant.myRole));
+            temp = UserDatabase.getInstance().userData.dataTotalRole.get(Constant.myRole);
+            UserDatabase.getInstance().userData.dataTotalRole.set(Constant.myRole, temp + 1);
+            Log.d(TAG, "onDestroy: " + UserDatabase.getInstance().userData.dataTotalRole.get(Constant.myRole));
+            temp = UserDatabase.getInstance().userData.dataWinRole.get(Constant.myRole);
+            UserDatabase.getInstance().userData.dataWinRole.set(Constant.myRole, temp + 1);
+        }
+
+        List<String> recent = new ArrayList<>();
+        for (PlayerModel playerModel : Constant.listPlayerModel)
+            if (!playerModel.id.equals(UserDatabase.facebookID))
+                recent.add(playerModel.id);
+        for (String s : UserDatabase.getInstance().userData.recentPlayWith) {
+            if (recent.size() >= 30) break;
+            recent.add(s);
+        }
+        UserDatabase.getInstance().userData.recentPlayWith = recent;
+
+        UserDatabase.getInstance().updateUser();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        OnClearFromRecentService.activity = this;
+        super.onResume();
     }
 }

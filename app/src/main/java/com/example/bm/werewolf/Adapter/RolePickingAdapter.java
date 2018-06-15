@@ -92,6 +92,14 @@ public class RolePickingAdapter extends BaseAdapter {
                     Toast.makeText(context, "Đã đủ số người", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (position != Constant.MA_SOI && position != Constant.DAN_LANG && count[position] == 1) {
+                    Toast.makeText(context, "Tối đa 1 người", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (position == Constant.MA_SOI && (count[position] + 1) * 2 >= Constant.totalPlayer) {
+                    Toast.makeText(context, "Số lượng sói phải ít hơn nửa số người", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 count[position] += 1;
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("role picking")
                         .child(String.valueOf(position)).setValue(count[position]);

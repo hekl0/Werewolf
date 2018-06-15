@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bm.werewolf.Adapter.ChatAdapter;
 import com.example.bm.werewolf.Adapter.WaitingRoomAdapter;
@@ -74,6 +75,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
     static RelativeLayout rlSmallWindow;
 
     ValueEventListener gameProgressListener;
+    public static Boolean isGameInProgress = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +87,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         Constant.isHost = false;
         Constant.roomID = String.valueOf(getIntent().getIntExtra("roomID", 0));
-        VoiceCallService.isVoiceCall = true;
-        VoiceCallService.joinChannel(Constant.roomID);
+
         RoomLogin();
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID).child("roomName");
@@ -129,19 +130,21 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         gameProgressListener = FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID)
                 .child("gameInProgress").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue(Boolean.class)) {
-                    Intent intent = new Intent(WaitingRoomActivity.this, PlayActivity.class);
-                    startActivity(intent);
-                }
-            }
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() == null) return;
+                        isGameInProgress = dataSnapshot.getValue(Boolean.class);
+                        if (isGameInProgress) {
+                            Intent intent = new Intent(WaitingRoomActivity.this, PlayActivity.class);
+                            startActivity(intent);
+                        }
+                    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                    }
+                });
     }
 
     @OnClick({R.id.iv_back, R.id.iv_chat_submit, R.id.iv_voice_call, R.id.iv_exit, R.id.tv_start_game})
@@ -151,6 +154,10 @@ public class WaitingRoomActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.tv_start_game:
+                if (WaitingRoomAdapter.playerList.size() < 6) {
+                    Toast.makeText(WaitingRoomActivity.this, "Cần tối thiểu 6 người để bắt đầu game", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID).child("players")
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -196,7 +203,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
                     ivVoiceCall.setImageResource(R.drawable.ic_voice_call);
                     VoiceCallService.joinChannel(Constant.roomID);
                 }
-                VoiceCallService.isVoiceCall = !VoiceCallService.isVoiceCall;
                 break;
             case R.id.iv_exit:
                 rlSmallWindow.setVisibility(View.GONE);
@@ -253,38 +259,24 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         final DatabaseReference host = firebaseDatabase.getReference("rooms").child(Constant.roomID).child("roomMasterID");
         final DatabaseReference databaseReference = firebaseDatabase.getReference("rooms").child(Constant.roomID).child("players");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<String> playerList = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren())
-                    if (!snapshot.getValue(String.class).equals(UserDatabase.facebookID))
-                        playerList.add(snapshot.getValue(String.class));
 
-                databaseReference.setValue(playerList);
+        List<String> playerList = WaitingRoomAdapter.playerList;
+        playerList.remove(UserDatabase.facebookID);
 
-                if (playerList.size() == 0) {
-                    firebaseDatabase.getReference("Ingame Data").child(Constant.roomID).removeValue();
-                    firebaseDatabase.getReference("chat").child(Constant.roomID).removeValue();
-                    firebaseDatabase.getReference("rooms").child(Constant.roomID).removeValue();
-                } else if (WaitingRoomAdapter.hostID.equals(UserDatabase.facebookID)) {
-                    Random random = new Random();
-                    String nextHost = playerList.get(random.nextInt(playerList.size()));
-                    host.setValue(nextHost);
-                }
-            }
+        databaseReference.setValue(playerList);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        if (playerList.size() == 0) {
+            firebaseDatabase.getReference("Ingame Data").child(Constant.roomID).removeValue();
+            firebaseDatabase.getReference("chat").child(Constant.roomID).removeValue();
+            firebaseDatabase.getReference("rooms").child(Constant.roomID).removeValue();
+        } else if (WaitingRoomAdapter.hostID.equals(UserDatabase.facebookID)) {
+            Random random = new Random();
+            String nextHost = playerList.get(random.nextInt(playerList.size()));
+            host.setValue(nextHost);
+        }
 
         if (VoiceCallService.isVoiceCall)
             VoiceCallService.leaveChannel();
-
-        FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID)
-                .child("gameInProgress").removeEventListener(gameProgressListener);
     }
 
     public static void openSmallWindow(final String userID) {
@@ -342,6 +334,10 @@ public class WaitingRoomActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         RoomLogout();
+
+        FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID)
+                .child("gameInProgress").removeEventListener(gameProgressListener);
+
         super.onDestroy();
     }
 
@@ -350,6 +346,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         if (VoiceCallService.isVoiceCall) ivVoiceCall.setImageResource(R.drawable.ic_voice_call);
         else ivVoiceCall.setImageResource(R.drawable.ic_mute);
         OnClearFromRecentService.activity = this;
+        if (isGameInProgress) onBackPressed();
         super.onResume();
     }
 }

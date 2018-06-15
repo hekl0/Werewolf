@@ -183,7 +183,8 @@
                     android:paddingTop="10dp"
                     android:text="Bỏ qua"
                     android:textColor="#fff"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/tv_start_game"
@@ -196,7 +197,8 @@
                     android:paddingTop="10dp"
                     android:text="Treo cổ"
                     android:textColor="#fff"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
             </LinearLayout>
 
         </RelativeLayout>
