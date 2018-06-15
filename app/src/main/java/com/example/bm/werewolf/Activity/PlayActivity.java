@@ -450,12 +450,15 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         handler.removeCallbacksAndMessages(null);
-        FirebaseDatabase.getInstance().getReference("Ingame Data")
-                .child(Constant.roomID).child("Vote").removeEventListener(voteListener);
-        FirebaseDatabase.getInstance().getReference("Ingame Data")
-                .child(Constant.roomID).child("response").removeEventListener(responseListener);
-        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
-                .removeEventListener(updateTurnListener);
+        if (voteListener != null)
+            FirebaseDatabase.getInstance().getReference("Ingame Data")
+                    .child(Constant.roomID).child("Vote").removeEventListener(voteListener);
+        if (responseListener != null)
+            FirebaseDatabase.getInstance().getReference("Ingame Data")
+                    .child(Constant.roomID).child("response").removeEventListener(responseListener);
+        if (updateTurnListener != null)
+            FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).child("Game Data")
+                    .removeEventListener(updateTurnListener);
 
         int temp;
         if (!isWin) {
