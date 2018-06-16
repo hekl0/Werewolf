@@ -449,7 +449,8 @@ public class PlayActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        handler.removeCallbacksAndMessages(null);
+        if (handler != null)
+            handler.removeCallbacksAndMessages(null);
         if (voteListener != null)
             FirebaseDatabase.getInstance().getReference("Ingame Data")
                     .child(Constant.roomID).child("Vote").removeEventListener(voteListener);

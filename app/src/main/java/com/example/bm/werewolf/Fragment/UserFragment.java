@@ -1,10 +1,10 @@
 package com.example.bm.werewolf.Fragment;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +15,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.bm.werewolf.Activity.LoginActivity;
 import com.example.bm.werewolf.Adapter.CoverAdapter;
 import com.example.bm.werewolf.Adapter.FavoriteRoleAdapter;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Utils.Constant;
 import com.example.bm.werewolf.Utils.UserDatabase;
+import com.facebook.login.LoginManager;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -78,6 +80,8 @@ public class UserFragment extends Fragment {
     TextView tvName;
     @BindView(R.id.tv_small_window)
     TextView tvSmallWindow;
+    @BindView(R.id.iv_log_out)
+    ImageView ivLogOut;
 
     public UserFragment() {
         // Required empty public constructor
@@ -221,7 +225,7 @@ public class UserFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_exit, R.id.ll_favorite_role, R.id.iv_cover})
+    @OnClick({R.id.iv_exit, R.id.ll_favorite_role, R.id.iv_cover, R.id.iv_log_out})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_exit:
@@ -234,6 +238,12 @@ public class UserFragment extends Fragment {
             case R.id.iv_cover:
                 initCover();
                 rlSmallWindow.setVisibility(View.VISIBLE);
+                break;
+            case R.id.iv_log_out:
+                LoginManager.getInstance().logOut();
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                getContext().startActivity(intent);
+                getActivity().finish();
                 break;
         }
     }
