@@ -45,6 +45,8 @@ public class WaitingRoomAdapter extends RecyclerView.Adapter<WaitingRoomAdapter.
     public String roomID;
     public Activity activity;
 
+    public static ValueEventListener valueEventListener;
+
     public WaitingRoomAdapter(String roomID, final Activity activity) {
         this.activity = activity;
         this.roomID = roomID;
@@ -72,7 +74,7 @@ public class WaitingRoomAdapter extends RecyclerView.Adapter<WaitingRoomAdapter.
         });
 
         databaseReference = firebaseDatabase.getReference("rooms").child(roomID).child("players");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        valueEventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 playerList = new ArrayList<>();

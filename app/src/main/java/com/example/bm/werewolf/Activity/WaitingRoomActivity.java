@@ -87,6 +87,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         Constant.isHost = false;
         Constant.roomID = String.valueOf(getIntent().getIntExtra("roomID", 0));
+        isGameInProgress = false;
 
         RoomLogin();
 
@@ -337,6 +338,10 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID)
                 .child("gameInProgress").removeEventListener(gameProgressListener);
+
+        if (WaitingRoomAdapter.valueEventListener != null)
+            FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID).child("players")
+                .removeEventListener(WaitingRoomAdapter.valueEventListener);
 
         super.onDestroy();
     }
