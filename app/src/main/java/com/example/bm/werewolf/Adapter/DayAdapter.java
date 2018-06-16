@@ -71,6 +71,7 @@ public class DayAdapter extends BaseAdapter {
 
         tvName.setText(playerModelList.get(pos).name);
         tvName.setSelected(true);
+        rlBorder.setBackgroundResource(R.drawable.null_background);
         if (PlayActivity.currentRole == playerModelList.get(pos).role) rlBorder.setBackgroundResource(R.drawable.custom_circular_boder);
         if ((PlayActivity.currentRole == Constant.BAO_VE && playerModelList.get(pos).id.equals(PlayActivity.lastProtectedPlayerID))
                 || (PlayActivity.currentRole == Constant.THO_SAN && playerModelList.get(pos).id.equals(PlayActivity.lastTargetPlayerID)))
