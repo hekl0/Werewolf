@@ -218,4 +218,15 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/iv_log_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_logout"
+        app:layout_constraintEnd_toEndOf="@id/iv_cover"
+        app:layout_constraintTop_toTopOf="@id/iv_cover"
+        android:padding="10dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/logout_border"/>
+
 </android.support.constraint.ConstraintLayout>
