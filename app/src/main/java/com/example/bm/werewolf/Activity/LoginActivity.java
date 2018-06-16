@@ -2,17 +2,23 @@ package com.example.bm.werewolf.Activity;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
+import android.Manifest;
 import com.example.bm.werewolf.R;
 import com.example.bm.werewolf.Service.EventHandler;
 import com.example.bm.werewolf.Service.OnClearFromRecentService;
@@ -41,6 +47,7 @@ import butterknife.ButterKnife;
 import io.agora.rtc.RtcEngine;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final int REQUEST_PERMISSION = 1;
     private static final String TAG = "LoginActivity";
 
     CallbackManager callbackManager;
@@ -58,6 +65,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        setupPermission();
 
         startService(new Intent(getBaseContext(), OnClearFromRecentService.class));
         OnClearFromRecentService.activity = this;
@@ -153,5 +162,46 @@ public class LoginActivity extends AppCompatActivity {
         );
 
         graphRequest.executeAsync();
+    }
+
+    private void setupPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat.requestPermissions(
+                        this,
+                        new String[]{Manifest.permission.RECORD_AUDIO   },
+                        REQUEST_PERMISSION
+                );
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_PERMISSION) {
+            if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Warning!")
+                        .setMessage("Without permission you can not use this app. " +
+                                "Do you want to grant permission?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ActivityCompat.requestPermissions(
+                                        LoginActivity.this,
+                                        new String[]{Manifest.permission.RECORD_AUDIO},
+                                        REQUEST_PERMISSION
+                                );
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                LoginActivity.this.finish();
+                            }
+                        })
+                        .show();
+            }
+        }
     }
 }

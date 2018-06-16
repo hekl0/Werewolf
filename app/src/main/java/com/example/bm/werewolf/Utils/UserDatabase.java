@@ -78,6 +78,31 @@ public class UserDatabase {
                 userData.isOnline = true;
                 userData.id = facebookID;
 
+                int soiwin  = userData.dataWinRole.get(1);
+                int soilose = userData.dataTotalRole.get(1) - soiwin;
+                if (soiwin >= 10 && soilose >= 10) {
+                    boolean exist = false;
+                    for (int i : userData.achievedCover)
+                        if (i == 2) exist = true;
+                    if (!exist) userData.achievedCover.add(2);
+                }
+
+                int nguoiwin = 0;
+                int nguoilose = 0;
+                for (int i = 0; i <= userData.dataWinRole.size()-1; i++) {
+                    if (i != 1) {
+                        nguoiwin += userData.dataWinRole.get(i);
+                        nguoilose += userData.dataTotalRole.get(i);
+                    }
+                }
+                nguoilose -= nguoiwin;
+                if (nguoilose >= 10 && nguoiwin >= 10){
+                    boolean exist = false;
+                    for (int i : userData.achievedCover)
+                        if (i == 1) exist = true;
+                    if (!exist) userData.achievedCover.add(1);
+                }
+
                 updateUser();
 
                 Intent intent = new Intent(context, MainActivity.class);
