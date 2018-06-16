@@ -74,7 +74,7 @@ public class EndGameFragment extends Fragment {
         else tvTitle.setText("Sói đã thắng");
 
         for (PlayerModel playerModel : Constant.listPlayerModel) {
-            playerModel.mark = playerModel.role;
+            playerModel.mark = playerModel.role + 1;
             playerModel.alive = true;
         }
         gvPlayer.setAdapter(new DayAdapter(Constant.listPlayerModel, getContext()));
