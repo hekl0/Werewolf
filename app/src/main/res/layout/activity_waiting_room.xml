@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="com.example.bm.werewolf.Activity.WaitingRoomActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:src="@drawable/ic_back_arrow" />
+
+        <TextView
+            android:id="@+id/tv_room_name"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/room_name_border"
+            android:fontFamily="@font/autour_one"
+            android:gravity="center"
+            android:text="12.Hahaha"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_waiting_room"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/rl1"
+        app:layout_constraintBottom_toTopOf="@id/rl2"
+        app:layout_constraintTop_toBottomOf="@id/rl1" />
+
+    <RelativeLayout
+        android:id="@+id/rl_chat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/rl1"
+        android:background="@drawable/chat_border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline2">
+
+        <RelativeLayout
+            android:id="@+id/ll1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:background="#242426"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="4dp">
+
+            <EditText
+                android:id="@+id/et_chat"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_toStartOf="@id/iv_chat_submit"
+                android:background="@drawable/chat_box_border"
+                android:maxLength="200"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:textColor="#F0EFF5"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:id="@+id/iv_chat_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/iv_voice_call"
+                android:padding="4dp"
+                android:src="@drawable/ic_done" />
+
+            <ImageView
+                android:id="@+id/iv_voice_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="8dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_voice_call" />
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/ll1"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:onClick="onViewClicked"
+            android:overScrollMode="never"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp" />
+
+    </RelativeLayout>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <RelativeLayout
+        android:id="@+id/rl_small_window"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/rl_chat"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        android:clickable="true">
+
+        <RelativeLayout
+            android:id="@+id/content"
+            android:layout_width="330dp"
+            android:layout_height="120dp"
+            android:background="@drawable/rounded_border"
+            android:padding="2dp"
+            android:layout_margin="20dp"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/iv_cover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@mipmap/achieve_gia_lang" />
+
+            <ImageView
+                android:id="@+id/iv_ava"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_launcher_background" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="hekl0"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:layout_below="@id/iv_ava"
+                android:maxLines="2"/>
+
+            <TextView
+                android:id="@+id/tv_win"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="18dp"
+                android:layout_toRightOf="@id/iv_ava"
+                android:text="Thắng: 10"
+                android:textColor="#fff"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_lose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="18dp"
+                android:layout_toRightOf="@id/tv_win"
+                android:text="Thua: 10"
+                android:textColor="#fff"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:id="@+id/ll_favorite_role"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="20dp"
+                android:layout_toRightOf="@id/iv_ava"
+                android:background="@drawable/text_border">
+
+                <ImageView
+                    android:id="@+id/iv_favorite_role"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="#000"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_favorite_role"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="Không có"
+                    android:textAllCaps="false"
+                    android:textColor="#d1ffffff"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_add_delete_friend"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/circle_border"
+                android:padding="12dp"
+                android:src="@drawable/ic_add_friend" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_x_button"
+            android:layout_alignEnd="@id/content"
+            android:layout_alignTop="@id/content"
+            android:layout_marginEnd="-10dp"
+            android:layout_marginTop="-10dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-10dp"
+        android:background="#9d383840"
+        android:padding="4dp"
+        app:layout_constraintBottom_toTopOf="@id/rl_chat"
+        tools:layout_editor_absoluteX="0dp">
+
+        <TextView
+            android:id="@+id/tv_start_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/start_game_button_border"
+            android:paddingBottom="10dp"
+            android:paddingEnd="60dp"
+            android:paddingStart="60dp"
+            android:paddingTop="10dp"
+            android:text="Bắt đầu"
+            android:textColor="#fff"
+            android:textSize="16sp"/>
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

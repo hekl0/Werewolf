@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragment.NightFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back_white_24dp"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/tv_room_id"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:padding="8dp"
+            android:text="Room id"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:fontFamily="@font/autour_one"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/room_name_border"/>
+
+        <TextView
+            android:id="@+id/tv_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="8dp"
+            android:padding="8dp"
+            android:text="00"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+
+        <ImageView
+            android:id="@+id/iv_roles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_remove_red_eye_black_24dp"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/tv_timer"/>
+
+        <in.srain.cube.views.GridViewWithHeaderAndFooter
+            android:id="@+id/gv_player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/rl2"
+            android:layout_below="@+id/tv_room_id"
+            android:padding="8dp"
+            android:numColumns="3"
+            android:gravity="center"/>
+
+        <LinearLayout
+            android:id="@+id/rl2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#9d383840"
+            android:padding="8dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/skip_turn_button_border"
+                android:paddingBottom="10dp"
+                android:paddingEnd="40dp"
+                android:paddingStart="40dp"
+                android:paddingTop="10dp"
+                android:text="Bỏ lượt"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:layout_marginEnd="24dp"/>
+
+            <TextView
+                android:id="@+id/tv_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/start_game_button_border"
+                android:paddingBottom="10dp"
+                android:paddingEnd="40dp"
+                android:paddingStart="40dp"
+                android:paddingTop="10dp"
+                android:text="Xác nhận"
+                android:textColor="#fff"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_not_saving"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/skip_turn_button_border"
+                android:paddingBottom="10dp"
+                android:paddingEnd="40dp"
+                android:paddingStart="40dp"
+                android:paddingTop="10dp"
+                android:text="Bỏ lượt"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:layout_marginEnd="24dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_saving"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/start_game_button_border"
+                android:paddingBottom="10dp"
+                android:paddingEnd="40dp"
+                android:paddingStart="40dp"
+                android:paddingTop="10dp"
+                android:text="Cứu giúp"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_noti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/gv_player"
+            android:layout_centerHorizontal="true"
+            android:text="Kill or Save"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:visibility="gone"/>
+
+        <ListView
+            android:id="@+id/lv_roles"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:layout_below="@+id/tv_room_id" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_seer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/lv2"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/search_window_border"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/iv_ava"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                app:srcCompat="@mipmap/card_back"
+                android:layout_centerHorizontal="true"/>
+
+            <ImageView
+                android:id="@+id/iv_mark"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@mipmap/ma_soi"
+                android:layout_alignEnd="@id/iv_ava"
+                android:layout_alignBottom="@id/iv_ava"/>
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="name"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_below="@id/iv_ava"
+                android:layout_centerHorizontal="true"/>
+
+            <ImageView
+                android:id="@+id/iv_seer"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_wrong"
+                android:layout_below="@id/tv_name"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/tv_seer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Là người"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:layout_below="@id/iv_seer"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_ok"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:text="Ok"
+            android:textSize="16sp"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_alignBottom="@id/lv2"
+            android:layout_marginBottom="-15dp"
+            android:background="@drawable/start_game_button_border"/>
+
+    </RelativeLayout>
+
+</FrameLayout>

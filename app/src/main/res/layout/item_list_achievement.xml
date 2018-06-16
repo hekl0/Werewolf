@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="6dp">
+
+    <ImageView
+        android:id="@+id/iv_achievement"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@mipmap/achieve_default"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/tv_achievement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:fontFamily="@font/autour_one"
+        android:padding="6dp"
+        android:layout_marginLeft="16dp"
+        android:text="Vua Sói"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

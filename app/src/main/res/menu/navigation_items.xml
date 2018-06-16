@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/item_friends"
+        android:title="Bạn bè"
+        android:icon="@drawable/ic_friends" />
+
+    <item
+        android:id="@+id/item_play"
+        android:title="Phòng chơi"
+        android:icon="@drawable/ic_play"/>
+
+    <item
+        android:id="@+id/item_achievement"
+        android:title="Thành tích"
+        android:icon="@drawable/ic_achievement"/>
+
+    <item
+        android:id="@+id/item_user"
+        android:title="Hồ sơ"
+        android:icon="@drawable/ic_user"/>
+
+</menu>
