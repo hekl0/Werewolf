@@ -210,12 +210,12 @@ public class DayFragment extends Fragment {
                         child("Vote").child(UserDatabase.facebookID).setValue("");
                 break;
             case R.id.tv_start_game:
-                tvSkip.setVisibility(View.GONE);
-                tvStartGame.setVisibility(View.GONE);
                 if (DayAdapter.pick == -1) {
                     Toast.makeText(getContext(), "Cần chọn mục tiêu trước", Toast.LENGTH_SHORT).show();
-                    break;
+                    return;
                 }
+                tvSkip.setVisibility(View.GONE);
+                tvStartGame.setVisibility(View.GONE);
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).
                         child("Vote").child(UserDatabase.facebookID).setValue(DayAdapter.playerModelList.get(DayAdapter.pick).id);
                 break;

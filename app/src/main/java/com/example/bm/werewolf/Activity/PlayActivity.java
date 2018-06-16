@@ -66,67 +66,11 @@ public class PlayActivity extends AppCompatActivity {
 
         currentRole = Constant.NONE;
         dyingPlayerID = new ArrayList<>();
-        Constant.listPlayerModel = null;
-        healPotion = null;
-        toxicPotion = null;
-        lastProtectedPlayerID = null;
-        lastTargetPlayerID = null;
-
-        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
-                .child("healPotion").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null) healPotion = true;
-                else healPotion = dataSnapshot.getValue(Boolean.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
-                .child("toxicPotion").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null) toxicPotion = true;
-                else toxicPotion = dataSnapshot.getValue(Boolean.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
-                .child("lastProtectedPlayerID").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null) lastProtectedPlayerID = "";
-                else lastProtectedPlayerID = dataSnapshot.getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID)
-                .child("lastTargetPlayerID").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null) lastTargetPlayerID = "";
-                else lastTargetPlayerID = dataSnapshot.getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        Constant.listPlayerModel = new ArrayList<>();
+        healPotion = true;
+        toxicPotion = true;
+        lastProtectedPlayerID = "";
+        lastTargetPlayerID = "";
 
         loadFragment(new RolePickingFragment());
     }
@@ -478,9 +422,10 @@ public class PlayActivity extends AppCompatActivity {
         }
 
         List<String> recent = new ArrayList<>();
-        for (PlayerModel playerModel : Constant.listPlayerModel)
-            if (!playerModel.id.equals(UserDatabase.facebookID))
-                recent.add(playerModel.id);
+        if (Constant.listPlayerModel != null)
+            for (PlayerModel playerModel : Constant.listPlayerModel)
+                if (!playerModel.id.equals(UserDatabase.facebookID))
+                    recent.add(playerModel.id);
         for (String s : UserDatabase.getInstance().userData.recentPlayWith) {
             if (recent.size() >= 30) break;
             recent.add(s);
