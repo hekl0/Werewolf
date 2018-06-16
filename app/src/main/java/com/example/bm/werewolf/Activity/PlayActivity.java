@@ -333,6 +333,11 @@ public class PlayActivity extends AppCompatActivity {
         String systemChat = "";
 
         for (int i = 0; i < votedPlayer.size(); i++) {
+            boolean loop = false;
+            for (int j = 0; j < i; j++)
+                if (votedPlayer.get(i).equals(votedPlayer.get(j))) loop = true;
+            if (loop) continue;
+
             String id = votedPlayer.get(i);
             if (id.equals("")) continue;
 

@@ -107,9 +107,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         rvWaitingRoom.setLayoutManager(gridLayoutManager);
         rvWaitingRoom.setHasFixedSize(true);
-        rvWaitingRoom.setItemViewCacheSize(20);
-        rvWaitingRoom.setDrawingCacheEnabled(true);
-        rvWaitingRoom.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         ChatAdapter chatAdapter = new ChatAdapter(Constant.roomID, linearLayoutManager);
