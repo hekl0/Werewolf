@@ -49,7 +49,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.WaitingRoomActivity" />
-        <activity android:name=".Activity.PlayActivity"></activity>
+        <activity android:name=".Activity.PlayActivity" />
     </application>
 
 </manifest>
