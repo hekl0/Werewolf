@@ -266,6 +266,7 @@ public class PlayActivity extends AppCompatActivity {
     public static void analyzeResponse() {
         FirebaseDatabase.getInstance().getReference("Ingame Data")
                 .child(Constant.roomID).child("response").removeEventListener(responseListener);
+        Log.d(TAG, "analyzeResponse: " + (responseListener == null));
 
         while (response.contains(""))
             response.remove("");
