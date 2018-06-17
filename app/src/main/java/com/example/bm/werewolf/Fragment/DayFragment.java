@@ -94,6 +94,7 @@ public class DayFragment extends Fragment {
     public View view;
 
     public List<String> dyingList = new ArrayList<>();
+    boolean vote;
 
     ValueEventListener valueEventListener;
 
@@ -109,6 +110,8 @@ public class DayFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_day, container, false);
         unbinder = ButterKnife.bind(this, view);
         context = getContext();
+
+        vote = false;
 
         checkAlive();
         setupUI(view);
@@ -204,6 +207,7 @@ public class DayFragment extends Fragment {
                 llDying.setVisibility(View.GONE);
                 break;
             case R.id.tv_skip:
+                vote = true;
                 tvSkip.setVisibility(View.GONE);
                 tvStartGame.setVisibility(View.GONE);
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).
@@ -214,6 +218,7 @@ public class DayFragment extends Fragment {
                     Toast.makeText(getContext(), "Cần chọn mục tiêu trước", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                vote = true;
                 tvSkip.setVisibility(View.GONE);
                 tvStartGame.setVisibility(View.GONE);
                 FirebaseDatabase.getInstance().getReference("Ingame Data").child(Constant.roomID).
@@ -282,7 +287,7 @@ public class DayFragment extends Fragment {
             tvStartGame.setVisibility(View.GONE);
             tvSkip.setVisibility(View.GONE);
             ll1.setVisibility(View.GONE);
-        } else {
+        } else if (!vote) {
             if (tvStartGame == null) tvStartGame = view.findViewById(R.id.tv_start_game);
             if (tvSkip == null) tvSkip = view.findViewById(R.id.tv_skip);
             tvStartGame.setVisibility(View.VISIBLE);
