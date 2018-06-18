@@ -152,10 +152,10 @@ public class WaitingRoomActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.tv_start_game:
-//                if (WaitingRoomAdapter.playerList.size() < 6) {
-//                    Toast.makeText(WaitingRoomActivity.this, "Cần tối thiểu 6 người để bắt đầu game", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
+                if (WaitingRoomAdapter.playerList.size() < 5) {
+                    Toast.makeText(WaitingRoomActivity.this, "Cần tối thiểu 5 người để bắt đầu game", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 FirebaseDatabase.getInstance().getReference("rooms").child(Constant.roomID).child("players")
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
